@@ -14,7 +14,7 @@ export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
       <Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/whitepaper">白皮书</Link><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify Music ↗</a></div>
+      <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/canon">Canon</Link><Link href="/whitepaper">Whitepaper</Link><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify Music ↗</a></div>
       <a className="mood-nav-action" href="#world">ENTER</a>
     </nav>
 
@@ -41,6 +41,6 @@ export default function TokenPage() {
 
     <section id="contract" className="mood-contract"><div><span className="mood-kicker">OFFICIAL CONTRACT</span><h2>只认这一个地址。</h2><p>交易或添加代币前，请核对完整合约地址。</p></div><div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noreferrer">验证合约 ↗</a></div></section>
 
-    <footer className="mood-footer"><Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link><p>Every voice deserves to be heard.</p><div><Link href="/whitepaper">Whitepaper</Link><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noreferrer">PancakeSwap ↗</a><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify ↗</a></div></footer>
+    <footer className="mood-footer"><Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link><p>Every voice deserves to be heard.</p><div><Link href="/canon">Canon</Link><Link href="/whitepaper">Whitepaper</Link><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noreferrer">PancakeSwap ↗</a><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify ↗</a></div></footer>
   </main>;
 }
