@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { formatUnits } from "viem";
 import { MOOD_TOKEN } from "../../lib/mood-token";
 
 type RequestArguments={method:string;params?:unknown[]|Record<string,unknown>};
@@ -31,6 +30,11 @@ function errorMessage(error:unknown){
   return value.message?value.message.slice(0,180):"钱包请求失败，请打开钱包扩展后重试。";
 }
 function balanceOfData(address:string){return `0x70a08231${address.toLowerCase().replace(/^0x/,"").padStart(64,"0")}`;}
+function formatBalance(value:unknown,decimals:number,precision=5){
+  const raw=BigInt(String(value));const base=10n**BigInt(decimals);const whole=raw/base;
+  const fraction=(raw%base).toString().padStart(decimals,"0").slice(0,precision).replace(/0+$/,"");
+  return `${whole.toLocaleString()}${fraction?`.${fraction}`:""}`;
+}
 
 export default function NavWallet(){
   const [choices,setChoices]=useState<ProviderChoice[]>([]);
@@ -67,8 +71,8 @@ export default function NavWallet(){
   useEffect(()=>{
     const wallet=selected?.provider;if(!wallet||!address)return;
     setBnb("读取中");setMood(chainId===BSC_ID?"读取中":"切换至 BSC");
-    void wallet.request({method:"eth_getBalance",params:[address,"latest"]}).then(value=>setBnb(Number(formatUnits(BigInt(String(value)),18)).toLocaleString(undefined,{maximumFractionDigits:5}))).catch(()=>setBnb("不可用"));
-    if(chainId===BSC_ID)void wallet.request({method:"eth_call",params:[{to:MOOD_TOKEN.address,data:balanceOfData(address)},"latest"]}).then(value=>setMood(Number(formatUnits(BigInt(String(value)),MOOD_TOKEN.decimals)).toLocaleString(undefined,{maximumFractionDigits:4}))).catch(()=>setMood("不可用"));
+    void wallet.request({method:"eth_getBalance",params:[address,"latest"]}).then(value=>setBnb(formatBalance(value,18))).catch(()=>setBnb("不可用"));
+    if(chainId===BSC_ID)void wallet.request({method:"eth_call",params:[{to:MOOD_TOKEN.address,data:balanceOfData(address)},"latest"]}).then(value=>setMood(formatBalance(value,MOOD_TOKEN.decimals,4))).catch(()=>setMood("不可用"));
   },[address,chainId,selected]);
 
   async function connect(){
