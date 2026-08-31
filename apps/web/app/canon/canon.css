@@ -1,64 +1,8 @@
-/* Isolated styles for the MOOD Canon route. */
-.canon-site{min-height:100vh;background:#0a0d24;color:#e6e9f7;font-family:Georgia,"Times New Roman",serif}
-.canon-site *{box-sizing:border-box}
-.canon-nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(24px,6vw,112px);border-bottom:1px solid rgba(230,233,247,.12);background:rgba(10,13,36,.92);backdrop-filter:blur(12px)}
-.canon-brand{display:flex;align-items:center;gap:12px;color:#e6e9f7;text-decoration:none;font-weight:800;letter-spacing:.22em}
-.canon-brand img{width:44px;height:28px;object-fit:contain}
-.canon-nav>div{display:flex;align-items:center;gap:24px}
-.canon-nav a,.canon-nav span{color:#e6e9f7;text-decoration:none;font-size:14px;font-weight:600}
-.canon-nav span[aria-current="page"]{color:#b5b8ff}
-.canon-nav .canon-download{padding:10px 16px;border:1px solid #e6e9f7;border-radius:999px}
-.canon-hero{padding:clamp(72px,10vw,150px) clamp(24px,9vw,170px) clamp(64px,8vw,110px);background:radial-gradient(circle at 84% 28%,rgba(117,100,255,.4),transparent 30%),linear-gradient(135deg,#0a0d24 42%,#11143a)}
-.canon-hero>p:first-child{margin:0 0 28px;color:#b5b8ff;font-size:12px;font-weight:800;letter-spacing:.25em}
-.canon-hero h1{max-width:1150px;margin:0;font-size:clamp(42px,6.4vw,100px);font-weight:400;line-height:.98;letter-spacing:-.045em;color:#fff}
-.canon-deck{max-width:900px;margin:36px 0 0;color:#c8cdf0;font-size:clamp(16px,2vw,24px);line-height:1.6}
-.canon-status{display:flex;flex-wrap:wrap;gap:10px;margin-top:38px}
-.canon-status>*{padding:8px 12px;border:1px solid rgba(230,233,247,.24);border-radius:999px;font-size:12px;color:#e6e9f7}
-.canon-status strong{background:#e6e9f7;color:#0a0d24}
-.canon-status code{font-family:Consolas,monospace;font-size:11px}
-.canon-notice{max-width:880px;margin:30px 0 0;padding-left:18px;border-left:3px solid #7c5cff;color:#c8cdf0;line-height:1.65;font-size:15px}
-.canon-notice code{font-family:Consolas,monospace;font-size:13px;background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px}
-.canon-shell{display:grid;grid-template-columns:minmax(210px,290px) minmax(0,850px);gap:clamp(40px,7vw,110px);justify-content:center;align-items:start;padding:90px clamp(24px,6vw,100px)}
-.canon-toc{position:sticky;top:110px;max-height:calc(100vh - 140px);overflow:auto;padding-right:20px}
-.canon-toc>span{font-size:11px;font-weight:800;letter-spacing:.25em;color:#b5b8ff}
-.canon-toc ol{margin:20px 0 0;padding-left:22px;list-style:none}
-.canon-toc li{padding:5px 0;color:#9aa1c8;font-size:12px;line-height:1.35}
-.canon-toc li[data-level="3"]{padding-left:18px;font-size:11px}
-.canon-toc a{color:inherit;text-decoration:none}
-.canon-toc a:hover{color:#b5b8ff}
-.canon-article{min-width:0;font-size:18px;line-height:1.78;overflow-wrap:anywhere}
-.canon-article h1,.canon-article h2,.canon-article h3{scroll-margin-top:110px;color:#fff;font-weight:400}
-.canon-article h1{margin:0 0 24px;font-size:56px;letter-spacing:-.03em}
-.canon-article h2{margin:90px 0 24px;padding-top:10px;border-top:1px solid rgba(230,233,247,.18);font-size:clamp(30px,4vw,48px);line-height:1.15;color:#fff}
-.canon-article h3{margin:45px 0 16px;font-size:26px;color:#b5b8ff}
-.canon-article p{margin:0 0 23px;color:#dde1f5}
-.canon-article li{margin:8px 0;color:#dde1f5}
-.canon-article blockquote{margin:36px 0;padding:24px 30px;border-left:4px solid #7c5cff;background:rgba(117,100,255,.08);font-size:21px;line-height:1.5;color:#fff}
-.canon-article pre{overflow:auto;margin:28px 0;padding:24px;border-radius:6px;background:#06081c;color:#dfffb0;font:13px/1.55 Consolas,monospace;border:1px solid rgba(230,233,247,.12)}
-.canon-article code{font-family:Consolas,monospace;font-size:.86em;color:#c8cdf0}
-.canon-article :not(pre)>code{padding:2px 5px;background:rgba(255,255,255,.06);border-radius:4px}
-.canon-article hr{margin:70px 0;border:0;border-top:1px solid rgba(230,233,247,.18)}
-.canon-article strong{color:#fff}
-.canon-article a{color:#b5b8ff}
-.canon-article ul,.canon-article ol{padding-left:28px}
-.canon-error{padding:clamp(72px,10vw,150px) clamp(24px,9vw,170px);max-width:880px}
-.canon-error h1{font-size:42px;margin:0 0 24px;color:#fff}
-.canon-error p{font-size:16px;line-height:1.7;color:#dde1f5}
-.canon-error code{font-family:Consolas,monospace;font-size:13px;background:rgba(255,255,255,.06);padding:2px 6px;border-radius:4px;color:#c8cdf0}
-.canon-error pre{background:#06081c;color:#dfffb0;padding:16px;border-radius:6px;overflow:auto}
-.canon-footer{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:42px clamp(24px,6vw,112px);border-top:1px solid rgba(230,233,247,.18)}
-.canon-footer p{margin:0;color:#9aa1c8;font-style:italic}
-.canon-footer>a{color:#e6e9f7;font-weight:700;text-decoration:none}
-@media(max-width:800px){
-  .canon-nav{padding:16px 20px}
-  .canon-nav>div{gap:14px}
-  .canon-nav>div>a:first-of-type,.canon-nav>div>span{display:none}
-  .canon-download{font-size:0!important}
-  .canon-download:after{content:"Markdown";font-size:12px}
-  .canon-hero{padding:72px 24px}
-  .canon-shell{display:block;padding:55px 24px}
-  .canon-toc{position:static;max-height:none;margin-bottom:70px;padding:24px;background:rgba(255,255,255,.03);border-radius:6px}
-  .canon-article{font-size:17px}
-  .canon-article h2{margin-top:65px}
-  .canon-footer{align-items:flex-start;flex-direction:column}
-}
+/* Isolated MOOD public UI styles. Palette authority: docs/BRAND_UI.md. */
+.canon-site{min-height:100vh;background:#f3f1e9;color:#102d2b;font-family:Arial,"Helvetica Neue",sans-serif}.canon-site *{box-sizing:border-box}.canon-site .canon-hero{display:block;height:auto;min-height:0;align-items:initial;justify-content:initial}
+.canon-nav{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:20px clamp(24px,6vw,112px);border-bottom:1px solid rgba(16,45,43,.18);background:rgba(243,241,233,.94);backdrop-filter:blur(12px)}.canon-brand{display:flex;align-items:center;gap:12px;color:#102d2b;text-decoration:none;font-weight:800;letter-spacing:.22em}.canon-brand img{width:44px;height:28px;object-fit:contain}.canon-nav>div{display:flex;align-items:center;gap:24px}.canon-nav a,.canon-nav span{color:#102d2b;text-decoration:none;font-size:14px;font-weight:700}.canon-nav span[aria-current="page"]{color:#007d77}.canon-nav .canon-download{padding:11px 16px;border:1px solid #102d2b;border-radius:999px}
+.canon-hero{padding:clamp(72px,10vw,150px) clamp(24px,9vw,170px) clamp(64px,8vw,110px);background:radial-gradient(circle at 84% 28%,rgba(188,244,68,.45),transparent 30%),linear-gradient(135deg,#f3f1e9 42%,#e9f0e8)}.canon-hero>p:first-child{margin:0 0 28px;color:#007d77;font-size:12px;font-weight:800;letter-spacing:.25em}.canon-hero h1{max-width:1150px;margin:0;font-family:Georgia,"Times New Roman",serif;font-size:clamp(42px,6.4vw,100px);font-weight:400;line-height:.98;letter-spacing:-.045em;color:#102d2b}.canon-deck{max-width:900px;margin:36px 0 0;color:#177f78;font-family:Georgia,"Times New Roman",serif;font-size:clamp(16px,2vw,24px);line-height:1.6}.canon-status{display:flex;flex-wrap:wrap;gap:10px;margin-top:38px}.canon-status>*{padding:8px 12px;border:1px solid rgba(16,45,43,.24);border-radius:999px;font-size:12px;color:#102d2b}.canon-status strong{background:#102d2b;color:#fff}.canon-status code{font-family:Consolas,monospace;font-size:11px}.canon-notice{max-width:880px;margin:30px 0 0;padding-left:18px;border-left:3px solid #b7ee45;color:#38504e;line-height:1.65;font-size:15px}.canon-notice code{font-family:Consolas,monospace;font-size:13px;background:#e2e7de;padding:2px 6px;border-radius:4px}
+.canon-shell{display:grid;grid-template-columns:minmax(210px,290px) minmax(0,850px);gap:clamp(40px,7vw,110px);justify-content:center;align-items:start;padding:90px clamp(24px,6vw,100px)}.canon-toc{position:sticky;top:110px;max-height:calc(100vh - 140px);overflow:auto;padding-right:20px}.canon-toc>span{font-size:11px;font-weight:800;letter-spacing:.25em;color:#007d77}.canon-toc ol{margin:20px 0 0;padding-left:22px;list-style:none}.canon-toc li{padding:5px 0;color:#63716f;font-size:12px;line-height:1.35}.canon-toc li[data-level="3"]{padding-left:18px;font-size:11px}.canon-toc a{color:inherit;text-decoration:none}.canon-toc a:hover{color:#007d77}
+.canon-article{min-width:0;font-family:Georgia,"Times New Roman",serif;font-size:18px;line-height:1.78;overflow-wrap:anywhere}.canon-article h1,.canon-article h2,.canon-article h3{scroll-margin-top:110px;color:#102d2b;font-weight:400}.canon-article h1{margin:0 0 24px;font-size:56px;letter-spacing:-.03em}.canon-article h2{margin:90px 0 24px;padding-top:10px;border-top:1px solid rgba(16,45,43,.18);font-size:clamp(30px,4vw,48px);line-height:1.15}.canon-article h3{margin:45px 0 16px;font-size:26px;color:#007d77}.canon-article p,.canon-article li{color:#263f3d}.canon-article p{margin:0 0 23px}.canon-article li{margin:8px 0}.canon-article blockquote{margin:36px 0;padding:24px 30px;border-left:4px solid #a8df36;background:#e9eee4;font-size:21px;line-height:1.5;color:#102d2b}.canon-article pre{overflow:auto;margin:28px 0;padding:24px;border-radius:4px;background:#102d2b;color:#dfffb0;font:13px/1.55 Consolas,monospace}.canon-article code{font-family:Consolas,monospace;font-size:.86em;color:#177f78}.canon-article :not(pre)>code{padding:2px 5px;background:#e2e7de;border-radius:4px}.canon-article hr{margin:70px 0;border:0;border-top:1px solid rgba(16,45,43,.22)}.canon-article strong{color:#102d2b}.canon-article a{color:#007d77}.canon-article ul,.canon-article ol{padding-left:28px}
+.canon-error{padding:clamp(72px,10vw,150px) clamp(24px,9vw,170px);max-width:880px}.canon-error h1{font:400 42px/1.1 Georgia,"Times New Roman",serif;margin:0 0 24px;color:#102d2b}.canon-error p{font-size:16px;line-height:1.7;color:#38504e}.canon-error code{font-family:Consolas,monospace;font-size:13px;background:#e2e7de;padding:2px 6px;border-radius:4px;color:#177f78}.canon-error pre{background:#102d2b;color:#dfffb0;padding:16px;border-radius:4px;overflow:auto}.canon-footer{display:flex;align-items:center;justify-content:space-between;gap:28px;padding:42px clamp(24px,6vw,112px);border-top:1px solid rgba(16,45,43,.2)}.canon-footer p{margin:0;color:#61706e;font-style:italic}.canon-footer>a{color:#102d2b;font-weight:700;text-decoration:none}
+@media(max-width:800px){.canon-nav{padding:16px 20px}.canon-nav>div{gap:14px}.canon-nav>div>a:first-of-type,.canon-nav>div>span{display:none}.canon-download{font-size:0!important}.canon-download:after{content:"Markdown";font-size:12px}.canon-hero{padding:72px 24px}.canon-shell{display:block;padding:55px 24px}.canon-toc{position:static;max-height:none;margin-bottom:70px;padding:24px;background:#e8ece4;border-radius:6px}.canon-article{font-size:17px}.canon-article h2{margin-top:65px}.canon-footer{align-items:flex-start;flex-direction:column}}
