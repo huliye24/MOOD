@@ -14,7 +14,7 @@ export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
       <Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/canon">Canon</Link><Link href="/whitepaper">Whitepaper</Link><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify Music ↗</a></div>
+      <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/library">Library</Link></div>
       <a className="mood-nav-action" href="#world">ENTER</a>
     </nav>
 
@@ -23,7 +23,7 @@ export default function TokenPage() {
       <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/moodify-brand-logo.png" alt="" /><small>ENTER THE WORLD</small></div>
     </header>
 
-    <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>一个入口，<br />通向许多种生活。</h2><p>MOOD 不是一张功能清单。它是一座逐渐生长的数字世界；你可以选择自己的方向，也可以只是停留。</p></div><nav className="mood-world-map" aria-label="MOOD 世界地图"><a href="#cafe"><span>01</span><strong>咖啡馆</strong><small>思想与不同的人相遇</small></a><a href="#road"><span>02</span><strong>在路上</strong><small>选择自己的方向</small></a><a href="#leisure"><span>03</span><strong>闲暇之地</strong><small>让生活重新生长</small></a><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer"><span>04</span><strong>Moodify Music</strong><small>从音乐进入这个世界 ↗</small></a></nav></section>
+    <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>一个入口，<br />通向许多种生活。</h2><p>MOOD 不是一张功能清单。它是一座逐渐生长的数字世界；你可以选择自己的方向，也可以只是停留。</p></div><nav className="mood-world-map" aria-label="MOOD 世界地图"><a href="#cafe"><span>01</span><strong>咖啡馆</strong><small>思想与不同的人相遇</small></a><a href="#road"><span>02</span><strong>在路上</strong><small>选择自己的方向</small></a><a href="#leisure"><span>03</span><strong>闲暇之地</strong><small>让生活重新生长</small></a><Link href="/library"><span>04</span><strong>Library</strong><small>阅读这个世界的公开记忆</small></Link></nav></section>
 
     <figure className="mood-world"><img src="/mood-world-hero.png" alt="人们在开放的未来音乐空间里围绕紫蓝色波形相遇、聆听与创作" /><figcaption>MOOD WORLD · A PLACE WITHOUT A PRESCRIBED LIFE</figcaption></figure>
 
@@ -41,6 +41,6 @@ export default function TokenPage() {
 
     <section id="contract" className="mood-contract"><div><span className="mood-kicker">OFFICIAL CONTRACT</span><h2>只认这一个地址。</h2><p>交易或添加代币前，请核对完整合约地址。</p></div><div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noreferrer">验证合约 ↗</a></div></section>
 
-    <footer className="mood-footer"><Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link><p>Every voice deserves to be heard.</p><div><Link href="/canon">Canon</Link><Link href="/whitepaper">Whitepaper</Link><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noreferrer">PancakeSwap ↗</a><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify ↗</a></div></footer>
+    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link><p>Every voice deserves to be heard.</p><div><Link href="/library">Library</Link><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noreferrer">PancakeSwap ↗</a></div></footer>
   </main>;
 }
