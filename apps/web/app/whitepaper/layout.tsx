@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./whitepaper.css";
 
 export const metadata: Metadata = {
   title: "MOOD Whitepaper v0.1",
