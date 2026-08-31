@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { MOOD_TOKEN } from "../../lib/mood-token";
 import WalletConnect from "./WalletConnect";
+import NavWallet from "./NavWallet";
 
 function CopyAddress() {
   const [copied, setCopied] = useState(false);
@@ -15,7 +16,7 @@ export default function TokenPage() {
     <nav className="mood-nav" aria-label="主导航">
       <Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
       <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/library">Library</Link></div>
-      <a className="mood-nav-action" href="#world">ENTER</a>
+      <NavWallet />
     </nav>
 
     <header className="mood-hero">
