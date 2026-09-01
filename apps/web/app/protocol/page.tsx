@@ -1,5 +1,11 @@
-import { MoodDocument } from "../../components/mood/MoodDocument";
-import { loadMoodContent } from "../../lib/mood-content";
+import { ProtocolHero, ProtocolMap } from "../../components/mood/ProtocolArchitecture";
+import { MoodShell } from "../../components/mood/MoodShell";
 
-export const metadata = { title: "Protocol | MOOD", description: "Identity, contribution, proof, reputation, rights and settlement in the MOOD coordination protocol." };
-export default async function ProtocolPage() { return <MoodDocument markdown={await loadMoodContent("protocol/index.md")} current="Protocol" section="PROTOCOL" />; }
+export const metadata = {
+  title: "MOOD Protocol Architecture | Open Coordination Network",
+  description: "Explore MOOD protocol architecture: state transitions, contribution proofs, reputation, rights, treasury and governance.",
+};
+
+export default function ProtocolPage() {
+  return <MoodShell current="Protocol"><ProtocolHero /><ProtocolMap /></MoodShell>;
+}

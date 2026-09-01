@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./mood-world.css";
 import "./mood-home-overrides.css";
+import "./protocol.css";
 import SwRegister from "./sw-register";
 
 export const metadata: Metadata = {

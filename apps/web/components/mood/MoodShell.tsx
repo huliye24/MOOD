@@ -2,9 +2,8 @@ import Link from "next/link";
 
 const links = [
   ["World", "/vision"],
+  ["Manifesto", "/manifesto"],
   ["Protocol", "/protocol"],
-  ["Portal", "/token#use"],
-  ["Network", "/network"],
   ["Library", "/library"],
 ] as const;
 
@@ -21,7 +20,7 @@ export function MoodShell({ children, current }: { children: React.ReactNode; cu
             <Link key={label} href={href} aria-current={current === label ? "page" : undefined}>{label}</Link>
           ))}
         </div>
-        <Link className="world-wallet" href="/token#use">连接钱包</Link>
+        <Link className="world-wallet" href="/network">Enter Network</Link>
       </nav>
       {children}
       <footer className="world-footer">

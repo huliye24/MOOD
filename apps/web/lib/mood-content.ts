@@ -22,6 +22,12 @@ import passport from "../content/mood/protocol/passport.md?raw";
 import agent from "../content/mood/protocol/agent.md?raw";
 import node from "../content/mood/protocol/node.md?raw";
 import verification from "../content/mood/protocol/verification.md?raw";
+import stateMachine from "../content/mood/protocol/state-machine.md?raw";
+import contributionProof from "../content/mood/protocol/contribution-proof.md?raw";
+import reputationEngine from "../content/mood/protocol/reputation-engine.md?raw";
+import rightsSystem from "../content/mood/protocol/rights-system.md?raw";
+import treasuryDesign from "../content/mood/protocol/treasury.md?raw";
+import governanceProcess from "../content/mood/protocol/governance-process.md?raw";
 
 const moodContent: Record<string, string> = {
   "manifesto/index.md": manifestoIndex,
@@ -48,6 +54,12 @@ const moodContent: Record<string, string> = {
   "protocol/agent.md": agent,
   "protocol/node.md": node,
   "protocol/verification.md": verification,
+  "protocol/state-machine.md": stateMachine,
+  "protocol/contribution-proof.md": contributionProof,
+  "protocol/reputation-engine.md": reputationEngine,
+  "protocol/rights-system.md": rightsSystem,
+  "protocol/treasury.md": treasuryDesign,
+  "protocol/governance-process.md": governanceProcess,
 };
 
 export async function loadMoodContent(relativePath: string): Promise<string> {
