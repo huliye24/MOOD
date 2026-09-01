@@ -1,16 +1,17 @@
 import Link from "next/link";
+import { WalletLoginButton } from "../../components/mood/WalletLoginButton";
 
 export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
-      <Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link>
+      <Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link>
       <div className="mood-nav-links"><Link href="/world">World</Link><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div>
-      <Link className="mood-nav-action" href="/portal">进入门户</Link>
+      <WalletLoginButton className="mood-nav-action" />
     </nav>
 
     <header className="mood-hero">
       <div className="mood-hero-copy"><span className="mood-kicker">A DIGITAL HOME FOR FREE SPIRITS</span><h1><span>BE YOURSELF.</span><small>在这里，<br /><em>成为你自己。</em></small></h1><p>MOOD 是一个属于自由意志、独立选择与美的数字家园。没有被规定的人生，只有你愿意生活的方式。</p><div className="mood-actions"><a className="mood-primary" href="#world">进入这个世界</a><Link className="mood-secondary" href="/manifesto">阅读我们的信念</Link></div></div>
-      <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/favicon.svg" alt="" /><small>ENTER THE WORLD</small></div>
+      <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/mood-logo.png" alt="" /><small>ENTER THE WORLD</small></div>
     </header>
 
     <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>从世界出发，<br />理解它的规则。</h2><p>MOOD 是面向人类与机器主体的开放协调协议与数字世界。这里先定义意义，再让协议与软件从意义中生长。</p></div><nav className="mood-world-map" aria-label="MOOD 阅读路径"><Link href="/world"><span>01</span><strong>World</strong><small>理解 MOOD 假定的世界</small></Link><Link href="/manifesto"><span>02</span><strong>Manifesto</strong><small>阅读我们的信念与方向</small></Link><Link href="/canon"><span>03</span><strong>Canon</strong><small>进入最高概念权威</small></Link><Link href="/library"><span>04</span><strong>Library</strong><small>阅读这个世界的公开记忆</small></Link></nav></section>
@@ -29,6 +30,6 @@ export default function TokenPage() {
 
     <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">PHASE ZERO · WORLDBUILDING</span><h2>参与从理解开始。</h2><p>当前阶段的首要工作是减少世界的歧义。Portal、身份、节点与治理仍是草案；网站不会把未来描述成已经发生。</p><div className="mood-mini-facts"><span>WORLD</span><span>CANON</span><span>CULTURE</span></div></div><div className="mood-phase-card"><span>当前状态</span><strong>Worldbuilding</strong><p>先阅读世界与 Canon，再进入正在形成的协议层。</p><div><Link href="/canon">阅读 Canon</Link><Link href="/protocol">探索 Protocol</Link></div></div></section>
 
-    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
+    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
   </main>;
 }

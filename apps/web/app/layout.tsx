@@ -9,7 +9,7 @@ import SwRegister from "./sw-register";
 export const metadata: Metadata = {
   title: "MOOD | Open Coordination Protocol for Human and Machine Agency",
   description: "MOOD is an open coordination protocol connecting humans, AI agents, organizations and resources through identity, contribution, proof, reputation and settlement.",
-  icons: { icon: "/favicon.svg" },
+  icons: { icon: "/mood-logo.png", apple: "/mood-logo.png" },
   manifest: "/manifest.webmanifest",
   alternates: { canonical: "https://crestwavecoin.com/" },
   openGraph: {
