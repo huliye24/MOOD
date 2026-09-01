@@ -1,6 +1,6 @@
 # MOOD
 
-## A new coordination layer for humans, machines and organizations.
+## An open coordination protocol and digital world for human and machine agency.
 
 People.
 
@@ -26,3 +26,11 @@ Connected by contribution.
 [Future of Work →](/manifesto/future-of-work)
 
 [Future of Capital →](/manifesto/future-of-capital)
+
+[Digital Society →](/manifesto/digital-society)
+
+[Protocol vs Platform →](/manifesto/protocol-vs-platform)
+
+[From Company to Network →](/manifesto/from-company-to-network)
+
+[Human AI Coexistence →](/manifesto/human-ai-coexistence)

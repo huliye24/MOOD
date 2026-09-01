@@ -22,3 +22,7 @@ PORTAL     identity · action · history
 ```
 
 MOOD is the network layer. Applications are built on top.
+
+[Economic Philosophy →](/vision/economic-philosophy)
+
+[Governance Philosophy →](/vision/governance-philosophy)

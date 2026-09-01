@@ -1,17 +1,13 @@
-import ReactMarkdown from "react-markdown";
 import { MoodShell } from "./MoodShell";
+import { ConceptSection } from "./ConceptSection";
+import { DocumentRenderer } from "./DocumentRenderer";
+import { ManifestoHero } from "./ManifestoHero";
 
 export function MoodDocument({ markdown, current, section }: { markdown: string; current: string; section: string }) {
   return (
     <MoodShell current={current}>
-      <header className="document-hero">
-        <span className="world-kicker">MOOD · {section}</span>
-        <article className="document-lead"><ReactMarkdown>{markdown}</ReactMarkdown></article>
-      </header>
-      <section className="document-entry">
-        <div className="entry-line"><span>WORLD</span><i /><span>PROTOCOL</span><i /><span>PORTAL</span></div>
-        <p>This page renders its Markdown source directly. Meaning remains upstream of interface.</p>
-      </section>
+      <ManifestoHero section={section}><DocumentRenderer markdown={markdown} /></ManifestoHero>
+      <ConceptSection />
     </MoodShell>
   );
 }
