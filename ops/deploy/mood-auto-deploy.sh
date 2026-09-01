@@ -39,6 +39,7 @@ mkdir -p "${release_dir}"
 runuser -u moodify -- git -C "${repository_dir}" archive "${revision}" | tar -x -C "${release_dir}"
 printf '%s\n' "${revision}" > "${release_dir}/DEPLOYED_COMMIT"
 chown -R moodify:moodify "${release_dir}"
+chmod u+x "${app_dir}"/scripts/*.sh
 
 cleanup_failed_release() {
   if [[ -n "${health_pid:-}" ]]; then
