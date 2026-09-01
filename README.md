@@ -277,6 +277,21 @@ It will be built by networks.
 
 ------------------------------------------------------------------------
 
+# Documentation
+
+The MOOD world is documented through Markdown under `docs/`.
+
+| Layer | Location | Canon basis |
+|---|---|---|
+| World | `docs/manifesto/`, `docs/network/` | §6.1 / §6.3 |
+| Protocol & Architecture | `docs/architecture/` | §6.4 |
+| Economy & Settlement | `docs/blockchain/` | §6.5 |
+
+> The website is an entrance into these documents — not the world itself
+> (`MOOD_CANON.md` §7).
+
+------------------------------------------------------------------------
+
 # MOOD
 
 ## Build Beyond Companies.
