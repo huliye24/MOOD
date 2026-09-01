@@ -12,7 +12,7 @@ import proofOfIntelligenceCn from "../content/mood/manifesto/proof-of-intelligen
 import technicalArchitectureCn from "../content/mood/manifesto/technical-architecture-cn.md?raw";
 import protocolYellowPaperCn from "../content/mood/manifesto/protocol-yellow-paper-cn.md?raw";
 import formalSpecificationCn from "../content/mood/manifesto/formal-specification-cn.md?raw";
-import formalSpecificationCn from "../content/mood/manifesto/formal-specification-cn.md?raw";
+import clientImplementationCn from "../content/mood/manifesto/client-implementation-cn.md?raw";
 import whatMoodIs from "../content/mood/canon/what-mood-is.md?raw";
 import whatMoodIsNot from "../content/mood/canon/what-mood-is-not.md?raw";
 import designPrinciples from "../content/mood/canon/design-principles.md?raw";
@@ -50,7 +50,7 @@ const moodContent: Record<string, string> = {
   "manifesto/technical-architecture-cn.md": technicalArchitectureCn,
   "manifesto/protocol-yellow-paper-cn.md": protocolYellowPaperCn,
   "manifesto/formal-specification-cn.md": formalSpecificationCn,
-  "manifesto/formal-specification-cn.md": formalSpecificationCn,
+  "manifesto/client-implementation-cn.md": clientImplementationCn,
   "canon/what-mood-is.md": whatMoodIs,
   "canon/what-mood-is-not.md": whatMoodIsNot,
   "canon/design-principles.md": designPrinciples,

@@ -44,3 +44,5 @@ Connected by contribution.
 [MOOD Protocol Specification：Yellow Paper（中文 · Non-normative Draft）→](/manifesto/protocol-yellow-paper)
 
 [MOOD Formal Specification（中文 · Non-normative Draft）→](/manifesto/formal-specification)
+
+[MOOD Protocol Client Implementation（中文 · Non-normative Draft）→](/manifesto/client-implementation)

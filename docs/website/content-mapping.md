@@ -80,6 +80,8 @@ surface reserved for future participation.
   - Proof of Intelligence：智能证明（中文概念提案，Draft）
   - MOOD Technical Architecture（中文技术架构概念稿，Draft）
   - MOOD Protocol Specification · Yellow Paper（中文非规范性草案，Draft）
+  - MOOD Formal Specification（中文非规范性形式化草案，Draft）
+  - MOOD Protocol Client Implementation（中文非规范性实现草案，Draft）
 - **Rule:** Each sub-route renders the corresponding Markdown file via the shared
   `MoodDocument` component. No narrative may be added that lacks a source document.
 
