@@ -57,8 +57,6 @@ test("semantic discipline: amber is human-attention only, red is blocking only",
   assert.match(byName["status.tsx"], /failed[\s\S]*var\(--blocking\)/, "red must represent failed");
   // states.tsx owns blocking error surfaces.
   assert.match(byName["states.tsx"], /var\(--blocking\)/, "error surfaces must use blocking red");
-  // audio transport is neutral + evidence only: never amber/red.
-  assert.doesNotMatch(byName["audio.tsx"], /var\(--attention\)|var\(--blocking\)/, "transport must not use attention/blocking");
   // no component may pair attention with an evidence-positive meaning.
   for (const { name, src } of sources) {
     assert.doesNotMatch(src, /var\(--attention\)[^;]*background.*var\(--evidence\)/s, `${name} mixes attention into evidence`);

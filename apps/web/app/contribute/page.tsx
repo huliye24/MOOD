@@ -360,7 +360,7 @@ function SubmitForm({
 
       <p style={{ margin: 0, fontSize: "var(--text-xs)", color: "var(--text-faint)" }}>
         提交代表你确认贡献内容原创且符合任务要求。审核结果将更新到「我的贡献」。
-        MOOD 奖励标记为「待发放」,实际发放需经 Moodify 协议批准。
+        MOOD 奖励标记为「待发放」,实际发放需经 MOOD 协议授权。
       </p>
     </div>
   );
@@ -499,7 +499,7 @@ export default function ContributePage() {
   return (
     <main style={{ minHeight: "100vh", background: "radial-gradient(circle at 70% 12%, rgba(36,66,154,.17), transparent 27%), linear-gradient(135deg, #070a22, #040719 70%)", padding: "0 clamp(20px, 4vw, 64px) var(--space-12)" }}>
       <nav aria-label="位置" style={{ paddingBlock: "var(--space-6)", color: "var(--text-faint)", fontSize: "var(--text-sm)" }}>
-        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 Moodify</Link>
+        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 MOOD</Link>
       </nav>
 
       <header style={{ display: "grid", gap: "var(--space-4)", paddingBlock: "var(--space-8)", maxWidth: 800 }}>
@@ -507,14 +507,14 @@ export default function ContributePage() {
           Protocol · Contribution
         </span>
         <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "var(--text-4xl)", color: "var(--text)", lineHeight: "var(--leading-tight)" }}>
-          Moodify 贡献网络
+          MOOD 贡献网络
         </h1>
         <p style={{ margin: 0, fontSize: "var(--text-lg)", color: "var(--text-muted)", maxWidth: "52ch", lineHeight: "var(--leading-normal)" }}>
           通过代码、测试、数据集、研究、文档、翻译、漏洞报告或社区贡献Earn MOOD。
           贡献经审核后获得 Reputation 与待发放 MOOD 奖励。
         </p>
         <p style={{ margin: 0, fontSize: "var(--text-sm)", color: "var(--attention)" }}>
-          MOOD 奖励为待发放状态,需经 Moodify 协议批准后实际发放。本流程不构成任何投资回报承诺。
+          MOOD 奖励为待发放状态,需经 MOOD 协议授权后实际发放。本流程不构成任何投资回报承诺。
         </p>
       </header>
 

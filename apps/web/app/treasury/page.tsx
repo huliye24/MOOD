@@ -20,7 +20,7 @@ import {
 } from "@/lib/treasury/model";
 
 export const metadata: Metadata = {
-  title: "Treasury | Moodify Protocol",
+  title: "Treasury | MOOD Protocol",
   description:
     "Public treasury transparency layer for MOOD protocol. Currently inactive.",
   robots: { index: true, follow: true },

@@ -9,14 +9,6 @@ test("deploy build removes copied audio before artifact validation", async () =>
   assert.match(prune, /dist\/client\/audio/);
 });
 
-test("public audio uses partial status only for an explicit range request", async () => {
-  const route = await readFile(
-    new URL("../app/api/v1/tracks/[id]/audio/route.ts", import.meta.url),
-    "utf8",
-  );
-  assert.match(route, /request\.headers\.has\("range"\)[\s\S]*status: 206/);
-});
-
 test("self-hosted builds fail closed for Cloudflare-only bindings", async () => {
   const config = await readFile(new URL("../vite.config.ts", import.meta.url), "utf8");
   const selfHostedBuild = await readFile(

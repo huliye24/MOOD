@@ -9,7 +9,7 @@ import { Metadata } from "next";
 import { buildSecurityStatusPayload } from "@/lib/security/model";
 
 export const metadata: Metadata = {
-  title: "Security | Moodify Protocol",
+  title: "Security | MOOD Protocol",
   description:
     "Public security transparency for MOOD protocol. Honest disclosure of controls, findings, and trust claims.",
   robots: { index: true, follow: true },

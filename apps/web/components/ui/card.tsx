@@ -1,4 +1,4 @@
-/* Moodify Card component — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001 */
+/* MOOD card component — inherited MFY compatibility identifier. */
 
 import type { CSSProperties, ReactNode } from "react";
 import { forwardRef } from "react";

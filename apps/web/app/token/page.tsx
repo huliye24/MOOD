@@ -7,20 +7,20 @@ import WalletConnect from "./WalletConnect";
 function CopyAddress() {
   const [copied, setCopied] = useState(false);
   async function copy() { try { await navigator.clipboard.writeText(MOOD_TOKEN.address); setCopied(true); window.setTimeout(() => setCopied(false), 1800); } catch { setCopied(false); } }
-  return <button className="mood-copy" onClick={copy}>{copied ? "已复制 ✓" : "复制地址"}</button>;
+  return <button className="mood-copy" onClick={copy}><span aria-live="polite">{copied ? "已复制 ✓" : "复制地址"}</span></button>;
 }
 
 export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
-      <Link className="mood-brand" href="/"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><a href="#use">Portal</a><Link href="/network">Network</Link><Link href="/library">Library</Link></div>
+      <Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link>
+      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><a href="#use">Portal</a><Link href="/network">Network</Link><Link href="/genesis">Genesis</Link><Link href="/library">Library</Link></div>
       <a className="mood-nav-action" href="#use">连接钱包</a>
     </nav>
 
     <header className="mood-hero">
       <div className="mood-hero-copy"><span className="mood-kicker">A DIGITAL HOME FOR FREE SPIRITS</span><h1><span>BE YOURSELF.</span><small>在这里，<br /><em>成为你自己。</em></small></h1><p>MOOD 是一个属于自由意志、独立选择与美的数字家园。没有被规定的人生，只有你愿意生活的方式。</p><div className="mood-actions"><a className="mood-primary" href="#world">进入这个世界</a><Link className="mood-secondary" href="/manifesto">阅读我们的信念</Link></div></div>
-      <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/moodify-brand-logo.png" alt="" /><small>ENTER THE WORLD</small></div>
+      <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/favicon.svg" alt="" /><small>ENTER THE WORLD</small></div>
     </header>
 
     <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>一个入口，<br />通向许多种生活。</h2><p>MOOD 不是一张功能清单。它是一座逐渐生长的数字世界；你可以选择自己的方向，也可以只是停留。</p></div><nav className="mood-world-map" aria-label="MOOD 世界地图"><a href="#cafe"><span>01</span><strong>咖啡馆</strong><small>思想与不同的人相遇</small></a><a href="#road"><span>02</span><strong>在路上</strong><small>选择自己的方向</small></a><a href="#leisure"><span>03</span><strong>闲暇之地</strong><small>让生活重新生长</small></a><Link href="/library"><span>04</span><strong>Library</strong><small>阅读这个世界的公开记忆</small></Link></nav></section>
@@ -37,10 +37,10 @@ export default function TokenPage() {
 
     <section className="mood-principles" aria-label="MOOD 的信念"><article><span>01</span><h3>独立意志</h3><p>没有人替你定义完整的人生。选择权始终属于你。</p></article><article><span>02</span><h3>自由连接</h3><p>关系源于自愿，而不是许可。世界因真实的连接而存在。</p></article><article><span>03</span><h3>生活之美</h3><p>美不是附加项。它是我们愿意生活、创造和留下的理由。</p></article></section>
 
-    <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">COME AS YOU ARE</span><h2>这里就是入口。</h2><p>钱包不是身份的全部，只是你进入 MOOD 数字家园的一把钥匙。Moodify 是其中一扇门，音乐让我们最先相遇。</p><div className="mood-mini-facts"><span>BNB Smart Chain</span><span>33,000,000 MOOD</span><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noreferrer">Moodify Music ↗</a></div></div><div className="mood-wallet-shell"><WalletConnect /></div></section>
+    <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">ENTER THE NETWORK</span><h2>这里就是入口。</h2><p>钱包不是身份的全部，只是进入 MOOD 协调网络的一把钥匙。参与从理解规则开始，而不是从持有资产开始。</p><div className="mood-mini-facts"><span>WORLD</span><span>PROTOCOL</span><span>PORTAL</span></div></div><div className="mood-wallet-shell"><WalletConnect /></div></section>
 
-    <section id="contract" className="mood-contract"><div><span className="mood-kicker">OFFICIAL CONTRACT</span><h2>只认这一个地址。</h2><p>交易或添加代币前，请核对完整合约地址。</p></div><div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noreferrer">验证合约 ↗</a></div></section>
+    <section id="contract" className="mood-contract"><div><span className="mood-kicker">OFFICIAL CONTRACT</span><h2>只认这一个地址。</h2><p>交易或添加代币前，请核对完整合约地址。</p><p><strong>风险提示：</strong>MOOD 不承诺收益。请独立核验合约、网络状态与交易风险。</p></div><div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noopener noreferrer">验证合约 ↗</a></div></section>
 
-    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link><p>Every voice deserves to be heard.</p><div><Link href="/library">Library</Link><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noreferrer">PancakeSwap ↗</a></div></footer>
+    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
   </main>;
 }

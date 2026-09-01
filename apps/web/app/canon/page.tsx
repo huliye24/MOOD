@@ -125,7 +125,7 @@ export default async function CanonPage() {
       <main className="canon-site">
         <nav className="canon-nav" aria-label="Canon navigation">
           <Link className="canon-brand" href="/token">
-            <img src="/moodify-brand-logo.png" alt="" />
+            <img src="/favicon.svg" alt="" />
             <span>MOOD</span>
           </Link>
           <div>
@@ -158,7 +158,7 @@ export default async function CanonPage() {
     <main className="canon-site">
       <nav className="canon-nav" aria-label="Canon navigation">
         <Link className="canon-brand" href="/token">
-          <img src="/moodify-brand-logo.png" alt="" />
+          <img src="/favicon.svg" alt="" />
           <span>MOOD</span>
         </Link>
         <div>
@@ -224,7 +224,7 @@ export default async function CanonPage() {
 
       <footer className="canon-footer">
         <Link className="canon-brand" href="/token">
-          <img src="/moodify-brand-logo.png" alt="" />
+          <img src="/favicon.svg" alt="" />
           <span>MOOD</span>
         </Link>
         <p>The Canon is where MOOD begins.</p>

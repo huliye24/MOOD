@@ -1,4 +1,4 @@
-/* Moodify page shell components — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001.
+/* MOOD page shell components — inherited compatibility component set.
    Navigation and shell only; never derives product state. */
 
 import type { ReactNode } from "react";
@@ -10,7 +10,7 @@ export interface BrandMarkProps {
   wordmark?: string;
 }
 
-export function BrandMark({ size = "md", wordmark = "MOODIFY" }: BrandMarkProps) {
+export function BrandMark({ size = "md", wordmark = "MOOD" }: BrandMarkProps) {
   const fontSize = size === "lg" ? "var(--text-2xl)" : size === "sm" ? "var(--text-md)" : "var(--text-xl)";
   return (
     <span
@@ -47,7 +47,7 @@ export function BrandMark({ size = "md", wordmark = "MOODIFY" }: BrandMarkProps)
 
 /* ---------- ProductSwitcher ---------- */
 
-export type ProductEntry = "website" | "ear" | "music";
+export type ProductEntry = "world" | "protocol" | "portal";
 
 export interface ProductSwitcherProps {
   current: ProductEntry;
@@ -55,9 +55,9 @@ export interface ProductSwitcherProps {
 }
 
 const productLabel: Record<ProductEntry, string> = {
-  website: "Website",
-  ear: "Moodify Ear",
-  music: "Moodify Music",
+  world: "World",
+  protocol: "Protocol",
+  portal: "Portal",
 };
 
 export function ProductSwitcher({ current, onNavigate }: ProductSwitcherProps) {

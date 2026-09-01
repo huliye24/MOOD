@@ -1,4 +1,4 @@
-/* Moodify UI primitives — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001.
+/* MOOD UI primitives — inherited MFY compatibility component set.
    Presentational only: accept state via props, never derive Ear judgment or
    Music publication conclusions. All colors/spacing from tokens.css. */
 

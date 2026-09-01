@@ -28,7 +28,7 @@ export function requireText(value: unknown, field: string, max: number): string 
 
 export async function requireMusicUser(request: Request) {
   const email = request.headers.get(EMAIL_HEADER)?.trim().toLowerCase();
-  if (!email) throw new ApiError(401, "UNAUTHORIZED", "请先登录 Moodify");
+  if (!email) throw new ApiError(401, "UNAUTHORIZED", "请先登录 MOOD");
   const encodedName = request.headers.get(NAME_HEADER);
   const displayName = encodedName && request.headers.get(NAME_ENCODING_HEADER) === "percent-encoded-utf-8"
     ? safeDecode(encodedName) ?? email

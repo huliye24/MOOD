@@ -810,7 +810,7 @@ export default function AdminContributionsPage() {
   return (
     <main style={{ minHeight: "100vh", background: "radial-gradient(circle at 70% 12%, rgba(36,66,154,.17), transparent 27%), linear-gradient(135deg, #070a22, #040719 70%)", padding: "0 clamp(20px, 4vw, 64px) var(--space-12)" }}>
       <nav aria-label="位置" style={{ paddingBlock: "var(--space-6)", color: "var(--text-faint)", fontSize: "var(--text-sm)" }}>
-        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 Moodify</Link>
+        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 MOOD</Link>
       </nav>
 
       <header style={{ display: "grid", gap: "var(--space-4)", paddingBlock: "var(--space-8)", maxWidth: 800 }}>

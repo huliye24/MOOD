@@ -11,6 +11,9 @@ MOOD Manifesto 描述协议背后的社会结构理念：
 - [Contribution Over Status](manifesto/contribution-over-status.md)
 - [From Gatekeeper to Protocol](manifesto/gatekeeper-to-protocol.md)
 - [Protocol Empire Theory](manifesto/protocol-empire-theory.md)
+- [MOOD Is Not Moodify](manifesto/mood-not-moodify.md)
+- [Protocol vs. Application](manifesto/protocol-vs-application.md)
+- [Genesis Application](manifesto/genesis-application.md)
 
 ## Protocol
 
@@ -19,3 +22,7 @@ MOOD Manifesto 描述协议背后的社会结构理念：
 ## Operational Records
 
 治理、安全、财库、预发布、Genesis 与审计记录位于 [`docs/mood/`](mood/)。这些记录必须区分提案、测试、阶段状态与已验证事实。
+
+## Compatibility
+
+历史 Moodify 标识的保留范围与迁移纪律见 [MOOD / Moodify Compatibility Boundary](MOODIFY_COMPATIBILITY_BOUNDARY.md)。

@@ -199,7 +199,7 @@ export async function GET(request: NextRequest) {
         },
         dataSources: [
           "BNB Smart Chain RPC (bsc-dataseed.binance.org)",
-          "Moodify Genesis database",
+          "Legacy Genesis database",
           "Approved Package 004 snapshot artifacts",
           "On-chain event logs (when indexed)",
         ],

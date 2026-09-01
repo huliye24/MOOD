@@ -1,4 +1,4 @@
-/* Moodify data display components — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001.
+/* MOOD data display components — inherited MFY compatibility component set.
    Render-only: tables, definition lists, single-question chart frames. */
 
 import type { ReactNode } from "react";

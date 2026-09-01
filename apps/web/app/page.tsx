@@ -1,2 +1,2 @@
-/** MOOD owns the canonical root route; Moodify is a separate product. */
+/** MOOD owns the canonical root route. Applications remain independent. */
 export { default } from "./token/page";

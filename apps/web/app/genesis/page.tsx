@@ -3,7 +3,7 @@
 /* /genesis — MOOD-GENESIS-002: Wallet-signature Genesis Participant
    registration. No token transfer, no approval, no gas. The only wallet
    action is `personal_sign` on a human-readable message reconstructed by
-   the server. The page reuses the existing Moodify visual system
+   the server. The page uses the MOOD visual system
    (hero + surface + risk notice) and the shared `components/ui/primitives`
    for accessible buttons and fields.
 
@@ -113,7 +113,7 @@ function PhaseBanner({ phase, errorMessage }: { phase: Phase; errorMessage: stri
     "connecting": { tone: "info", text: "正在连接钱包……" },
     "wrong-network": { tone: "attention", text: `请切换到 ${GENESIS_CONFIG.network} (chainId ${GENESIS_CONFIG.chainId})。` },
     "ready-to-sign": { tone: "info", text: "已就绪。请仔细阅读下方签名内容,然后点击「签名并注册」。" },
-    "nonce-loading": { tone: "info", text: "正在向 Moodify 后端申请一次性 nonce……" },
+    "nonce-loading": { tone: "info", text: "正在向 MOOD 服务申请一次性 nonce……" },
     "signature-requested": { tone: "info", text: "请在钱包中确认签名。签名不授权任何代币转账或链上交易。" },
     "verifying": { tone: "info", text: "正在验证签名并创建 Genesis Participant 记录……" },
     "rejected": { tone: "attention", text: errorMessage ?? "你已取消签名。可以随时重试。" },
@@ -398,7 +398,7 @@ export default function GenesisPage() {
   return (
     <main style={{ minHeight: "100vh", background: "radial-gradient(circle at 70% 12%, rgba(36,66,154,.17), transparent 27%), linear-gradient(135deg, #070a22, #040719 70%)", padding: "0 clamp(20px, 4vw, 64px) var(--space-12)" }}>
       <nav aria-label="位置" style={{ paddingBlock: "var(--space-6)", color: "var(--text-faint)", fontSize: "var(--text-sm)" }}>
-        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 Moodify</Link>
+        <Link href="/" style={{ color: "inherit", textDecoration: "none" }}>← 返回 MOOD</Link>
       </nav>
 
       <header style={{ display: "grid", gap: "var(--space-4)", paddingBlock: "var(--space-12) var(--space-8)", maxWidth: 760 }}>
@@ -406,10 +406,10 @@ export default function GenesisPage() {
           Protocol · Genesis
         </span>
         <h1 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "var(--text-4xl)", lineHeight: "var(--leading-tight)", letterSpacing: "-0.01em", color: "var(--text)" }}>
-          Moodify Genesis
+          MOOD Genesis
         </h1>
         <p style={{ margin: 0, fontSize: "var(--text-lg)", color: "var(--text-muted)", maxWidth: "44ch", lineHeight: "var(--leading-normal)" }}>
-          注册为 Moodify Genesis Participant。整个过程只需要一次钱包签名:无需购买代币、无需授权转账、无需支付 Gas。
+          注册为 MOOD Genesis Participant。整个过程只需要一次钱包签名:无需购买代币、无需授权转账、无需支付 Gas。
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "var(--space-3)" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-2)", padding: "var(--space-1) var(--space-4)", borderRadius: "var(--radius-pill)", border: "1px solid var(--line)", background: "var(--surface-subtle)", fontSize: "var(--text-sm)", color: "var(--text)" }}>
@@ -424,11 +424,11 @@ export default function GenesisPage() {
         <div style={{ display: "grid", gap: "var(--space-3)" }}>
           <h2 style={{ margin: 0, fontFamily: "var(--font-display)", fontSize: "var(--text-2xl)", color: "var(--text)" }}>什么是 Genesis Participant</h2>
           <ul style={{ margin: 0, paddingInlineStart: "var(--space-6)", display: "grid", gap: "var(--space-2)", color: "var(--text-muted)", fontSize: "var(--text-md)", lineHeight: "var(--leading-normal)" }}>
-            <li>Moodify Protocol Genesis 是早期参与者登记簿,记录在 BNB Smart Chain 上某个 EVM 钱包地址的参与意愿。</li>
+            <li>MOOD Protocol Genesis 是早期参与者登记簿,记录在 BNB Smart Chain 上某个 EVM 钱包地址的参与意愿。</li>
             <li>注册不代表任何形式的金融价值承诺,也不构成投资、证券或回报保证。</li>
             <li>注册不需要购买、转移或授权 MOOD 代币,也不需要支付任何链上费用。</li>
             <li>钱包签名仅证明钱包所有权;签名内容明确写明不授权任何代币转账或交易。</li>
-            <li>未来 Moodify 协议可能基于此登记册进行分配/空投等机制,但本流程不执行这些动作。</li>
+            <li>未来 MOOD 协议可能基于此登记册提出分配机制,但本流程不执行这些动作，也不构成承诺。</li>
           </ul>
         </div>
 
@@ -439,7 +439,7 @@ export default function GenesisPage() {
           <ol style={{ margin: 0, paddingInlineStart: "var(--space-6)", display: "grid", gap: "var(--space-2)", color: "var(--text-muted)", fontSize: "var(--text-md)", lineHeight: "var(--leading-normal)" }}>
             <li>连接你的 EVM 钱包(MetaMask、Rabby、OKX、Trust 等)。</li>
             <li>确认钱包当前网络为 BNB Smart Chain (chainId {GENESIS_CONFIG.chainId});若不是,使用钱包提供的切换按钮。</li>
-            <li>点击「申请签名并注册」,Moodify 后端会生成一次性 nonce 并向你展示完整签名内容。</li>
+            <li>点击「申请签名并注册」,MOOD 服务会生成一次性 nonce 并向你展示完整签名内容。</li>
             <li>在钱包中确认 `personal_sign`;签名内容明确写明不授权任何代币转账或交易。</li>
             <li>后端验证签名成功后,返回你的 Genesis Participant 编号与记录。</li>
           </ol>
@@ -479,9 +479,9 @@ export default function GenesisPage() {
           <ul style={{ margin: 0, paddingInlineStart: "var(--space-6)", display: "grid", gap: "var(--space-2)", color: "var(--text-muted)", fontSize: "var(--text-md)", lineHeight: "var(--leading-normal)" }}>
             <li>本注册不收取任何费用,不要求转移代币,不要求授权代币,不要求支付 Gas。</li>
             <li>注册即表示你确认自己所在司法辖区允许此类参与,并接受当前的签名版本与条款版本。</li>
-            <li>Moodify 不会询问你的助记词、私钥或任何敏感信息;请只在官方页面进行签名。</li>
+            <li>MOOD 不会询问你的助记词、私钥或任何敏感信息;请只在官方页面进行签名。</li>
             <li>注册编号不可转让;每个钱包地址只能登记一次。</li>
-            <li>未来是否基于此登记册进行分配、空投或激励,属于 Moodify 协议后续决定,本流程不构成任何承诺。</li>
+            <li>未来是否基于此登记册提出分配或激励,属于 MOOD 协议的后续治理问题,本流程不构成任何承诺。</li>
           </ul>
         </section>
       </section>

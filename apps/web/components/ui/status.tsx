@@ -1,4 +1,4 @@
-/* Moodify status components — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001.
+/* MOOD status components — inherited MFY compatibility component set.
    Accept state via props only. Semantic discipline (design_tokens_v1 §5):
    amber = human attention only, red = blocking failure only. */
 

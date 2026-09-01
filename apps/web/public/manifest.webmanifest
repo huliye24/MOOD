@@ -1,7 +1,7 @@
 {
-  "name": "Moodify Music",
-  "short_name": "Moodify",
-  "description": "听见此刻与你更接近的音乐。先听，再发现，然后创作。",
+  "name": "MOOD",
+  "short_name": "MOOD",
+  "description": "An open coordination protocol and digital world for human and machine agency.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -9,9 +9,9 @@
   "theme_color": "#05081e",
   "icons": [
     {
-      "src": "/moodify-logo.png",
+      "src": "/favicon.svg",
       "sizes": "any",
-      "type": "image/png",
+      "type": "image/svg+xml",
       "purpose": "any"
     }
   ]

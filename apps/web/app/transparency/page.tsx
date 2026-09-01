@@ -19,7 +19,7 @@ import { genesisParticipants } from "@/db/schema";
 import { sql } from "drizzle-orm";
 
 export const metadata: Metadata = {
-  title: "Transparency | Moodify Protocol",
+  title: "Transparency | MOOD Protocol",
   description: "Public transparency layer for MOOD token and protocol assets",
 };
 
@@ -319,7 +319,7 @@ export default async function TransparencyPage() {
               <h3 className="font-medium text-gray-900 mb-2">Data Sources</h3>
               <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
                 <li>BNB Smart Chain RPC (bsc-dataseed.binance.org)</li>
-                <li>Moodify Genesis database</li>
+                <li>Legacy Genesis database</li>
                 <li>Approved Package 004 snapshot artifacts</li>
                 <li>On-chain event logs (when indexed)</li>
               </ul>

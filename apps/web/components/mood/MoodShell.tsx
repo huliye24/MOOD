@@ -12,7 +12,7 @@ export function MoodShell({ children, current }: { children: React.ReactNode; cu
     <main className="mood-interface">
       <nav className="world-nav" aria-label="MOOD navigation">
         <Link className="world-brand" href="/">
-          <img src="/moodify-brand-logo.png" alt="" />
+          <img src="/favicon.svg" alt="" />
           <span>MOOD</span>
         </Link>
         <div className="world-links">
@@ -24,7 +24,7 @@ export function MoodShell({ children, current }: { children: React.ReactNode; cu
       </nav>
       {children}
       <footer className="world-footer">
-        <Link className="world-brand" href="/"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
+        <Link className="world-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link>
         <p>WORLD · PROTOCOL · PORTAL</p>
         <div><Link href="/canon">Canon</Link><Link href="/library">Library</Link><a href="https://github.com/huliye24/MOOD" target="_blank" rel="noreferrer">GitHub ↗</a></div>
       </footer>

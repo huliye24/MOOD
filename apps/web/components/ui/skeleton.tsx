@@ -1,4 +1,4 @@
-/* Moodify Skeleton component — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001 */
+/* MOOD skeleton component — inherited MFY compatibility identifier. */
 
 import type { CSSProperties } from "react";
 import { forwardRef } from "react";

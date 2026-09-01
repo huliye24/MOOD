@@ -1,4 +1,4 @@
-/* Moodify empty/error/recovery surfaces — MFY_SHARED_DESIGN_SYSTEM_AND_SHELL_001.
+/* MOOD empty/error/recovery surfaces — inherited MFY compatibility component set.
    Honest states: no fake success, no spinner-only feedback. */
 
 import type { ReactNode } from "react";

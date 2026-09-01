@@ -1,6 +1,6 @@
 /* MOOD public interface Service Worker — static assets only.
 
-Cache boundary (MFY_MUSIC_APP_FOUNDATION_001):
+Cache boundary:
 - PRECACHE: versioned JS/CSS, manifest, icons, offline shell.
 - network-only: /api/*, private pages, uploads, auth responses.
 - Audio Range responses: never cache-first (pass-through to network).
@@ -10,7 +10,7 @@ const VERSION = "mood-public-assets-v1";
 const SHELL_CACHE = VERSION;
 const PRECACHE_URLS = [
   "/manifest.webmanifest",
-  "/moodify-brand-logo.png",
+  "/favicon.svg",
 ];
 
 self.addEventListener("install", (event) => {
@@ -30,11 +30,7 @@ self.addEventListener("activate", (event) => {
 function isStaticAsset(url) {
   const { pathname } = url;
   if (pathname.startsWith("/api/")) return false; // API never cached
-  if (pathname.startsWith("/audio/")) return false; // audio Range pass-through
-  if (pathname.startsWith("/studio") || pathname.startsWith("/library")
-    || pathname.startsWith("/inbox") || pathname.startsWith("/console")
-    || pathname.startsWith("/playlists") || pathname.startsWith("/drafts")
-    || pathname.startsWith("/beta-login")) return false; // private/session pages
+  if (pathname.startsWith("/library")) return false;
   if (pathname.endsWith(".js") || pathname.endsWith(".css")
     || pathname.endsWith(".png") || pathname.endsWith(".svg")
     || pathname.endsWith(".ico") || pathname.endsWith(".woff2")) return true;
