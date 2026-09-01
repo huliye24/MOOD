@@ -4,12 +4,28 @@ MOOD is MOOD — an independent project with its own repository, product identit
 
 This repository is the new development mainline. New MOOD work must not be developed in the Moodify repository.
 
+MOOD is an open coordination protocol and digital world for:
+
+- Humans
+- AI Agents
+- Organizations
+- Capital
+- Network Resources
+
+Core idea:
+
+> Company owns resources.
+>
+> Protocol coordinates resources.
+
+MOOD is a coordination protocol, not an investment platform. Capital is one protocol module, and organizations remain network nodes rather than being replaced by the protocol.
+
 ## Repository layout
 
 - `apps/web` — MOOD web application, protocol surfaces, APIs, contracts, and tests
 - `protocol` — protocol schemas, policies, examples, and validation tests
 - `docs/mood` — governance, security, treasury, staging, genesis, and audit records
-- `docs/protocol` — protocol/token reference documents
+- `docs/protocol` — foundational protocol modules and protocol/token reference documents
 - `e2e/staging` — public staging end-to-end journeys
 
 ## Local development
@@ -38,4 +54,3 @@ Moodify music-processing code, private audio, generated output, and unrelated pr
 ## Status and safety
 
 Documentation may describe proposed or staged capabilities. A proposal is not proof of deployment. Contract, treasury, node, governance, distribution, and production claims require verifiable runtime or on-chain evidence and any documented human approval.
-
