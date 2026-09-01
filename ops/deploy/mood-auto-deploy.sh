@@ -87,7 +87,7 @@ ln -sfn "${app_dir}" "${current_link}.next"
 mv -Tf "${current_link}.next" "${current_link}"
 
 if ! systemctl restart "${service_name}" \
-  || ! curl --fail --silent --show-error --retry 12 --retry-delay 2 --max-time 5 "http://127.0.0.1:3200/" >/dev/null; then
+  || ! curl --fail --silent --show-error --retry 12 --retry-connrefused --retry-delay 2 --max-time 5 "http://127.0.0.1:3200/" >/dev/null; then
   if [[ -n "${previous_target}" && -d "${previous_target}" ]]; then
     ln -sfn "${previous_target}" "${current_link}.rollback"
     mv -Tf "${current_link}.rollback" "${current_link}"
