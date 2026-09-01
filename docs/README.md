@@ -39,6 +39,13 @@ MOOD → WORLD → MANIFESTO → CANON → LIBRARY → PROTOCOL
 Each route's authoritative source document is recorded in
 [`docs/website/content-mapping.md`](website/content-mapping.md).
 
+Portal architecture planning (Phase Zero, no live surface):
+
+- [Portal Architecture — Pack 005](website/pack-005/README.md)
+- [Information Architecture](website/pack-005/information-architecture.md)
+- [Portal Architecture](website/pack-005/portal-architecture.md)
+- [Future Portal Surface](website/pack-005/future-portal-surface.md)
+
 ## Operational Records
 
 治理、安全、财库、预发布、Genesis 与审计记录位于 [`docs/mood/`](mood/)。这些记录必须区分提案、测试、阶段状态与已验证事实。
@@ -52,6 +59,15 @@ Each route's authoritative source document is recorded in
 - [Foundation Node Proposal](chronicle/PROPOSAL_FOUNDATION_NODE.md) — *Draft*
 - [Community Node Proposal](chronicle/PROPOSAL_COMMUNITY_NODE.md) — *Draft*
 - [Contributor Lifecycle Proposal](chronicle/PROPOSAL_CONTRIBUTOR_LIFECYCLE.md) — *Draft*
+
+## Engineering Operations
+
+跨切工程规范位于 [`docs/operations/`](operations/)。这些是**维护性文档**，不授权 canonical 概念。
+
+- [Repository Hygiene Protocol](operations/repository-hygiene.md) — repository governance for AI-assisted development
+- [Cleanup Checklist](operations/cleanup-checklist.md) — before / after / weekly audit checklist
+
+`docs/mood/` 的numbered staging 文档（如 023、024）与 `docs/operations/` 的跨切规范互补：前者是部署专有，后者是全局规范。
 
 ## Compatibility
 
