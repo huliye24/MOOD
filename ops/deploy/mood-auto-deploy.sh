@@ -24,7 +24,7 @@ if [[ ! -d "${repository_dir}/.git" ]]; then
 fi
 
 runuser -u moodify -- git -C "${repository_dir}" fetch --prune origin "+refs/heads/${branch}:refs/remotes/origin/${branch}"
-revision="$(git -C "${repository_dir}" rev-parse "refs/remotes/origin/${branch}")"
+revision="$(runuser -u moodify -- git -C "${repository_dir}" rev-parse "refs/remotes/origin/${branch}")"
 deployed_revision="$(cat "${deployed_revision_file}" 2>/dev/null || true)"
 
 if [[ "${revision}" == "${deployed_revision}" ]]; then
@@ -36,7 +36,7 @@ release_dir="${releases_dir}/${release_id}"
 app_dir="${release_dir}/apps/web"
 
 mkdir -p "${release_dir}"
-git -C "${repository_dir}" archive "${revision}" | tar -x -C "${release_dir}"
+runuser -u moodify -- git -C "${repository_dir}" archive "${revision}" | tar -x -C "${release_dir}"
 printf '%s\n' "${revision}" > "${release_dir}/DEPLOYED_COMMIT"
 chown -R moodify:moodify "${release_dir}"
 
