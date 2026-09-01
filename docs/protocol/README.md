@@ -14,18 +14,27 @@ MOOD is not an investment platform. Capital is one form of contribution and one 
 
 ## Protocol Modules
 
-- Identity — conceptual module; specification not yet written
+### Active specifications
 - [Contribution](contribution.md)
-- Proof — conceptual module; specification not yet written
+- [Contribution Proof](contribution-proof.md)
 - [Reputation](reputation.md)
-- Agent — conceptual module; specification not yet written
+- [Reputation Engine](reputation-engine.md)
+- [Agent](agent.md)
 - [Node](node.md)
 - [Organization](organization.md)
 - [Project](project.md)
 - [Capital](capital.md)
+- [Passport](passport.md)
+- [Verification](verification.md)
 - [Rights](rights.md)
-- Governance — conceptual module; specification not yet written
-- Settlement — conceptual module; specification not yet written
+- [Rights System](rights-system.md)
+- [Governance Process](governance-process.md)
+- [State Machine](state-machine.md)
+- [Treasury](treasury.md)
+
+### Conceptual modules — specification not yet written
+- Identity
+- Settlement
 
 ## Direction
 

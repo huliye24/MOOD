@@ -14,7 +14,7 @@ export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
       <Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><a href="#use">Portal</a><Link href="/network">Network</Link><Link href="/genesis">Genesis</Link><Link href="/library">Library</Link></div>
+      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><Link href="/portal">Portal</Link><Link href="/network">Network</Link><Link href="/genesis">Genesis</Link><Link href="/library">Library</Link></div>
       <a className="mood-nav-action" href="#use">连接钱包</a>
     </nav>
 
@@ -39,7 +39,29 @@ export default function TokenPage() {
 
     <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">ENTER THE NETWORK</span><h2>这里就是入口。</h2><p>钱包不是身份的全部，只是进入 MOOD 协调网络的一把钥匙。参与从理解规则开始，而不是从持有资产开始。</p><div className="mood-mini-facts"><span>WORLD</span><span>PROTOCOL</span><span>PORTAL</span></div></div><div className="mood-wallet-shell"><WalletConnect /></div></section>
 
-    <section id="contract" className="mood-contract"><div><span className="mood-kicker">OFFICIAL CONTRACT</span><h2>只认这一个地址。</h2><p>交易或添加代币前，请核对完整合约地址。</p><p><strong>风险提示：</strong>MOOD 不承诺收益。请独立核验合约、网络状态与交易风险。</p></div><div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noopener noreferrer">验证合约 ↗</a></div></section>
+    <section id="contract" className="mood-contract">
+      <div>
+        <span className="mood-kicker">MOOD TOKEN · ON-CHAIN RECORD</span>
+        <h2>只有一个地址。</h2>
+        <p>任何交易或添加代币之前,请在区块浏览器上独立核实合约地址是否与本文档的权威来源一致。</p>
+        <p><strong>风险提示：</strong>MOOD 不提供任何形式的回报保证。新上线代币流动性可能较浅,价格剧烈波动,智能合约风险与市场风险自担。请自行核实合约地址。</p>
+        <p className="mood-contract-authority">
+          <strong>事实来源：</strong>
+          <Link href="/canon">MOOD Canon</Link>
+          <span> · </span>
+          <a href="https://github.com/huliye24/MOOD/blob/main/docs/protocol/MOOD_TOKEN.md" target="_blank" rel="noreferrer">docs/protocol/MOOD_TOKEN.md ↗</a>
+          <span> · </span>
+          <a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noopener noreferrer">在区块浏览器核验 ↗</a>
+        </p>
+        <p className="mood-contract-phase">
+          <strong>阶段标识：</strong>Phase Zero — Worldbuilding。代币记录在
+          <a href="https://github.com/huliye24/MOOD/blob/main/docs/protocol/MOOD_TOKEN.md" target="_blank" rel="noreferrer"> 协议文档</a>
+          中维护;本页面不参与分配、领取或激活流程。任何分配、流动性、激励或收益机制均未在
+          <Link href="/canon"> Canon</Link> 中授权,不会出现在本页面。
+        </p>
+      </div>
+      <div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /></div>
+    </section>
 
     <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
   </main>;
