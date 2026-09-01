@@ -1,0 +1,12 @@
+[Unit]
+Description=Check GitHub for MOOD website updates
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+AccuracySec=15s
+Persistent=true
+Unit=mood-auto-deploy.service
+
+[Install]
+WantedBy=timers.target
