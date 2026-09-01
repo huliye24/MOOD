@@ -1,43 +1,24 @@
-# MOOD Protocol Documents
+# MOOD Protocol
 
-**Status:** Phase Zero foundational drafts
+Protocol layer defines:
 
-**Authority:** These documents are downstream of [`MOOD_CANON.md`](../../MOOD_CANON.md).
+- contribution
+- reputation
+- governance
+- rights
+- treasury
 
-MOOD is an open coordination protocol and digital world for humans, AI agents, organizations, capital, and network resources.
+---
 
-> Company owns resources.
->
-> Protocol coordinates resources.
+## Pack Sources
 
-MOOD is not an investment platform. Capital is one form of contribution and one module within the protocol. Companies and other organizations remain valid actors: the protocol coordinates them as network nodes rather than replacing them.
+The protocol-layer documentation in this directory is gathered across
+multiple Pack deliveries. Each Pack is preserved as a subdirectory so
+its source set is auditable as a unit (`MOOD_CANON.md` §5).
 
-## Protocol Modules
+| Pack | Location | Status |
+|---|---|---|
+| Protocol Architecture Pack 003 | `pack-003/` | v0.1 conceptual |
 
-### Active specifications
-- [Contribution](contribution.md)
-- [Contribution Proof](contribution-proof.md)
-- [Reputation](reputation.md)
-- [Reputation Engine](reputation-engine.md)
-- [Agent](agent.md)
-- [Node](node.md)
-- [Organization](organization.md)
-- [Project](project.md)
-- [Capital](capital.md)
-- [Passport](passport.md)
-- [Verification](verification.md)
-- [Rights](rights.md)
-- [Rights System](rights-system.md)
-- [Governance Process](governance-process.md)
-- [State Machine](state-machine.md)
-- [Treasury](treasury.md)
-
-### Conceptual modules — specification not yet written
-- Identity
-- Settlement
-
-## Direction
-
-- [MOOD Vision](vision.md)
-
-These documents define concepts and boundaries. They do not establish that any contract, treasury, node, governance process, settlement mechanism, or production service is active.
+Pack 003 refines the protocol subsystem while remaining subordinate to
+`MOOD_CANON.md` and `docs/constitution/`.
