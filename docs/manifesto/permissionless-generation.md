@@ -1,0 +1,25 @@
+# MOOD Manifesto
+
+## Permissionless Generation
+
+**Status:** Canonical Draft  
+**Category:** Manifesto / Social Architecture  
+**Protocol:** MOOD Protocol
+
+### 从许可时代到贡献时代
+
+旧世界：
+
+创造者需要获得机构、资本和平台的许可。
+
+新世界：
+
+创造者通过贡献证明自己的价值。
+
+MOOD 相信：
+
+- 贡献 > 身份
+- 创造 > 关系
+- 声誉 > 背景
+
+网络应该属于参与建设网络的人。
