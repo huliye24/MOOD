@@ -10,6 +10,7 @@ MOOD Manifesto 描述协议背后的社会结构理念：
 - [Anti-Gatekeeper Economy](manifesto/anti-gatekeeper-economy.md)
 - [Contribution Over Status](manifesto/contribution-over-status.md)
 - [From Gatekeeper to Protocol](manifesto/gatekeeper-to-protocol.md)
+- [Protocol Empire Theory](manifesto/protocol-empire-theory.md)
 
 ## Protocol
 
