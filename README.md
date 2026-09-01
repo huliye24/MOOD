@@ -284,6 +284,7 @@ The MOOD world is documented through Markdown under `docs/`.
 | Layer | Location | Canon basis |
 |---|---|---|
 | World | `docs/manifesto/`, `docs/network/` | §6.1 / §6.3 |
+| Constitution | `docs/constitution/` | §6.2 |
 | Protocol & Architecture | `docs/architecture/` | §6.4 |
 | Economy & Settlement | `docs/blockchain/` | §6.5 |
 
