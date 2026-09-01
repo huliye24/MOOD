@@ -76,6 +76,10 @@ surface reserved for future participation.
   - From Company to Network
   - Human AI Coexistence
   - Protocol vs. Platform
+  - MOODism：贡献驱动的网络文明（中文思想文稿，Draft）
+  - Proof of Intelligence：智能证明（中文概念提案，Draft）
+  - MOOD Technical Architecture（中文技术架构概念稿，Draft）
+  - MOOD Protocol Specification · Yellow Paper（中文非规范性草案，Draft）
 - **Rule:** Each sub-route renders the corresponding Markdown file via the shared
   `MoodDocument` component. No narrative may be added that lacks a source document.
 

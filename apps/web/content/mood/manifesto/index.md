@@ -34,3 +34,11 @@ Connected by contribution.
 [From Company to Network →](/manifesto/from-company-to-network)
 
 [Human AI Coexistence →](/manifesto/human-ai-coexistence)
+
+[MOODism：贡献驱动的网络文明（中文 · Draft）→](/manifesto/moodism)
+
+[Proof of Intelligence：智能证明（中文 · Draft）→](/manifesto/proof-of-intelligence)
+
+[MOOD Technical Architecture：AI 时代基础协议架构（中文 · Draft）→](/manifesto/technical-architecture)
+
+[MOOD Protocol Specification：Yellow Paper（中文 · Non-normative Draft）→](/manifesto/protocol-yellow-paper)

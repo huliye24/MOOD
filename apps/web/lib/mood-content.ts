@@ -9,6 +9,8 @@ import fromCompanyToNetwork from "../content/mood/manifesto/from-company-to-netw
 import humanAiCoexistence from "../content/mood/manifesto/human-ai-coexistence.md?raw";
 import moodismCn from "../content/mood/manifesto/moodism-cn.md?raw";
 import proofOfIntelligenceCn from "../content/mood/manifesto/proof-of-intelligence-cn.md?raw";
+import technicalArchitectureCn from "../content/mood/manifesto/technical-architecture-cn.md?raw";
+import protocolYellowPaperCn from "../content/mood/manifesto/protocol-yellow-paper-cn.md?raw";
 import whatMoodIs from "../content/mood/canon/what-mood-is.md?raw";
 import whatMoodIsNot from "../content/mood/canon/what-mood-is-not.md?raw";
 import designPrinciples from "../content/mood/canon/design-principles.md?raw";
@@ -43,6 +45,8 @@ const moodContent: Record<string, string> = {
   "manifesto/human-ai-coexistence.md": humanAiCoexistence,
   "manifesto/moodism-cn.md": moodismCn,
   "manifesto/proof-of-intelligence-cn.md": proofOfIntelligenceCn,
+  "manifesto/technical-architecture-cn.md": technicalArchitectureCn,
+  "manifesto/protocol-yellow-paper-cn.md": protocolYellowPaperCn,
   "canon/what-mood-is.md": whatMoodIs,
   "canon/what-mood-is-not.md": whatMoodIsNot,
   "canon/design-principles.md": designPrinciples,

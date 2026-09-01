@@ -11,6 +11,8 @@ const documents:DocumentEntry[]=[
   {title:"Human × AI",description:"人类与机器如何在同一协调世界中保持主体性。",kind:"Manifesto",href:"/manifesto/human-ai-coexistence",image:"/mood-leisure.png",keywords:["ai","human","coexistence","agents"]},
   {title:"MOODism：贡献驱动的网络文明",description:"中文思想文稿：从身份驱动走向贡献、信誉与权益。Draft。",kind:"Manifesto",href:"/manifesto/moodism",image:"/mood-road.png",keywords:["moodism","贡献","信誉","权益","network civilization","中文"]},
   {title:"Proof of Intelligence：智能证明",description:"中文概念提案：探索智能贡献的验证、信誉与权益路径。Draft。",kind:"Manifesto",href:"/manifesto/proof-of-intelligence",image:"/mood-network-cycle.png",keywords:["proof of intelligence","poi","智能证明","智能贡献","共识","中文"],diagram:true},
+  {title:"MOOD Technical Architecture",description:"中文技术架构概念稿：PoI、贡献证明、信誉、权益与 AI Agent Network。Draft。",kind:"Manifesto",href:"/manifesto/technical-architecture",image:"/mood-network-cycle.png",keywords:["technical architecture","技术架构","poi","contribution proof","reputation","rights","agent network","中文"],diagram:true},
+  {title:"MOOD Protocol Specification · Yellow Paper",description:"中文非规范性草案：状态、验证、智能共识、信誉、权益与 Agent 交互。",kind:"Manifesto",href:"/manifesto/protocol-yellow-paper",image:"/mood-network-cycle.png",keywords:["yellow paper","protocol specification","协议规范","状态模型","信誉公式","agent","中文"],diagram:true},
 ];
 export default function LibraryPage(){
   const [query,setQuery]=useState("");const [filter,setFilter]=useState<"All"|DocumentEntry["kind"]>("All");
