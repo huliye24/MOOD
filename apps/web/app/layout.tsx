@@ -4,6 +4,7 @@ import "./mood-world.css";
 import "./mood-home-overrides.css";
 import "./mood-phase.css";
 import "./protocol.css";
+import "./layout-fixes.css";
 import SwRegister from "./sw-register";
 
 export const metadata: Metadata = {

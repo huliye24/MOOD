@@ -1,0 +1,45 @@
+/* Prevent legacy player header styles from collapsing public editorial pages. */
+.mood-interface .document-hero,
+.mood-interface .protocol-architecture-hero,
+.mood-interface .protocol-document-hero {
+  height: auto;
+  display: block;
+  align-items: initial;
+  justify-content: initial;
+}
+
+/* Long diagrams remain contained without forcing the entire page wider. */
+.document-lead,
+.protocol-architecture-hero,
+.protocol-document-hero {
+  min-width: 0;
+}
+
+@media (min-width: 901px) {
+  .protocol-architecture-hero .protocol-flow {
+    overflow-x: hidden;
+  }
+}
+
+@media (max-width: 900px) {
+  .protocol-flow {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .protocol-flow-step {
+    min-width: 0;
+    border-bottom: 1px solid rgba(16, 45, 43, 0.18);
+  }
+
+  .protocol-flow-step i {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .protocol-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

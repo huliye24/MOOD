@@ -1,5 +1,6 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
+import bundledCanon from "../../../../../MOOD_CANON.md?raw";
 
 /**
  * /canon/raw — serves MOOD_CANON.md verbatim as a downloadable Markdown file.
@@ -35,6 +36,15 @@ export async function GET() {
     } catch {
       // try the next candidate
     }
+  }
+  if (bundledCanon.trim()) {
+    return new Response(bundledCanon, {
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Content-Disposition": 'attachment; filename="MOOD_CANON.md"',
+        "Cache-Control": "public, max-age=300",
+      },
+    });
   }
   return new Response(
     `# MOOD Canon — visibly unverified\n\nThe canonical file MOOD_CANON.md could not be read from disk.\n\nTried: ${tried.join(" | ")}\n`,

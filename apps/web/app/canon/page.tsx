@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import ReactMarkdown from "react-markdown";
 import Link from "next/link";
+import bundledCanon from "../../../../MOOD_CANON.md?raw";
 
 /**
  * /canon — the MOOD Canon public entrance.
@@ -37,9 +38,10 @@ async function loadCanon(): Promise<{ body: string; sourcePath: string } | { err
       // try the next candidate
     }
   }
-  return {
-    error: `MOOD_CANON.md not found. Tried: ${tried.join(" | ")}`,
-  };
+  if (bundledCanon.trim()) {
+    return { body: bundledCanon, sourcePath: "MOOD_CANON.md · bundled from canonical source" };
+  }
+  return { error: `MOOD_CANON.md not found. Tried: ${tried.join(" | ")}` };
 }
 
 function slugify(value: string): string {

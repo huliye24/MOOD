@@ -56,9 +56,14 @@ export function useWallet() {
   const [state, setState] = useState<WalletState>("disconnected");
   const [account, setAccount] = useState<WalletAccount | null>(null);
   const [error, setError] = useState<WalletError | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Check if wallet is available
-  const hasWallet = !!getInjectedProvider();
+  const hasWallet = mounted && !!getInjectedProvider();
 
   // Get wallet client
   const getWalletClient = useCallback(() => {
