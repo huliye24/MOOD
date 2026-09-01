@@ -1,0 +1,2 @@
+.mood-site .mood-hero h1 small::first-line { color: var(--ink); }
+.mood-site .mood-hero h1 em { color: var(--teal); font-style: normal; }

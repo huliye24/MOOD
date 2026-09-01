@@ -6,6 +6,16 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 // import { CheckCircle, XCircle, AlertTriangle, Clock, Server, Users, FileText } from "lucide-react";
 
+const makeIcon = (glyph: string) => function Icon({ className = "" }: { className?: string }) {
+  return <span className={className} aria-hidden="true">{glyph}</span>;
+};
+const CheckCircle = makeIcon("✓");
+const XCircle = makeIcon("×");
+const AlertTriangle = makeIcon("!");
+const Server = makeIcon("▤");
+const Users = makeIcon("◎");
+const FileText = makeIcon("▧");
+
 // Health check types
 type HealthStatus = "healthy" | "degraded" | "error";
 

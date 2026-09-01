@@ -8,6 +8,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import NetworkHealthMonitor from "@/components/network-health-monitor";
 import ActivityFeed from "@/components/network-activity-feed";
 
+const makeIcon = (glyph: string) => function Icon({ className = "" }: { className?: string }) {
+  return <span className={className} aria-hidden="true">{glyph}</span>;
+};
+const Clock = makeIcon("◷");
+const AlertCircle = makeIcon("!");
+const RefreshCw = makeIcon("↻");
+
 // Type definitions for network metrics
 type MetricValue = {
   value: number | null;

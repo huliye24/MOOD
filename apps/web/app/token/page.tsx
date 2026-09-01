@@ -13,13 +13,13 @@ function CopyAddress() {
 export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
-      <Link className="mood-brand" href="/token"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><a href="#world">我们的世界</a><a href="#story">我们的信念</a><a href="#home">世界地图</a><Link href="/library">Library</Link></div>
-      <a className="mood-nav-action" href="#world">ENTER</a>
+      <Link className="mood-brand" href="/"><img src="/moodify-brand-logo.png" alt="" /><span>MOOD</span></Link>
+      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><a href="#use">Portal</a><Link href="/network">Network</Link><Link href="/library">Library</Link></div>
+      <a className="mood-nav-action" href="#use">连接钱包</a>
     </nav>
 
     <header className="mood-hero">
-      <div className="mood-hero-copy"><span className="mood-kicker">MOOD · A DIGITAL HOME FOR FREE SPIRITS</span><h1><span>BE YOURSELF.</span><small>在这里，成为你自己。</small></h1><p>MOOD 是一个属于自由意志、独立选择与美的数字家园。没有规定的人生，只有你愿意生活的方式。</p><div className="mood-actions"><a className="mood-primary" href="#world">进入 MOOD <span aria-hidden="true">→</span></a><a className="mood-secondary" href="#story">阅读我们的信念</a></div></div>
+      <div className="mood-hero-copy"><span className="mood-kicker">A DIGITAL HOME FOR FREE SPIRITS</span><h1><span>BE YOURSELF.</span><small>在这里，<br /><em>成为你自己。</em></small></h1><p>MOOD 是一个属于自由意志、独立选择与美的数字家园。没有被规定的人生，只有你愿意生活的方式。</p><div className="mood-actions"><a className="mood-primary" href="#world">进入这个世界</a><Link className="mood-secondary" href="/manifesto">阅读我们的信念</Link></div></div>
       <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/moodify-brand-logo.png" alt="" /><small>ENTER THE WORLD</small></div>
     </header>
 

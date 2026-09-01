@@ -1,4 +1,4 @@
-/* Moodify Music Service Worker — app-shell only.
+/* MOOD public interface Service Worker — static assets only.
 
 Cache boundary (MFY_MUSIC_APP_FOUNDATION_001):
 - PRECACHE: versioned JS/CSS, manifest, icons, offline shell.
@@ -6,11 +6,11 @@ Cache boundary (MFY_MUSIC_APP_FOUNDATION_001):
 - Audio Range responses: never cache-first (pass-through to network).
 */
 
-const VERSION = "mfy-music-shell-v1";
-const SHELL_CACHE = "mfy-shell";
+const VERSION = "mood-public-assets-v1";
+const SHELL_CACHE = VERSION;
 const PRECACHE_URLS = [
   "/manifest.webmanifest",
-  "/moodify-logo.png",
+  "/moodify-brand-logo.png",
 ];
 
 self.addEventListener("install", (event) => {
@@ -27,7 +27,7 @@ self.addEventListener("activate", (event) => {
   );
 });
 
-function isShellRequest(url) {
+function isStaticAsset(url) {
   const { pathname } = url;
   if (pathname.startsWith("/api/")) return false; // API never cached
   if (pathname.startsWith("/audio/")) return false; // audio Range pass-through
@@ -38,7 +38,7 @@ function isShellRequest(url) {
   if (pathname.endsWith(".js") || pathname.endsWith(".css")
     || pathname.endsWith(".png") || pathname.endsWith(".svg")
     || pathname.endsWith(".ico") || pathname.endsWith(".woff2")) return true;
-  return pathname === "/" || pathname === "/offline";
+  return false;
 }
 
 self.addEventListener("fetch", (event) => {
@@ -46,7 +46,7 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return; // cross-origin pass-through
   if (event.request.method !== "GET") return;
 
-  if (isShellRequest(url)) {
+  if (isStaticAsset(url)) {
     event.respondWith(
       caches.match(event.request).then((cached) => {
         if (cached) {

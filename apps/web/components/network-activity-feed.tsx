@@ -6,6 +6,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 // import { ExternalLink, Clock, User, CheckCircle, AlertCircle, FileText, Award } from "lucide-react";
 import { Button } from "@/components/ui/primitives";
 
+const makeIcon = (glyph: string) => function Icon({ className = "" }: { className?: string }) {
+  return <span className={className} aria-hidden="true">{glyph}</span>;
+};
+const ExternalLink = makeIcon("↗");
+const Clock = makeIcon("◷");
+const User = makeIcon("●");
+const CheckCircle = makeIcon("✓");
+const AlertCircle = makeIcon("!");
+const FileText = makeIcon("▧");
+const Award = makeIcon("◆");
+
 // Activity event type
 export type ActivityEvent = {
   id: string;

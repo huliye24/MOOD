@@ -1,25 +1,29 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./mood-world.css";
+import "./mood-home-overrides.css";
 import SwRegister from "./sw-register";
 
 export const metadata: Metadata = {
-  title: "MOOD — World · Protocol · Portal",
-  description: "A digital home for free spirits: an open world, protocol, and public memory for human and machine agency.",
+  title: "MOOD | Open Coordination Protocol for Human and Machine Agency",
+  description: "MOOD is an open coordination protocol and digital world connecting humans, AI agents, organizations and resources through identity, contribution, proof, reputation and settlement.",
   icons: { icon: "/favicon.svg" },
   manifest: "/manifest.webmanifest",
   alternates: { canonical: "https://crestwavecoin.com/" },
   openGraph: {
-    title: "MOOD — World · Protocol · Portal",
-    description: "A digital home for free spirits.",
+    title: "MOOD | Open Coordination Protocol for Human and Machine Agency",
+    description: "An open coordination protocol and digital world for humans, AI agents, organizations and resources.",
     url: "https://crestwavecoin.com/",
     siteName: "MOOD",
     locale: "zh_CN",
     type: "website",
+    images: [{ url: "https://crestwavecoin.com/og.png", width: 1792, height: 896, alt: "MOOD · WORLD · PROTOCOL · PORTAL" }],
   },
   twitter: {
-    card: "summary",
-    title: "MOOD — World · Protocol · Portal",
-    description: "A digital home for free spirits.",
+    card: "summary_large_image",
+    title: "MOOD | Open Coordination Protocol for Human and Machine Agency",
+    description: "An open coordination protocol and digital world for humans, AI agents, organizations and resources.",
+    images: ["https://crestwavecoin.com/og.png"],
   },
   other: { "codex-preview": "development" },
 };
