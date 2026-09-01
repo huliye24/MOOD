@@ -7,6 +7,8 @@ import digitalSociety from "../content/mood/manifesto/digital-society.md?raw";
 import protocolVsPlatform from "../content/mood/manifesto/protocol-vs-platform.md?raw";
 import fromCompanyToNetwork from "../content/mood/manifesto/from-company-to-network.md?raw";
 import humanAiCoexistence from "../content/mood/manifesto/human-ai-coexistence.md?raw";
+import moodismCn from "../content/mood/manifesto/moodism-cn.md?raw";
+import proofOfIntelligenceCn from "../content/mood/manifesto/proof-of-intelligence-cn.md?raw";
 import whatMoodIs from "../content/mood/canon/what-mood-is.md?raw";
 import whatMoodIsNot from "../content/mood/canon/what-mood-is-not.md?raw";
 import designPrinciples from "../content/mood/canon/design-principles.md?raw";
@@ -39,6 +41,8 @@ const moodContent: Record<string, string> = {
   "manifesto/protocol-vs-platform.md": protocolVsPlatform,
   "manifesto/from-company-to-network.md": fromCompanyToNetwork,
   "manifesto/human-ai-coexistence.md": humanAiCoexistence,
+  "manifesto/moodism-cn.md": moodismCn,
+  "manifesto/proof-of-intelligence-cn.md": proofOfIntelligenceCn,
   "canon/what-mood-is.md": whatMoodIs,
   "canon/what-mood-is-not.md": whatMoodIsNot,
   "canon/design-principles.md": designPrinciples,
