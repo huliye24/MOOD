@@ -1,21 +1,11 @@
-"use client";
 import Link from "next/link";
-import { useState } from "react";
-import { MOOD_TOKEN } from "../../lib/mood-token";
-import WalletConnect from "./WalletConnect";
-
-function CopyAddress() {
-  const [copied, setCopied] = useState(false);
-  async function copy() { try { await navigator.clipboard.writeText(MOOD_TOKEN.address); setCopied(true); window.setTimeout(() => setCopied(false), 1800); } catch { setCopied(false); } }
-  return <button className="mood-copy" onClick={copy}><span aria-live="polite">{copied ? "已复制 ✓" : "复制地址"}</span></button>;
-}
 
 export default function TokenPage() {
   return <main className="mood-site">
     <nav className="mood-nav" aria-label="主导航">
       <Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><Link href="/vision">World</Link><Link href="/protocol">Protocol</Link><Link href="/portal">Portal</Link><Link href="/network">Network</Link><Link href="/genesis">Genesis</Link><Link href="/library">Library</Link></div>
-      <a className="mood-nav-action" href="#use">连接钱包</a>
+      <div className="mood-nav-links"><Link href="/world">World</Link><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div>
+      <Link className="mood-nav-action" href="/portal">进入门户</Link>
     </nav>
 
     <header className="mood-hero">
@@ -23,11 +13,11 @@ export default function TokenPage() {
       <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/favicon.svg" alt="" /><small>ENTER THE WORLD</small></div>
     </header>
 
-    <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>一个入口，<br />通向许多种生活。</h2><p>MOOD 不是一张功能清单。它是一座逐渐生长的数字世界；你可以选择自己的方向，也可以只是停留。</p></div><nav className="mood-world-map" aria-label="MOOD 世界地图"><a href="#cafe"><span>01</span><strong>咖啡馆</strong><small>思想与不同的人相遇</small></a><a href="#road"><span>02</span><strong>在路上</strong><small>选择自己的方向</small></a><a href="#leisure"><span>03</span><strong>闲暇之地</strong><small>让生活重新生长</small></a><Link href="/library"><span>04</span><strong>Library</strong><small>阅读这个世界的公开记忆</small></Link></nav></section>
+    <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>从世界出发，<br />理解它的规则。</h2><p>MOOD 是面向人类与机器主体的开放协调协议与数字世界。这里先定义意义，再让协议与软件从意义中生长。</p></div><nav className="mood-world-map" aria-label="MOOD 阅读路径"><Link href="/world"><span>01</span><strong>World</strong><small>理解 MOOD 假定的世界</small></Link><Link href="/manifesto"><span>02</span><strong>Manifesto</strong><small>阅读我们的信念与方向</small></Link><Link href="/canon"><span>03</span><strong>Canon</strong><small>进入最高概念权威</small></Link><Link href="/library"><span>04</span><strong>Library</strong><small>阅读这个世界的公开记忆</small></Link></nav></section>
 
     <figure className="mood-world"><img src="/mood-world-hero.png" alt="人们在开放的未来音乐空间里围绕紫蓝色波形相遇、聆听与创作" /><figcaption>MOOD WORLD · A PLACE WITHOUT A PRESCRIBED LIFE</figcaption></figure>
 
-    <section id="story" className="mood-story"><div><span className="mood-kicker">THE MOOD MANIFESTO</span><h2>世界不只需要<br />宏大的使命。</h2></div><div className="mood-story-copy"><p>我们相信，人不是为了成为工具而活。闲暇不是浪费，远行不必抵达，艺术也不需要证明价值。你可以思考，可以创造，可以相爱，也可以只是坐在阳光下。</p><p>MOOD 尊重每个人的独立意志。选择自己的节奏，建立真实的关系，保留感受美的能力——这本身就是一种完整的人生。</p></div></section>
+    <section id="story" className="mood-story"><div><span className="mood-kicker">CULTURE · STORIES</span><h2>协议需要规则，<br />世界也需要文化。</h2></div><div className="mood-story-copy"><p>下面的咖啡馆、道路与闲暇之地，是 MOOD 的文化想象，不是已经运行的协议事实。它们帮助我们讨论：当人和机器都能行动时，我们希望保留怎样的生活。</p><p>这些故事服从 Canon，也允许世界拥有温度、象征、记忆与美。</p><Link className="mood-inline-link" href="/manifesto">阅读 Manifesto →</Link></div></section>
 
     <section id="home" className="mood-chapters">
       <article id="cafe" className="mood-chapter"><div className="mood-chapter-copy"><span>01 · THE CAFÉ</span><h2>思想在咖啡馆相遇。</h2><p>没有标准答案，也没有被安排好的立场。有人交谈，有人阅读，有人独处。我们因不同而靠近，也保留不被说服的权利。</p></div><figure><img src="/mood-cafe.png" alt="开放山景中的咖啡馆与图书空间，人们阅读、交谈、写作和演奏音乐" /></figure></article>
@@ -37,32 +27,8 @@ export default function TokenPage() {
 
     <section className="mood-principles" aria-label="MOOD 的信念"><article><span>01</span><h3>独立意志</h3><p>没有人替你定义完整的人生。选择权始终属于你。</p></article><article><span>02</span><h3>自由连接</h3><p>关系源于自愿，而不是许可。世界因真实的连接而存在。</p></article><article><span>03</span><h3>生活之美</h3><p>美不是附加项。它是我们愿意生活、创造和留下的理由。</p></article></section>
 
-    <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">ENTER THE NETWORK</span><h2>这里就是入口。</h2><p>钱包不是身份的全部，只是进入 MOOD 协调网络的一把钥匙。参与从理解规则开始，而不是从持有资产开始。</p><div className="mood-mini-facts"><span>WORLD</span><span>PROTOCOL</span><span>PORTAL</span></div></div><div className="mood-wallet-shell"><WalletConnect /></div></section>
+    <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">PHASE ZERO · WORLDBUILDING</span><h2>参与从理解开始。</h2><p>当前阶段的首要工作是减少世界的歧义。Portal、身份、节点与治理仍是草案；网站不会把未来描述成已经发生。</p><div className="mood-mini-facts"><span>WORLD</span><span>CANON</span><span>CULTURE</span></div></div><div className="mood-phase-card"><span>当前状态</span><strong>Worldbuilding</strong><p>先阅读世界与 Canon，再进入正在形成的协议层。</p><div><Link href="/canon">阅读 Canon</Link><Link href="/protocol">探索 Protocol</Link></div></div></section>
 
-    <section id="contract" className="mood-contract">
-      <div>
-        <span className="mood-kicker">MOOD TOKEN · ON-CHAIN RECORD</span>
-        <h2>只有一个地址。</h2>
-        <p>任何交易或添加代币之前,请在区块浏览器上独立核实合约地址是否与本文档的权威来源一致。</p>
-        <p><strong>风险提示：</strong>MOOD 不提供任何形式的回报保证。新上线代币流动性可能较浅,价格剧烈波动,智能合约风险与市场风险自担。请自行核实合约地址。</p>
-        <p className="mood-contract-authority">
-          <strong>事实来源：</strong>
-          <Link href="/canon">MOOD Canon</Link>
-          <span> · </span>
-          <a href="https://github.com/huliye24/MOOD/blob/main/docs/protocol/MOOD_TOKEN.md" target="_blank" rel="noreferrer">docs/protocol/MOOD_TOKEN.md ↗</a>
-          <span> · </span>
-          <a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noopener noreferrer">在区块浏览器核验 ↗</a>
-        </p>
-        <p className="mood-contract-phase">
-          <strong>阶段标识：</strong>Phase Zero — Worldbuilding。代币记录在
-          <a href="https://github.com/huliye24/MOOD/blob/main/docs/protocol/MOOD_TOKEN.md" target="_blank" rel="noreferrer"> 协议文档</a>
-          中维护;本页面不参与分配、领取或激活流程。任何分配、流动性、激励或收益机制均未在
-          <Link href="/canon"> Canon</Link> 中授权,不会出现在本页面。
-        </p>
-      </div>
-      <div className="mood-address"><code>{MOOD_TOKEN.address}</code><CopyAddress /></div>
-    </section>
-
-    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
+    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/favicon.svg" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
   </main>;
 }
