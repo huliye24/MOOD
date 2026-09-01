@@ -13,6 +13,7 @@ const documents:DocumentEntry[]=[
   {title:"Proof of Intelligence：智能证明",description:"中文概念提案：探索智能贡献的验证、信誉与权益路径。Draft。",kind:"Manifesto",href:"/manifesto/proof-of-intelligence",image:"/mood-network-cycle.png",keywords:["proof of intelligence","poi","智能证明","智能贡献","共识","中文"],diagram:true},
   {title:"MOOD Technical Architecture",description:"中文技术架构概念稿：PoI、贡献证明、信誉、权益与 AI Agent Network。Draft。",kind:"Manifesto",href:"/manifesto/technical-architecture",image:"/mood-network-cycle.png",keywords:["technical architecture","技术架构","poi","contribution proof","reputation","rights","agent network","中文"],diagram:true},
   {title:"MOOD Protocol Specification · Yellow Paper",description:"中文非规范性草案：状态、验证、智能共识、信誉、权益与 Agent 交互。",kind:"Manifesto",href:"/manifesto/protocol-yellow-paper",image:"/mood-network-cycle.png",keywords:["yellow paper","protocol specification","协议规范","状态模型","信誉公式","agent","中文"],diagram:true},
+  {title:"MOOD Formal Specification",description:"中文非规范性形式化草案：状态转换、验证逻辑、信誉算法、Agent 共识与经济方程。",kind:"Manifesto",href:"/manifesto/formal-specification",image:"/mood-network-cycle.png",keywords:["formal specification","形式化规范","数学模型","状态转换","验证逻辑","共识","中文"],diagram:true},
 ];
 export default function LibraryPage(){
   const [query,setQuery]=useState("");const [filter,setFilter]=useState<"All"|DocumentEntry["kind"]>("All");

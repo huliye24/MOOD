@@ -42,3 +42,5 @@ Connected by contribution.
 [MOOD Technical Architecture：AI 时代基础协议架构（中文 · Draft）→](/manifesto/technical-architecture)
 
 [MOOD Protocol Specification：Yellow Paper（中文 · Non-normative Draft）→](/manifesto/protocol-yellow-paper)
+
+[MOOD Formal Specification（中文 · Non-normative Draft）→](/manifesto/formal-specification)
