@@ -4,11 +4,11 @@ MOOD Genesis Hash
 Network:      MOOD Network
 Version:       v0.1.0
 Phase:         Genesis
-Generated:     2026-09-02T13:50:28.833Z
+Generated:     2026-09-02T14:04:29.316Z
 
-SHA256:        c451f26f40e6e45791208f54c2692365a553c231b82aed3ab667ea33f60fe6b8
+SHA256:        2496506c815bacb6c296dd2d27274d4890c4d90ef9226f86800fe5cb7b8c3c1a
 
-Genesis ID:    MOOD_GENESIS_C451F26F40E6E457
+Genesis ID:    MOOD_GENESIS_2496506C815BACB6
 
 Verification:
   Run: node scripts/verify-genesis.js
