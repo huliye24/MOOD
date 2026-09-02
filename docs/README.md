@@ -6,6 +6,13 @@ MOOD documentation defines the world from which the protocol may be built. `MOOD
 
 MOOD Manifesto 描述协议背后的社会结构理念：
 
+- [MOODISM Manifesto 001 — 思想版本谱系](manifesto/MOODISM_MANIFESTO_HISTORY.md)
+- [MOODISM Manifesto 001 v0.1 — 中文](manifesto/MOODISM_MANIFESTO_001_ZH.md) — *Preserved Genesis Draft*
+- [MOODISM Manifesto 001 v0.1 — English](manifesto/MOODISM_MANIFESTO_001_EN.md) — *Preserved Genesis Draft*
+- [MOODISM Manifesto 001 v0.2 — 中文](manifesto/MOODISM_MANIFESTO_001_V0.2_ZH.md) — *Preserved Genesis Draft*
+- [MOODISM Manifesto 001 v0.2 — English](manifesto/MOODISM_MANIFESTO_001_V0.2_EN.md) — *Preserved Genesis Draft*
+- [MOODISM Manifesto 001 v0.3 — 中文](manifesto/MOODISM_MANIFESTO_001_V0.3_ZH.md) — *Current Genesis Draft III*
+- [MOODISM Manifesto 001 v0.3 — English](manifesto/MOODISM_MANIFESTO_001_V0.3_EN.md) — *Current Genesis Draft III*
 - [Permissionless Generation](manifesto/permissionless-generation.md)
 - [Anti-Gatekeeper Economy](manifesto/anti-gatekeeper-economy.md)
 - [Contribution Over Status](manifesto/contribution-over-status.md)
@@ -18,6 +25,13 @@ MOOD Manifesto 描述协议背后的社会结构理念：
 - [From Company to Network](manifesto/from-company-to-network.md)
 - [Human AI Coexistence](manifesto/human-ai-coexistence.md)
 - [Protocol vs. Platform](manifesto/protocol-vs-platform.md)
+
+## Lexicon
+
+MOOD 的中英文核心词义与不可混淆边界位于 [`docs/lexicon/`](lexicon/README.md)：
+
+- [中文核心词典](lexicon/LEXICON_ZH.md)
+- [English Core Lexicon](lexicon/LEXICON_EN.md)
 
 ## Protocol
 
@@ -50,12 +64,16 @@ Portal architecture planning (Phase Zero, no live surface):
 
 治理、安全、财库、预发布、Genesis 与审计记录位于 [`docs/mood/`](mood/)。这些记录必须区分提案、测试、阶段状态与已验证事实。
 
+经济层的当前边界见 [`docs/economy/`](economy/README.md)。现有代币或市场事实不自动证明 MOOD Protocol 经济已经启用。
+
 ## Chronicle — Canon Amendment Proposals
 
 存放在 [`docs/chronicle/`](chronicle/) 的文档是 **Canon 修正提案**，仅在草案状态。它们不修改 [`MOOD_CANON.md`](../MOOD_CANON.md)，也不证明任何系统已部署。
 
 当前批次（Phase Zero — Batch A）：
 
+- [MOODISM Identity Proposal](chronicle/proposals/PROPOSAL_MOODISM_IDENTITY.md) — *Accepted in Canon v0.2*
+- [Decision 001: MOODISM Identity](chronicle/decisions/DECISION_001_MOODISM_IDENTITY.md) — *Accepted*
 - [Foundation Node Proposal](chronicle/PROPOSAL_FOUNDATION_NODE.md) — *Draft*
 - [Community Node Proposal](chronicle/PROPOSAL_COMMUNITY_NODE.md) — *Draft*
 - [Contributor Lifecycle Proposal](chronicle/PROPOSAL_CONTRIBUTOR_LIFECYCLE.md) — *Draft*

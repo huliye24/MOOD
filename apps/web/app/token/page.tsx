@@ -1,37 +1,61 @@
+"use client";
+
 import Link from "next/link";
-import { WalletLoginButton } from "../../components/mood/WalletLoginButton";
+import { useState } from "react";
+import { MOOD_TOKEN } from "../../lib/mood-token";
 
 export default function TokenPage() {
-  return <main className="mood-site">
-    <nav className="mood-nav" aria-label="主导航">
-      <Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link>
-      <div className="mood-nav-links"><Link href="/world">World</Link><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div>
-      <WalletLoginButton className="mood-nav-action" />
-    </nav>
+  const [copyStatus, setCopyStatus] = useState("");
 
-    <header className="mood-hero">
-      <div className="mood-hero-copy"><span className="mood-kicker">A DIGITAL HOME FOR FREE SPIRITS</span><h1><span>BE YOURSELF.</span><small>在这里，<br /><em>成为你自己。</em></small></h1><p>MOOD 是一个属于自由意志、独立选择与美的数字家园。没有被规定的人生，只有你愿意生活的方式。</p><div className="mood-actions"><a className="mood-primary" href="#world">进入这个世界</a><Link className="mood-secondary" href="/manifesto">阅读我们的信念</Link></div></div>
-      <div className="mood-hero-mark" aria-hidden="true"><span className="mood-orbit mood-orbit-one" /><span className="mood-orbit mood-orbit-two" /><img src="/mood-logo.png" alt="" /><small>ENTER THE WORLD</small></div>
-    </header>
+  async function copyAddress() {
+    try {
+      await navigator.clipboard.writeText(MOOD_TOKEN.address);
+      setCopyStatus("合约地址已复制");
+    } catch {
+      setCopyStatus("复制失败，请手动复制合约地址");
+    }
+  }
 
-    <section id="world" className="mood-world-gate"><div className="mood-world-intro"><span className="mood-kicker">ENTER THE WORLD</span><h2>世界先于系统。</h2><p>人、机器与共同体，在同一个开放世界中行动。</p></div><nav className="mood-world-map" aria-label="MOOD 阅读路径"><Link href="/world"><span>01</span><strong>World</strong><small>进入世界</small></Link><Link href="/manifesto"><span>02</span><strong>Manifesto</strong><small>阅读信念</small></Link><Link href="/canon"><span>03</span><strong>Canon</strong><small>理解规则</small></Link><Link href="/library"><span>04</span><strong>Library</strong><small>探索记忆</small></Link></nav></section>
+  return (
+    <main className="mood-site">
+      <nav className="mood-nav" aria-label="Token navigation">
+        <Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link>
+        <div className="mood-nav-links"><Link href="/">World</Link><Link href="/canon">Canon</Link><Link href="/protocol">Protocol</Link><Link href="/genesis">Genesis</Link></div>
+      </nav>
 
-    <figure className="mood-world"><img src="/mood-world-hero.png" alt="人们在开放的未来音乐空间里围绕紫蓝色波形相遇、聆听与创作" /><figcaption>MOOD WORLD · A PLACE WITHOUT A PRESCRIBED LIFE</figcaption></figure>
+      <header className="mood-hero">
+        <div className="mood-hero-copy">
+          <span className="mood-kicker">ECONOMY · OBSERVABLE CONTRACT · ROLE UNRESOLVED</span>
+          <h1><span>MOOD TOKEN</span><small>事实可验证，<br /><em>角色仍待定义。</em></small></h1>
+          <p>以下内容记录一个现有链上合约。合约存在不等于 MOOD Protocol 经济、治理、奖励、财库或分配机制已经启用。</p>
+          <div className="mood-actions"><Link className="mood-primary" href="/canon">阅读 Token 边界</Link><Link className="mood-secondary" href="/protocol">查看协议状态</Link></div>
+        </div>
+      </header>
 
-    <section className="mood-visual-portal"><img src="/mood-civilization.png" alt="人类与机器主体在开放的花园、图书馆和公共空间中共同生活与创造" /><div><span>HUMAN · MACHINE · COMMONS</span><h2>进入一个<br />仍在生长的世界。</h2><Link href="/world">Explore the world →</Link></div></section>
+      <section className="mood-world-gate" aria-labelledby="token-facts-title">
+        <div className="mood-world-intro"><span className="mood-kicker">VERIFIABLE FACTS</span><h2 id="token-facts-title">链上事实</h2><p>应用只从一个配置来源读取这些字段。</p></div>
+        <div className="mood-phase-card">
+          <span>{MOOD_TOKEN.network} · Chain ID {MOOD_TOKEN.chainId}</span>
+          <strong>{MOOD_TOKEN.name} · {MOOD_TOKEN.symbol}</strong>
+          <p>{MOOD_TOKEN.totalSupplyDisplay}</p>
+          <code style={{ wordBreak: "break-all" }}>{MOOD_TOKEN.address}</code>
+          <button type="button" onClick={copyAddress}>复制合约地址</button>
+          <p aria-live="polite">{copyStatus}</p>
+        </div>
+      </section>
 
-    <section id="story" className="mood-story"><div><span className="mood-kicker">CULTURE · STORIES</span><h2>规则之外，<br />世界需要想象。</h2></div><div className="mood-story-copy"><p>咖啡馆、道路与闲暇之地，是 MOOD 对共同生活的文化想象。</p><Link className="mood-inline-link" href="/manifesto">阅读 Manifesto →</Link></div></section>
+      <section className="mood-principles" aria-label="Contract links">
+        <article><span>01</span><h3>Explorer</h3><p>在 BscScan 检查合约。</p><a href={MOOD_TOKEN.explorerUrl} target="_blank" rel="noopener noreferrer">打开区块浏览器 ↗</a></article>
+        <article><span>02</span><h3>Market</h3><p>外部市场入口不代表 MOOD 对价格或流动性作出保证。</p><a href={MOOD_TOKEN.tradeUrl} target="_blank" rel="noopener noreferrer">打开外部市场 ↗</a></article>
+        <article><span>03</span><h3>Legacy context</h3><p>历史产品与代码仅提供兼容性背景。</p><a href={MOOD_TOKEN.officialSite} target="_blank" rel="noopener noreferrer">历史站点 ↗</a><br /><a href={MOOD_TOKEN.githubUrl} target="_blank" rel="noopener noreferrer">历史仓库 ↗</a></article>
+      </section>
 
-    <section id="home" className="mood-chapters">
-      <article id="cafe" className="mood-chapter"><div className="mood-chapter-copy"><span>01 · THE CAFÉ</span><h2>思想在咖啡馆相遇。</h2><p>没有标准答案，也没有被安排好的立场。有人交谈，有人阅读，有人独处。我们因不同而靠近，也保留不被说服的权利。</p></div><figure><img src="/mood-cafe.png" alt="开放山景中的咖啡馆与图书空间，人们阅读、交谈、写作和演奏音乐" /></figure></article>
-      <article id="road" className="mood-chapter mood-chapter-reverse"><div className="mood-chapter-copy"><span>02 · ON THE ROAD</span><h2>路不一定通向目的地。</h2><p>自由不是拥有更多选项，而是能够决定什么值得追寻。慢下来，转身，停留，重新出发——人生属于选择它的人。</p></div><figure><img src="/mood-road.png" alt="人们沿着海岸道路自由旅行、绘画、游泳、阅读和演奏" /></figure></article>
-      <article id="leisure" className="mood-chapter mood-chapter-night"><div className="mood-chapter-copy"><span>03 · IN PRAISE OF IDLENESS</span><h2>闲暇让灵魂重新生长。</h2><p>创造并不只发生在工作里。看星星、种花、跳舞、做一顿饭，或和喜欢的人消磨一个夜晚——生活的美不需要效率来批准。</p></div><figure><img src="/mood-leisure.png" alt="夜色中的水上花园，人们休息、创作、观星、共餐和跳舞" /></figure></article>
-    </section>
+      <section className="mood-use" aria-labelledby="token-risk-title">
+        <div className="mood-use-intro"><span className="mood-kicker">RISK NOTICE</span><h2 id="token-risk-title">风险提示</h2><p>该资产属于新上线或早期链上资产，流动性可能较浅，价格可能剧烈波动，并存在智能合约风险。操作前请独立核实合约、网络和交易路径。MOOD 不提供任何形式的回报保证。</p></div>
+        <div className="mood-phase-card"><span>Canonical status</span><strong>Economic role unresolved</strong><p>Token ownership does not automatically establish contribution, reputation, rights, governance authority, or ownership of the network.</p></div>
+      </section>
 
-    <section className="mood-principles" aria-label="MOOD 的信念"><article><span>01</span><h3>独立意志</h3><p>选择属于行动者。</p></article><article><span>02</span><h3>自由连接</h3><p>关系源于自愿。</p></article><article><span>03</span><h3>生活之美</h3><p>美也是世界的基础。</p></article></section>
-
-    <section id="use" className="mood-use"><div className="mood-use-intro"><span className="mood-kicker">PHASE ZERO · WORLDBUILDING</span><h2>参与从理解开始。</h2><div className="mood-mini-facts"><span>WORLD</span><span>CANON</span><span>CULTURE</span></div></div><div className="mood-phase-card"><span>当前状态</span><strong>Worldbuilding</strong><div><Link href="/canon">阅读 Canon</Link><Link href="/protocol">探索 Protocol</Link></div></div></section>
-
-    <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link><p>World before system. Meaning before mechanism.</p><div><Link href="/manifesto">Manifesto</Link><Link href="/canon">Canon</Link><Link href="/library">Library</Link><Link href="/protocol">Protocol</Link></div></footer>
-  </main>;
+      <footer className="mood-footer"><Link className="mood-brand" href="/"><img src="/mood-logo.png" alt="" /><span>MOOD</span></Link><p>Contract existence is not protocol activation.</p><div><Link href="/">World</Link><Link href="/canon">Canon</Link><Link href="/transparency">Transparency</Link></div></footer>
+    </main>
+  );
 }

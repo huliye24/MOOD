@@ -35,7 +35,17 @@ Connected by contribution.
 
 [Human AI Coexistence →](/manifesto/human-ai-coexistence)
 
-[MOODism：贡献驱动的网络文明（中文 · Draft）→](/manifesto/moodism)
+[MOODISM Manifesto 001 v0.3：尊严、自由与贡献（中文 · Current Genesis Draft III）→](/manifesto/moodism)
+
+[MOODISM Manifesto 001 v0.3: Dignity, Freedom, and Contribution（English · Current Genesis Draft III）→](/manifesto/moodism/en)
+
+[回看 MOODISM Manifesto 001 v0.2（中文 · Preserved）→](/manifesto/moodism/v0.2)
+
+[Read MOODISM Manifesto 001 v0.2（English · Preserved）→](/manifesto/moodism/v0.2/en)
+
+[回看 MOODISM Manifesto 001 v0.1（中文 · Preserved）→](/manifesto/moodism/v0.1)
+
+[Read MOODISM Manifesto 001 v0.1（English · Preserved）→](/manifesto/moodism/v0.1/en)
 
 [Proof of Intelligence：智能证明（中文 · Draft）→](/manifesto/proof-of-intelligence)
 

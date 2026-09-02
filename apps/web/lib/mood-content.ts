@@ -7,7 +7,12 @@ import digitalSociety from "../content/mood/manifesto/digital-society.md?raw";
 import protocolVsPlatform from "../content/mood/manifesto/protocol-vs-platform.md?raw";
 import fromCompanyToNetwork from "../content/mood/manifesto/from-company-to-network.md?raw";
 import humanAiCoexistence from "../content/mood/manifesto/human-ai-coexistence.md?raw";
-import moodismCn from "../content/mood/manifesto/moodism-cn.md?raw";
+import moodismV01Cn from "../../../docs/manifesto/MOODISM_MANIFESTO_001_ZH.md?raw";
+import moodismV01En from "../../../docs/manifesto/MOODISM_MANIFESTO_001_EN.md?raw";
+import moodismV02Cn from "../../../docs/manifesto/MOODISM_MANIFESTO_001_V0.2_ZH.md?raw";
+import moodismV02En from "../../../docs/manifesto/MOODISM_MANIFESTO_001_V0.2_EN.md?raw";
+import moodismCn from "../../../docs/manifesto/MOODISM_MANIFESTO_001_V0.3_ZH.md?raw";
+import moodismEn from "../../../docs/manifesto/MOODISM_MANIFESTO_001_V0.3_EN.md?raw";
 import proofOfIntelligenceCn from "../content/mood/manifesto/proof-of-intelligence-cn.md?raw";
 import technicalArchitectureCn from "../content/mood/manifesto/technical-architecture-cn.md?raw";
 import protocolYellowPaperCn from "../content/mood/manifesto/protocol-yellow-paper-cn.md?raw";
@@ -46,6 +51,11 @@ const moodContent: Record<string, string> = {
   "manifesto/from-company-to-network.md": fromCompanyToNetwork,
   "manifesto/human-ai-coexistence.md": humanAiCoexistence,
   "manifesto/moodism-cn.md": moodismCn,
+  "manifesto/moodism-en.md": moodismEn,
+  "manifesto/moodism-v0.1-cn.md": moodismV01Cn,
+  "manifesto/moodism-v0.1-en.md": moodismV01En,
+  "manifesto/moodism-v0.2-cn.md": moodismV02Cn,
+  "manifesto/moodism-v0.2-en.md": moodismV02En,
   "manifesto/proof-of-intelligence-cn.md": proofOfIntelligenceCn,
   "manifesto/technical-architecture-cn.md": technicalArchitectureCn,
   "manifesto/protocol-yellow-paper-cn.md": protocolYellowPaperCn,

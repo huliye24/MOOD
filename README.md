@@ -1,24 +1,39 @@
 # MOOD
 
-## The Open Innovation Network for the AI Era
+## A Contribution-Driven Network Civilization
 
-> Building a digital Silicon Valley beyond companies.
+> MOODISM coordinates human creativity, machine intelligence, and digital
+> resources through open protocols.
+
+**Current phase:** Phase Zero — Worldbuilding
+
+**Canonical authority:** [`MOOD_CANON.md`](MOOD_CANON.md)
+
+**Protocol and economy status:** Foundational / Draft unless supported by
+explicit evidence
 
 ------------------------------------------------------------------------
 
 ## What is MOOD?
 
-MOOD is an open innovation network designed for the AI era.
+MOOD is the independent project and open coordination world through which the
+MOODISM vision is explored.
 
-It is a digital environment where AI builders, researchers, creators,
-and entrepreneurs can collaborate, build, contribute, and capture value
-without being limited by traditional company structures.
+MOODISM is the civilizational philosophy: a contribution-driven vision of
+network society.
+
+MOOD Protocol is the institutional and technical layer that may translate
+stable concepts into explicit rules for identity, contribution, proof,
+reputation, rights, responsibility, coordination, governance, and settlement.
+
+Any token or economic instrument remains downstream of the world, the Canon,
+and the protocol. It cannot substitute for real contribution.
 
 MOOD is not a company.
 
 MOOD is not a platform.
 
-MOOD is a network.
+MOOD is an open world and network in formation.
 
 ------------------------------------------------------------------------
 
@@ -67,8 +82,9 @@ MOOD imagines a new innovation structure:
             ↓
     
     Contribution
+    Proof
     Reputation
-    Ownership
+    Rights & Responsibility
     Coordination
 
 Instead of asking:

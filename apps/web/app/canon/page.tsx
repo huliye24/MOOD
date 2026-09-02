@@ -55,6 +55,7 @@ function slugify(value: string): string {
 const slugOverrides: Record<string, string> = {
   "1. The Prime Rule": "1-the-prime-rule",
   "2. What MOOD Is": "2-what-mood-is",
+  "2.1 MOODISM, MOOD, and MOOD Protocol": "2-1-moodism-mood-and-mood-protocol",
   "3. The World Comes Before the System": "3-the-world-comes-before-the-system",
   "4. Canon Is the Source of Authority": "4-canon-is-the-source-of-authority",
   "5. Markdown as Canonical Memory": "5-markdown-as-canonical-memory",
@@ -171,7 +172,7 @@ export default async function CanonPage() {
       </nav>
 
       <header className="canon-hero">
-        <p>MOOD · CANON · VERSION 0.1</p>
+        <p>MOOD · CANON · VERSION 0.2</p>
         <h1>The World Before the System</h1>
         <p className="canon-deck">
           The MOOD Canon defines the highest-level conceptual and developmental order

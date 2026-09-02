@@ -4,7 +4,7 @@
 **Project:** MOOD  
 **Repository:** `huliye24/MOOD`  
 **Authority:** This document defines the highest-level conceptual and developmental order of MOOD.  
-**Version:** 0.1  
+**Version:** 0.2
 
 ---
 
@@ -52,6 +52,47 @@ The interfaces may change.
 The infrastructure may change.
 
 The Canon defines what those systems are trying to preserve.
+
+### 2.1 MOODISM, MOOD, and MOOD Protocol
+
+MOODISM is the contribution-driven vision of network civilization that gives
+MOOD its civilizational direction.
+
+It explores how human creativity, machine intelligence, and digital resources
+may be coordinated through open protocols so that meaningful contribution can
+become legible, verifiable, remembered, and capable of supporting legitimate
+rights and shared value.
+
+MOODISM is a philosophy and direction. It is not a claim that a complete
+network civilization, contribution system, governance system, or economy is
+already operating.
+
+MOOD is the independent project, open coordination world, and public body of
+work through which this direction is explored.
+
+MOOD Protocol is the institutional and technical layer through which stable
+canonical concepts may become explicit, testable rules.
+
+Their relationship is:
+
+```text
+MOODISM
+Civilizational philosophy and direction
+   ↓
+MOOD
+Open coordination world and independent project
+   ↓
+MOOD Protocol
+Institutional and technical rules
+   ↓
+ECONOMY
+Optional downstream coordination instruments
+   ↓
+APPLICATIONS
+Independent participants and implementations
+```
+
+No lower layer may silently redefine a higher layer.
 
 ---
 
@@ -236,6 +277,8 @@ The website should feel less like a conventional technology landing page and mor
 A visitor should be able to move from curiosity to understanding:
 
 ```text
+MOODISM
+  ↓
 MOOD
   ↓
 WORLD
@@ -367,6 +410,15 @@ The existence of incentives does not establish meaningful contribution.
 
 Therefore token design, issuance, distribution, staking, settlement, rewards, and treasury mechanisms must remain downstream of the Canon and protocol model.
 
+MOOD may be used as the name or symbol of an economic instrument only where
+its identity, authority, evidence, and relationship to the protocol are made
+explicit. A token contract associated with MOOD or inherited from Moodify does
+not by itself become the constitutional center, native economy, governance
+authority, or proof of contribution of MOOD.
+
+Token ownership does not automatically establish contribution, reputation,
+governance authority, rights, responsibility, or ownership of the network.
+
 MOOD should first answer:
 
 - What is valuable?
@@ -484,6 +536,7 @@ It is conceptual clarity.
 
 The work of Phase Zero includes:
 
+- defining MOODISM and its relationship to MOOD;
 - defining the Genesis of MOOD;
 - defining the world and its assumptions;
 - defining human and machine agency;

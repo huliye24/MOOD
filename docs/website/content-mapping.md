@@ -76,7 +76,13 @@ surface reserved for future participation.
   - From Company to Network
   - Human AI Coexistence
   - Protocol vs. Platform
-  - MOODism：贡献驱动的网络文明（中文思想文稿，Draft）
+  - [MOODISM Manifesto 001 — 思想版本谱系](../manifesto/MOODISM_MANIFESTO_HISTORY.md)
+  - [MOODISM Manifesto 001 v0.1 — 中文](../manifesto/MOODISM_MANIFESTO_001_ZH.md)（Preserved Genesis Draft）
+  - [MOODISM Manifesto 001 v0.1 — English](../manifesto/MOODISM_MANIFESTO_001_EN.md)（Preserved Genesis Draft）
+  - [MOODISM Manifesto 001 v0.2 — 中文](../manifesto/MOODISM_MANIFESTO_001_V0.2_ZH.md)（Preserved Genesis Draft）
+  - [MOODISM Manifesto 001 v0.2 — English](../manifesto/MOODISM_MANIFESTO_001_V0.2_EN.md)（Preserved Genesis Draft）
+  - [MOODISM Manifesto 001 v0.3 — 中文](../manifesto/MOODISM_MANIFESTO_001_V0.3_ZH.md)（Current Genesis Draft III）
+  - [MOODISM Manifesto 001 v0.3 — English](../manifesto/MOODISM_MANIFESTO_001_V0.3_EN.md)（Current Genesis Draft III）
   - Proof of Intelligence：智能证明（中文概念提案，Draft）
   - MOOD Technical Architecture（中文技术架构概念稿，Draft）
   - MOOD Protocol Specification · Yellow Paper（中文非规范性草案，Draft）

@@ -1,5 +1,7 @@
 import { MoodDocument } from "../../../components/mood/MoodDocument";
 import { loadMoodContent } from "../../../lib/mood-content";
+import Link from "next/link";
+import { MoodismArc } from "../../../components/mood/MoodismArc";
 
 export const metadata = {
   title: "MOODism：贡献驱动的网络文明 | MOOD Manifesto",
@@ -8,10 +10,20 @@ export const metadata = {
 
 export default async function MoodismPage() {
   return (
-    <MoodDocument
-      markdown={await loadMoodContent("manifesto/moodism-cn.md")}
-      current="Manifesto"
-      section="MANIFESTO · MOODISM · 中文 · DRAFT"
-    />
+    <>
+      <nav className="mood-language-nav" aria-label="MOODISM language">
+        <strong>v0.3</strong>
+        <span>中文</span>
+        <Link href="/manifesto/moodism/en">English</Link>
+        <Link href="/manifesto/moodism/v0.2">回看 v0.2</Link>
+        <Link href="/manifesto/moodism/v0.1">回看 v0.1</Link>
+      </nav>
+      <MoodismArc />
+      <MoodDocument
+        markdown={await loadMoodContent("manifesto/moodism-cn.md")}
+        current="Manifesto"
+        section="MANIFESTO · MOODISM · v0.3 · 中文 · GENESIS DRAFT III"
+      />
+    </>
   );
 }
