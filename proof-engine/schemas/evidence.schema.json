@@ -1,0 +1,59 @@
+/**
+ * MOOD Evidence Schema
+ * Version: v0.1.0
+ * 
+ * Defines the structure for contribution evidence.
+ */
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MOOD Evidence",
+  "description": "Evidence supporting a contribution claim",
+  "type": "object",
+  "required": ["id", "type", "reference"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique evidence identifier",
+      "pattern": "^evidence_"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "github_commit",
+        "file_hash", 
+        "timestamp",
+        "document",
+        "link",
+        "manual"
+      ],
+      "description": "Type of evidence"
+    },
+    "source": {
+      "type": "string",
+      "description": "Source of the evidence (e.g., github.com, ipfs.io)"
+    },
+    "reference": {
+      "type": "string",
+      "description": "Reference identifier (commit hash, file hash, URL, etc.)"
+    },
+    "hash": {
+      "type": "string",
+      "description": "SHA256 hash of the evidence content"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the evidence was created/submitted"
+    },
+    "verified": {
+      "type": "boolean",
+      "description": "Whether the evidence has been verified",
+      "default": false
+    },
+    "verification_data": {
+      "type": "object",
+      "description": "Additional data from verification process"
+    }
+  }
+}

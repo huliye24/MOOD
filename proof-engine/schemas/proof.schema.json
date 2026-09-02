@@ -1,0 +1,99 @@
+/**
+ * MOOD Proof Schema
+ * Version: v0.1.0
+ * 
+ * Defines the structure for contribution proofs.
+ */
+
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MOOD Proof",
+  "description": "Proof of contribution verification",
+  "type": "object",
+  "required": ["proof_id", "contribution_id", "evidence_hash", "verification_method", "status"],
+  "properties": {
+    "proof_id": {
+      "type": "string",
+      "description": "Unique proof identifier",
+      "pattern": "^proof_"
+    },
+    "contribution_id": {
+      "type": "string",
+      "description": "Reference to the contribution being proven"
+    },
+    "contributor": {
+      "type": "string",
+      "description": "Wallet address of the contributor"
+    },
+    "evidence_hash": {
+      "type": "string",
+      "description": "SHA256 hash of the evidence"
+    },
+    "verification_method": {
+      "type": "string",
+      "enum": ["github_commit", "file_hash", "timestamp", "manual"],
+      "description": "Method used to verify the contribution"
+    },
+    "verified_by": {
+      "type": "string",
+      "description": "Entity that verified the proof (system, oracle, human)",
+      "default": "system"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the proof was created"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "verified", "rejected", "expired"],
+      "description": "Current status of the proof"
+    },
+    "evidence": {
+      "type": "array",
+      "description": "Array of evidence objects",
+      "items": {
+        "$ref": "#/definitions/Evidence"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata"
+    }
+  },
+  "definitions": {
+    "Evidence": {
+      "type": "object",
+      "required": ["id", "type", "reference"],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["github_commit", "file_hash", "timestamp", "document", "link"]
+        },
+        "source": {
+          "type": "string",
+          "description": "Source of the evidence (e.g., github.com)"
+        },
+        "reference": {
+          "type": "string",
+          "description": "Reference identifier (e.g., commit hash)"
+        },
+        "hash": {
+          "type": "string",
+          "description": "Hash of the evidence"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "verified": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  }
+}

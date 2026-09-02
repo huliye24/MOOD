@@ -11,6 +11,7 @@ const cors = require('cors');
 // Import routes
 const contributionsRouter = require('./api/contributions');
 const contributorsRouter = require('./api/contributors');
+const proofsRouter = require('./api/proofs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -38,6 +39,7 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/contributions', contributionsRouter);
 app.use('/api/contributors', contributorsRouter);
+app.use('/api/proofs', proofsRouter);
 
 // Error handling
 app.use((err, req, res, next) => {
