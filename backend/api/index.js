@@ -12,6 +12,7 @@ const cors = require('cors');
 const contributionsRouter = require('./api/contributions');
 const contributorsRouter = require('./api/contributors');
 const proofsRouter = require('./api/proofs');
+const reputationRouter = require('../../reputation-engine/api/reputation-api');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,7 @@ app.get('/health', (req, res) => {
 app.use('/api/contributions', contributionsRouter);
 app.use('/api/contributors', contributorsRouter);
 app.use('/api/proofs', proofsRouter);
+app.use('/api/reputation', reputationRouter);
 
 // Error handling
 app.use((err, req, res, next) => {

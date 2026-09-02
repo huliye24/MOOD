@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "MOOD Reputation",
+  "description": "Reputation profile for MOOD Network contributors",
+  "type": "object",
+  "required": ["contributor", "total_score", "level", "contributions", "verified_proofs"],
+  "properties": {
+    "contributor": {
+      "type": "string",
+      "description": "Contributor address or identifier"
+    },
+    "total_score": {
+      "type": "number",
+      "description": "Total reputation score",
+      "minimum": 0
+    },
+    "level": {
+      "type": "string",
+      "enum": ["Genesis", "Builder", "Core Contributor", "Guardian"],
+      "description": "Reputation level"
+    },
+    "contributions": {
+      "type": "integer",
+      "description": "Total number of contributions",
+      "minimum": 0
+    },
+    "verified_proofs": {
+      "type": "integer",
+      "description": "Number of verified proofs",
+      "minimum": 0
+    },
+    "last_updated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last reputation update timestamp"
+    },
+    "history": {
+      "type": "array",
+      "description": "Reputation change history",
+      "items": {
+        "$ref": "#/definitions/ReputationEvent"
+      }
+    },
+    "breakdown": {
+      "type": "object",
+      "description": "Score breakdown by contribution type",
+      "properties": {
+        "protocol": { "type": "number" },
+        "code": { "type": "number" },
+        "research": { "type": "number" },
+        "infrastructure": { "type": "number" },
+        "documentation": { "type": "number" },
+        "community": { "type": "number" }
+      }
+    }
+  },
+  "definitions": {
+    "ReputationEvent": {
+      "type": "object",
+      "required": ["timestamp", "delta", "reason"],
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "delta": {
+          "type": "number",
+          "description": "Score change (positive or negative)"
+        },
+        "reason": {
+          "type": "string",
+          "description": "Reason for score change"
+        },
+        "contribution_id": {
+          "type": "string",
+          "description": "Related contribution ID"
+        },
+        "proof_id": {
+          "type": "string",
+          "description": "Related proof ID"
+        }
+      }
+    }
+  }
+}

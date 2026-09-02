@@ -1,0 +1,14 @@
+{
+  "name": "mood-reputation-engine-tests",
+  "version": "0.1.0",
+  "description": "Tests for MOOD Reputation Engine v0.1",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "dependencies": {
+    "jest": "^29.0.0",
+    "ts-jest": "^29.0.0",
+    "typescript": "^5.0.0"
+  }
+}
