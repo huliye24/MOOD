@@ -5,7 +5,7 @@
   "description": "Initial reputation state for MOOD Network Genesis contributors",
   "reputations": [
     {
-      "contributor": "genesis_founder",
+      "contributor": "genesis_001",
       "score": 10,
       "level": "Genesis",
       "reason": "Created MOOD Protocol architecture",
