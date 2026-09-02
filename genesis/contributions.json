@@ -1,0 +1,36 @@
+{
+  "version": "0.1.0",
+  "network": "MOOD",
+  "genesis_timestamp": "2026-09-02T00:00:00Z",
+  "description": "Genesis contribution records for MOOD Network",
+  "contributions": [
+    {
+      "id": "contribution_genesis_001",
+      "contributor_id": "genesis_001",
+      "type": "protocol",
+      "title": "MOOD Protocol Architecture",
+      "description": "Created the initial MOOD Protocol architecture, defining contribution, proof, and reputation as the core value layers of the network.",
+      "status": "verified",
+      "proof_ids": ["proof_genesis_001"],
+      "created_at": "2026-09-02T00:00:00Z",
+      "verified_at": "2026-09-02T00:00:00Z"
+    },
+    {
+      "id": "contribution_genesis_002",
+      "contributor_id": "genesis_001",
+      "type": "code",
+      "title": "MOOD Network v0.1 Implementation",
+      "description": "Implemented the initial v0.1 contribution registry, proof engine, and reputation engine as the first working systems of the protocol.",
+      "status": "verified",
+      "proof_ids": ["proof_genesis_002"],
+      "created_at": "2026-09-02T00:00:00Z",
+      "verified_at": "2026-09-02T00:00:00Z"
+    }
+  ],
+  "total_contributions": 2,
+  "verified_contributions": 2,
+  "by_type": {
+    "protocol": 1,
+    "code": 1
+  }
+}
