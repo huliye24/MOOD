@@ -16,7 +16,7 @@
     },
     {
       "id": "proof_genesis_002",
-      "contribution": "MOOD Network v0.1",
+      "contribution": "MOOD Network v0.1 Implementation",
       "type": "code",
       "verification_method": "github_commit",
       "status": "verified",

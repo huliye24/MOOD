@@ -9,7 +9,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const GENESIS_DIR = path.join(__dirname, '..', 'genesis');
+const GENESIS_DIR = path.join(__dirname, '..', '..', 'genesis');
 
 function loadJson(filename) {
   const content = fs.readFileSync(path.join(GENESIS_DIR, filename), 'utf8');
@@ -213,7 +213,7 @@ describe('MOOD Genesis State', () => {
     });
 
     test('genesis state hash is valid', () => {
-      const { verify } = require('../genesis/scripts/verify-genesis');
+      const { verify } = require('../../genesis/scripts/verify-genesis');
       expect(verify()).toBe(true);
     });
   });
