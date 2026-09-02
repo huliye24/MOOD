@@ -1,0 +1,13 @@
+{
+  "name": "mood-contribution-registry-tests",
+  "version": "0.1.0",
+  "description": "Tests for MOOD Contribution Registry v0.1",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "jest": "^29.0.0"
+  }
+}

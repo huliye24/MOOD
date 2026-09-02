@@ -2,5 +2,12 @@
   "version": "0.1.0",
   "network": "MOOD",
   "genesis_timestamp": "2026-09-02T00:00:00Z",
-  "contributors": []
+  "contributors": [
+    {
+      "id": "genesis_001",
+      "name": "MOOD Founder",
+      "type": "protocol_creation",
+      "contribution": "Created MOOD Network architecture"
+    }
+  ]
 }
