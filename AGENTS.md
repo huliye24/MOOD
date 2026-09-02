@@ -1,4 +1,86 @@
-# AGENTS.md — MOOD Repository Authority
+# AGENTS.md — MOOD Repository AI Rules
+
+---
+
+## Project Identity
+
+MOOD is an open protocol for contribution verification, reputation formation and decentralized coordination.
+
+---
+
+## Directory Rules
+
+```
+protocol/
+├── architecture/      # System design and architecture specs
+├── specification/     # Protocol rule specifications
+├── state-machine/     # State transition definitions
+└── economics/         # Economic model definitions
+
+contracts/
+├── registry/         # Contribution registry contracts
+├── proof/            # Proof verification contracts
+└── reputation/       # Reputation contracts
+
+backend/
+├── api/              # API endpoints
+├── database/         # Database schemas and migrations
+└── services/         # Backend services
+
+frontend/
+├── explorer/         # Network explorer interface
+└── portal/          # User portal interface
+
+proof-engine/
+├── verifier/         # Contribution verification logic
+├── schemas/          # Proof schemas
+└── tests/           # Verification tests
+
+reputation-engine/
+├── scoring/          # Reputation scoring logic
+├── rules/            # Scoring rules
+└── tests/           # Reputation tests
+
+genesis/
+├── genesis.json      # Initial network state
+├── contributors.json # Genesis contributors
+└── genesis-state.md  # Genesis state documentation
+
+docs/
+├── whitepaper/       # Technical whitepaper
+├── manifesto/       # MOODISM philosophy
+└── research/        # Research documents
+```
+
+---
+
+## Development Principle
+
+- Do not create features without protocol definition.
+- Do not modify protocol rules without documentation.
+- Every major change requires:
+  1. Specification update
+  2. Implementation update
+  3. Test update
+
+---
+
+## AI Agent Behavior
+
+Before coding:
+
+1. Read `protocol/` directory
+2. Read `docs/` directory
+3. Understand architecture
+
+Rules:
+
+- Do not create duplicate systems.
+- Do not rename core concepts without approval.
+
+---
+
+# Legacy Authority (see MOOD_CANON.md)
 
 This repository is the canonical development home of **MOOD**.
 

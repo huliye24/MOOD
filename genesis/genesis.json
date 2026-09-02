@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "network": "MOOD",
+  "phase": "genesis",
+  "timestamp": "2026-09-02T00:00:00Z",
+  "chain_id": null,
+  "contracts": {
+    "registry": null,
+    "proof": null,
+    "reputation": null
+  },
+  "parameters": {
+    "min_contribution_stake": 0,
+    "reputation_decay_rate": 0,
+    "governance_quorum": 0
+  },
+  "initial_state": "genesis-state.md"
+}

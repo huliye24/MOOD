@@ -12,6 +12,63 @@
 **Protocol and economy status:** Foundational / Draft unless supported by
 explicit evidence
 
+---
+
+## Repository Structure v0.1
+
+```
+MOOD/
+├── protocol/           # Protocol specifications
+│   ├── architecture/
+│   ├── specification/
+│   ├── state-machine/
+│   └── economics/
+├── contracts/          # Smart contracts
+│   ├── registry/
+│   ├── proof/
+│   └── reputation/
+├── backend/           # Backend services
+│   ├── api/
+│   ├── database/
+│   └── services/
+├── frontend/          # User interfaces
+│   ├── explorer/
+│   └── portal/
+├── proof-engine/      # Contribution verification
+│   ├── verifier/
+│   ├── schemas/
+│   └── tests/
+├── reputation-engine/ # Reputation calculation
+│   ├── scoring/
+│   ├── rules/
+│   └── tests/
+├── genesis/           # Genesis state
+├── docs/              # Documentation
+│   ├── whitepaper/
+│   ├── manifesto/
+│   └── research/
+├── scripts/           # Utility scripts
+└── tests/             # Integration tests
+```
+
+---
+
+## Quick Links
+
+| Layer | Location | Purpose |
+|-------|----------|---------|
+| Protocol | `protocol/` | Rule specifications |
+| Contracts | `contracts/` | Blockchain implementation |
+| Backend | `backend/` | Server-side logic |
+| Frontend | `frontend/` | User interfaces |
+| Docs | `docs/` | Human-readable docs |
+
+---
+
+## AI Agent Rules
+
+See [`AGENTS.md`](AGENTS.md) for repository AI behavior rules.
+
 ------------------------------------------------------------------------
 
 ## What is MOOD?
