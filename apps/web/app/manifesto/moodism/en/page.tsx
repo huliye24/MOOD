@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { MoodDocument } from "../../../../components/mood/MoodDocument";
 import { loadMoodContent } from "../../../../lib/mood-content";
-import { MoodismArc } from "../../../../components/mood/MoodismArc";
 
 export const metadata = {
   title: "MOODISM Manifesto 001 | MOOD",
@@ -18,7 +17,6 @@ export default async function MoodismEnglishPage() {
         <Link href="/manifesto/moodism/v0.2/en">Read v0.2</Link>
         <Link href="/manifesto/moodism/v0.1/en">Read v0.1</Link>
       </nav>
-      <MoodismArc />
       <MoodDocument
         markdown={await loadMoodContent("manifesto/moodism-en.md")}
         current="Manifesto"

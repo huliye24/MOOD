@@ -55,3 +55,14 @@ test("the website keeps old routes while making v0.3 the current reading edition
   assert.match(v02Zh, /阅读 v0\.3/);
   assert.match(v02En, /Read v0\.3/);
 });
+
+test("new manifesto editions do not rewrite the established MOOD entrance", async () => {
+  const rootRoute = await readWeb("app/page.tsx");
+  const home = await readWeb("components/mood/MoodHome.tsx");
+
+  assert.match(rootRoute, /MoodHome/);
+  assert.match(home, /A DIGITAL HOME FOR FREE SPIRITS/);
+  assert.match(home, /在这里，/);
+  assert.match(home, /成为你自己。/);
+  assert.doesNotMatch(home, /MoodismArc/);
+});
