@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm --prefix apps/web run dev",
-    "build": "npm --prefix apps/web run build",
+    "build": "npm --prefix apps/web run install:ci && npm --prefix apps/web run build",
     "test": "npm --prefix apps/web run test",
     "lint": "npm --prefix apps/web run lint"
   },
