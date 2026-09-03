@@ -1,0 +1,34 @@
+{
+  "name": "@mood/node-api",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD API Agent Layer Alpha 001 — the HTTP face of a MOOD node, for AI Agents. The CLI is for humans; the API is for agents.",
+  "type": "module",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "test": "node --test src/tests/api.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mood",
+    "api",
+    "ai-agent",
+    "protocol-node",
+    "contribution-network",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@mood/cli": "0.2.0-alpha.2",
+    "@mood/node-runtime": "0.1.0-alpha.1",
+    "express": "^4.21.2"
+  },
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}

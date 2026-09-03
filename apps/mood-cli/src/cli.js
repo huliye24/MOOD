@@ -115,6 +115,12 @@ ${bold('Node lifecycle:')}
   mood stop                         Stop the local MOOD node runtime
   mood status                       Show node status (snapshot, peers, epoch)
 
+${bold('AI Agent layer:')}
+  mood api start [--port <n>]       Start the local API (default 127.0.0.1:8788)
+                                    [--key <secret>] require Bearer auth
+  mood api status                   Show API status (endpoint, key, health)
+  mood api stop                     Stop the local API
+
 ${bold('Identity & Invitations:')}
   mood identity show                Show node identity (public side only)
   mood invite create --email <addr> Issue a .moodinvite for a new node
@@ -127,8 +133,9 @@ ${bold('Network:')}
 ${bold('AI Agent mode:')}
   Any command supports \`--json\` to emit a stable JSON envelope.
   Example: mood status --json
+  AI Agents call the API: curl http://127.0.0.1:8788/node/status
 
-${dim('The CLI is the primary MOOD interface.')}
+${dim('The CLI is the human entry; the API is the AI entry.')}
 ${dim('MOOD is a protocol node, not an application.')}
 `;
 

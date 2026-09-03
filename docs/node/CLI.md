@@ -76,6 +76,8 @@ mood init                           # 1. create ~/.mood/ and the node identity
 mood start                          # 2. run the node runtime (background daemon)
 mood status                         # 3. inspect: identity, snapshot, peers, epoch
 mood stop                           # 4. stop the runtime (data is preserved)
+
+mood api start                      # 5. (optional) open the AI Agent API
 ```
 
 The first run is exactly three commands:
@@ -120,8 +122,11 @@ $ mood snapshot verify
 │   └── node.json          # network, relay, organization, bootstrap peers
 ├── snapshots/             # epoch snapshots + latest.json pointer
 ├── logs/
-│   └── node.log           # daemon log
-└── state.json             # runtime state (status, pid, connected peers)
+│   ├── node.log           # daemon log
+│   └── api.log            # Agent Layer API log
+├── state.json             # runtime state (status, pid, connected peers)
+├── api-state.json         # Agent Layer API state (status, pid, port, bind)
+└── api-stop               # cooperative stop flag for the API (transient)
 ```
 
 ---
@@ -170,6 +175,39 @@ last digest.
   Snapshot:     sha256:36ae5361...
   Agreement:    Verified
 ```
+
+### `mood api start` / `mood api status` / `mood api stop`
+
+Starts, inspects, and stops the **AI Agent Layer** — a local HTTP API
+(services/node-api) that lets an AI Agent operate this node without a
+shell. The CLI is the human entry; the API is the AI entry.
+
+```bash
+$ mood api start
+  Starting MOOD API...
+
+  Endpoint: http://127.0.0.1:8788
+  Status:   Ready for AI Agents
+  PID:      20020
+  Key:      disabled (local-only default)
+  Log:      ~/.mood/logs/api.log
+
+$ curl http://127.0.0.1:8788/node/status
+{"nodeId":"mood:node:63aa...","network":"MOOD Alpha Testnet","protocol":"v0.1","status":"running","epoch":"001"}
+```
+
+| Flag | Meaning |
+|------|---------|
+| `--port <n>` | port (default 8788; env `MOOD_API_PORT`) |
+| `--bind <addr>` | bind address (default 127.0.0.1 — local-only; env `MOOD_API_BIND`) |
+| `--key <secret>` | require `Authorization: Bearer <secret>` on every endpoint except `/health` |
+
+Security posture: binds loopback only by default, never reads the private
+key file, validates the Host header against DNS rebinding, and exposes
+only public identity data. The API drives the node through the canonical
+`mood start`/`mood stop` — agents and humans share one code path. Full
+reference: [`services/node-api`](../../services/node-api) and
+[`docs/agent/api-demo.md`](../agent/api-demo.md).
 
 ### `mood identity show`
 
@@ -295,7 +333,7 @@ apps/mood-cli/
 │   ├── state.js              # ~/.mood tree: identity, config, state
 │   ├── daemon.js             # background runtime loop
 │   ├── commands/             # one file per command
-│   │   init · start · stop · status
+│   │   init · start · stop · status · api
 │   │   identity · invite · peers · snapshot · protocol
 │   ├── ui/                   # logo + terminal renderers + JSON emit
 │   └── config/defaults.js    # single source of display constants
@@ -370,6 +408,33 @@ mood stop --json
 An agent that can run a shell and parse JSON can operate a MOOD node —
 join, observe, verify consensus, and invite the next node. That is the
 entire integration surface, and it is deliberate.
+
+Agents that speak HTTP have a second, protocol-native door: the local
+API started by `mood api start`. It is not a wrapper around the CLI — it
+reads the same `~/.mood/` tree and drives the same runtime, so both doors
+always agree.
+
+```text
+   Human operator                    AI Agent
+   │                                │
+   │  $ mood status                 │  $ curl 127.0.0.1:8788/node/status
+   │  (terminal screens)            │  {"nodeId":"mood:node:..."}
+   │                                │
+   └────────────┬───────────────────┴──────────────┬──────────────
+                │                                  │
+                ▼                                  ▼
+        ┌──────────────────┐          ┌──────────────────────────┐
+        │  apps/mood-cli   │          │  services/node-api       │
+        │  human entry     │          │  AI entry (local HTTP)   │
+        └────────┬─────────┘          └───────────┬──────────────┘
+                 │                                │
+                 └────────────┬───────────────────┘
+                              ▼
+                ┌──────────────────────────┐
+                │  @mood/node-runtime      │
+                │  one node, one state     │
+                └──────────────────────────┘
+```
 
 ---
 

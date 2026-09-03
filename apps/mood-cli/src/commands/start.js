@@ -10,7 +10,7 @@ import { spawn } from 'child_process';
 import { existsSync, openSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
-import { emit, green, yellow, dim } from '../ui/terminal.js';
+import { emit, renderKeyValue, green, yellow, dim } from '../ui/terminal.js';
 import {
   isInitialized,
   readState,

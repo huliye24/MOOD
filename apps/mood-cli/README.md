@@ -53,6 +53,8 @@ Requires Node.js ≥ 22.13. No other dependencies.
 | `mood init` | Create `~/.mood/` + Ed25519 identity (idempotent) |
 | `mood start` / `mood stop` | Run / stop the node runtime |
 | `mood status` | Node ID, network, status, epoch, digest, agreement |
+| `mood api start` / `mood api stop` | Run / stop the AI Agent API (127.0.0.1:8788) |
+| `mood api status` | API endpoint, key mode, health |
 | `mood identity show` | Public identity — never the private key |
 | `mood invite create --email <addr>` | Issue a signed `.moodinvite` |
 | `mood peers` | Connected + bootstrap peers |
@@ -72,6 +74,17 @@ $ mood status --json
 - `MOOD_JSON=1` forces JSON globally
 
 An agent that can run a shell and parse JSON can operate a MOOD node.
+
+Agents that speak HTTP have their own door — the local API:
+
+```bash
+mood api start                # 127.0.0.1:8788, local-only
+mood api start --key <secret> # require Authorization: Bearer <secret>
+curl http://127.0.0.1:8788/node/status
+```
+
+See [`services/node-api`](../../services/node-api) — the CLI is the human
+entry; the API is the AI entry.
 
 ## Architecture
 
