@@ -57,6 +57,9 @@ Requires Node.js ≥ 22.13. No other dependencies.
 | `mood api status` | API endpoint, key mode, health |
 | `mood connector detect` | Detect installed AI Agent tools (existence-only — never runs them) |
 | `mood connector init` / `register` / `status` | Connector identity + agent registration (contribution layer) |
+| `mood contribution create --actor <ref>` | Record a contribution event + SHA-256 proof (`--type`, `--description`, `--actor-type`) |
+| `mood contribution list` | Contributions recorded on this node |
+| `mood contribution verify` | Recompute every proof hash — detects tampering, exit 1 on failure |
 | `mood identity show` | Public identity — never the private key |
 | `mood invite create --email <addr>` | Issue a signed `.moodinvite` |
 | `mood peers` | Connected + bootstrap peers |
@@ -100,6 +103,20 @@ curl http://127.0.0.1:8788/connector/status
 See [`packages/mood-connector`](../../packages/mood-connector) — AI
 engines create; MOOD records contribution; the network verifies.
 
+Work recorded through the connector (or by humans) becomes a verifiable
+protocol object:
+
+```bash
+mood contribution create --actor claude-code --type code_change \
+                          --description "Updated node API"
+mood contribution list              # what this node recorded
+mood contribution verify            # recompute every hash — tamper-evident
+```
+
+See [`packages/contribution-proof`](../../packages/contribution-proof) —
+a proof attests an event existed and was not modified. Not a reward, not
+a score, not token accounting.
+
 ## Architecture
 
 The CLI owns presentation and process management — nothing else. All
@@ -115,7 +132,7 @@ apps/mood-cli ──▶ packages/node-runtime ──▶ protocol/* ──▶ Sna
 
 ```bash
 cd apps/mood-cli
-npm test          # 12 end-to-end tests (spawns the real binary)
+npm test          # 17 end-to-end tests (spawns the real binary)
 ```
 
 Full reference: [`docs/node/CLI.md`](../../docs/node/CLI.md)

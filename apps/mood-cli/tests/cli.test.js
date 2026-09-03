@@ -12,6 +12,8 @@
  *   5. Invite generation — .moodinvite is written and verifiable
  *   6. Node lifecycle    — start → snapshot → verify → stop
  *   7. Connector         — detect/init/register/status over a faked machine
+ *   8. Contribution proof — create/list/verify, tamper detection, secret
+ *                           rejection, registered-agent chain
  *
  * Run: npm test   (from apps/mood-cli)
  */
@@ -421,6 +423,184 @@ test('connector: detect → init → register → status on a faked machine', ()
       assert.ok(!content.includes('sk-ant'), `${f} must not contain API keys`);
       assert.ok(!content.includes('apiKey'), `${f} must not contain key fields`);
     }
+  } finally {
+    box.cleanup();
+  }
+});
+
+// ── 8. Contribution proof layer ────────────────────────────────────────────
+
+const EVENT_ID_RE = /^event:mood:[0-9a-f]{24}$/;
+const PROOF_ID_RE = /^proof:mood:[0-9a-f]{24}$/;
+const HASH_RE = /^sha256:[0-9a-f]{64}$/;
+
+test('contribution: create → list → verify without init or connector', () => {
+  const box = sandbox();
+  try {
+    // create — no `mood init`, no connector: the actor derives deterministically.
+    const created = moodJson(box, [
+      'contribution', 'create',
+      '--actor', 'claude-code',
+      '--type', 'code_change',
+      '--description', 'Updated node API',
+    ]);
+    assert.match(created.event.id, EVENT_ID_RE);
+    assert.equal(created.event.type, 'contribution_event');
+    assert.equal(created.event.actor.type, 'ai_agent');
+    assert.match(created.event.actor.id, /^agent:mood:[0-9a-f]{16}$/);
+    assert.equal(created.event.action.type, 'code_change');
+    assert.equal(created.event.action.description, 'Updated node API');
+    assert.equal(created.event.source.connector, '');
+    assert.match(created.proof.proofId, PROOF_ID_RE);
+    assert.equal(created.proof.eventId, created.event.id);
+    assert.match(created.proof.eventHash, HASH_RE);
+    assert.equal(created.proof.algorithm, 'SHA-256');
+    assert.equal(created.proof.verified, true);
+
+    // both files on disk under ~/.mood/contributions/
+    assert.ok(existsSync(join(box.home, 'contributions', 'events', `event-mood-${created.event.id.slice('event:mood:'.length)}.json`)));
+    assert.ok(existsSync(join(box.home, 'contributions', 'proofs', `proof-mood-${created.proof.proofId.slice('proof:mood:'.length)}.json`)));
+
+    // human output carries the spec's four facts.
+    const human = moodOk(box, [
+      'contribution', 'create',
+      '--actor', 'codex',
+      '--description', 'Second contribution',
+    ]);
+    assert.match(human, /Contribution created\./);
+    assert.match(human, /Event:\s+event:mood:[0-9a-f]{24}/);
+    assert.match(human, /Proof:\s+sha256:[0-9a-f]{64}/);
+    assert.match(human, /Verified:\s+true/);
+
+    // list — human + JSON
+    const listHuman = moodOk(box, ['contribution', 'list']);
+    assert.match(listHuman, /MOOD Contributions/);
+    assert.match(listHuman, /1\.\s+Agent:\s+codex/); // newest first
+    assert.match(listHuman, /2\.\s+Agent:\s+claude-code/);
+    assert.match(listHuman, /Type:\s+code_change/);
+    assert.match(listHuman, /Proof:\s+Verified/);
+    const listed = moodJson(box, ['contribution', 'list']);
+    assert.equal(listed.contributions.length, 2);
+    assert.equal(listed.contributions[0].event.actor.name, 'codex');
+    assert.equal(listed.contributions[1].event.id, created.event.id);
+
+    // verify — PASS + hash + summary, exit 0
+    const verifyHuman = moodOk(box, ['contribution', 'verify']);
+    assert.match(verifyHuman, /Proof verification/);
+    assert.match(verifyHuman, /PASS/);
+    assert.match(verifyHuman, /Hash:\s+sha256:[0-9a-f]{64}/);
+    assert.match(verifyHuman, /Summary:\s+2\/2 verified/);
+    const verified = moodJson(box, ['contribution', 'verify']);
+    assert.equal(verified.total, 2);
+    assert.equal(verified.passed, 2);
+    assert.equal(verified.failed, 0);
+    for (const r of verified.results) {
+      assert.equal(r.valid, true);
+      assert.equal(r.eventHash, r.recomputed);
+    }
+
+    // single contribution verify by event id
+    const single = moodJson(box, ['contribution', 'verify', created.event.id]);
+    assert.equal(single.total, 1);
+    assert.equal(single.passed, 1);
+
+    // unknown id → clean failure
+    const missing = mood(box, ['contribution', 'verify', 'event:mood:' + '0'.repeat(24), '--json']);
+    assert.equal(missing.status, 1);
+    assert.equal(JSON.parse(missing.stdout).ok, false);
+  } finally {
+    box.cleanup();
+  }
+});
+
+test('contribution: a tampered event file fails verification with exit 1', () => {
+  const box = sandbox();
+  try {
+    const created = moodJson(box, [
+      'contribution', 'create',
+      '--actor', 'claude-code',
+      '--description', 'Alpha contribution',
+    ]);
+
+    // Rewrite the stored event — the classic after-the-fact edit.
+    const eventFile = join(
+      box.home, 'contributions', 'events',
+      `event-mood-${created.event.id.slice('event:mood:'.length)}.json`,
+    );
+    const stored = JSON.parse(readFileSync(eventFile, 'utf8'));
+    stored.action.description = 'rewritten after the fact';
+    writeFileSync(eventFile, JSON.stringify(stored, null, 2) + '\n', 'utf8');
+
+    const r = mood(box, ['contribution', 'verify']);
+    assert.equal(r.status, 1, 'tampered contribution must exit 1');
+    assert.match(r.stdout, /FAIL/);
+    assert.match(r.stdout, /hash mismatch/);
+    assert.match(r.stdout, /1 FAILED/);
+
+    const asJson = mood(box, ['contribution', 'verify', '--json']);
+    assert.equal(asJson.status, 1);
+    const envelope = JSON.parse(asJson.stdout);
+    assert.equal(envelope.ok, true, 'a failed verification is a result, not an API error');
+    assert.equal(envelope.failed, 1);
+    assert.equal(envelope.results[0].valid, false);
+    assert.notEqual(envelope.results[0].eventHash, envelope.results[0].recomputed);
+  } finally {
+    box.cleanup();
+  }
+});
+
+test('contribution: credential-shaped descriptions are refused', () => {
+  const box = sandbox();
+  try {
+    for (const bad of [
+      'key sk-ant-api03-FAKE-LEAK-000000000000',
+      'password=hunter2',
+    ]) {
+      const r = mood(box, ['contribution', 'create', '--actor', 'claude-code', '--description', bad, '--json']);
+      assert.equal(r.status, 1);
+      const envelope = JSON.parse(r.stdout);
+      assert.equal(envelope.ok, false);
+      assert.match(envelope.error, /credential/);
+    }
+    // nothing was written
+    assert.equal(moodJson(box, ['contribution', 'list']).contributions.length, 0);
+
+    // --actor is required
+    const noActor = mood(box, ['contribution', 'create', '--json']);
+    assert.equal(noActor.status, 1);
+    assert.match(JSON.parse(noActor.stdout).error, /--actor is required/);
+
+    // unknown actor type
+    const badType = mood(box, ['contribution', 'create', '--actor', 'x', '--actor-type', 'robot', '--json']);
+    assert.equal(badType.status, 1);
+  } finally {
+    box.cleanup();
+  }
+});
+
+test('contribution: a registered connector agent records provenance', () => {
+  const box = sandbox();
+  try {
+    const fake = fakeAgentMachine(box);
+    moodOk(box, ['connector', 'init'], fake.env);
+    const reg = moodJson(box, ['connector', 'register', '--agent', 'claude-code'], fake.env);
+    const registered = reg.registered[0];
+
+    const created = moodJson(box, [
+      'contribution', 'create',
+      '--actor', 'claude-code',
+      '--description', 'Chain test',
+    ], fake.env);
+
+    // the registered identity is used, not a derived one
+    assert.equal(created.event.actor.id, registered.agentId);
+    assert.equal(created.event.actor.name, 'Claude Code');
+    assert.equal(created.event.actor.type, 'ai_agent');
+    assert.match(created.event.source.connector, /^connector:mood:[0-9a-f]{32}$/);
+
+    // and it verifies
+    const verified = moodJson(box, ['contribution', 'verify'], fake.env);
+    assert.equal(verified.passed, 1);
   } finally {
     box.cleanup();
   }

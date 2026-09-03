@@ -1,0 +1,37 @@
+{
+  "name": "@mood/contribution-proof",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Contribution Proof Alpha 001 — verifiable recording of work performed by humans and AI Agents. Contribution Event → Proof Object → MOOD Node. Not a reward, not a score, not token accounting.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./src/schema.js",
+    "./hash": "./src/hash.js",
+    "./event": "./src/event.js",
+    "./proof": "./src/proof.js",
+    "./validator": "./src/validator.js",
+    "./storage": "./src/storage.js"
+  },
+  "scripts": {
+    "test": "node src/tests/contribution-proof.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mood",
+    "contribution",
+    "proof",
+    "protocol",
+    "hash",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}

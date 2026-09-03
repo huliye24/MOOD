@@ -12,6 +12,9 @@
  *     connector/
  *       connector-id        ← connector identity (@mood/connector layer)
  *       agent-record.json   ← registered AI Agents (names/types only)
+ *     contributions/
+ *       events/             ← ContributionEvents (@mood/contribution-proof layer)
+ *       proofs/             ← ContributionProofs (SHA-256 over each event)
  *     snapshots/
  *       latest.json         ← pointer to the most recent snapshot
  *       snapshot-*.json     ← snapshot objects written by the runtime

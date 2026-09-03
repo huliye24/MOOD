@@ -31,10 +31,13 @@ below exactly; every error is the same envelope:
 | GET    | `/peers`       | `{"peers":[],"status":"running"}` |
 | GET    | `/snapshot`    | `{"epoch":"001","digest":"sha256:...","agreement":"verified"}` — digest re-verified on every request |
 | GET    | `/connector/status` | `{"connector":"active","agents":[{"name":"Claude Code","type":"coding-agent"}]}` — inactive before `mood connector init`; independent of node identity |
+| GET    | `/contributions` | `{"contributions":[{"event":{…},"proof":{…}}]}` — the contribution records on this node; a record that trips the credential guard is served as `{"refused":"…"}` with all content stripped |
+| POST   | `/contributions/verify` | `{"verified":true}` — verifies a submitted ContributionProof against the stored ContributionEvent; a failed check is 200 + `{"verified":false,"errors":[…]}`, not an error |
 
 Stable error codes: `NOT_INITIALIZED` (409), `NO_SNAPSHOT` (404),
 `UNAUTHORIZED` (401), `FORBIDDEN_HOST` (403), `NOT_FOUND` (404),
-`START_FAILED` / `STOP_FAILED` / `INTERNAL` (500).
+`INVALID_REQUEST` (400 — malformed body), `START_FAILED` / `STOP_FAILED` /
+`INTERNAL` (500).
 
 ## Design rules
 
@@ -47,7 +50,8 @@ Stable error codes: `NOT_INITIALIZED` (409), `NO_SNAPSHOT` (404),
 - **Deterministic output.** No timestamps, no random IDs, no
   human-formatted tables. An agent can diff two responses byte-for-byte.
 - **What the API allows:** read node status, inspect public identity,
-  inspect peers, verify snapshots, start/stop the node.
+  inspect peers, verify snapshots, start/stop the node, list contribution
+  records, verify contribution proofs.
 - **What the API never does:** expose private keys or secrets, create
   tokens, perform financial operations, bypass protocol rules. Phase Zero
   is unchanged — no token, no wallet, no mining, no staking.
@@ -68,6 +72,12 @@ Stable error codes: `NOT_INITIALIZED` (409), `NO_SNAPSHOT` (404),
   a DNS-rebinding page in a browser cannot reach this API.
 - **Nothing sensitive is stored.** No private keys, no email, no
   credentials — anywhere.
+- **Contribution records are public by design — but guarded.** A proof
+  exists to be verified by third parties, so `/contributions` serves the
+  full record. Anything that trips the credential guard (a hand-edited
+  file with key/password-shaped content) is refused with its content
+  stripped — creation refuses such content outright, and serving defends
+  the read side the same way.
 
 ## Running
 

@@ -9,6 +9,7 @@
  *
  *   reads      → ~/.mood/ files (the documented on-disk contract)
  *   verify     → @mood/node-runtime (digest verification)
+ *   proofs     → @mood/contribution-proof (contribution verification)
  *   lifecycle  → the canonical `mood start` / `mood stop` commands
  *
  * Security posture:
@@ -40,6 +41,7 @@ import identityRoutes from './routes/identity.js';
 import peersRoutes from './routes/peers.js';
 import snapshotRoutes from './routes/snapshot.js';
 import connectorRoutes from './routes/connector.js';
+import contributionsRoutes from './routes/contributions.js';
 
 const DEFAULT_PORT = 8788;
 const DEFAULT_BIND = '127.0.0.1';
@@ -81,15 +83,32 @@ export function createApp({ apiKey } = {}) {
   // Everything below requires the API key when one is configured.
   app.use(createAuthMiddleware({ apiKey }));
 
+  // JSON body parsing — mounted AFTER auth so an unauthorized request
+  // never triggers a parse. Bodies are tiny (a ContributionProof is a
+  // few hundred bytes); the limit reflects that.
+  app.use(express.json({ limit: '64kb' }));
+
   app.use('/node', nodeRoutes);
   app.use('/identity', identityRoutes);
   app.use('/peers', peersRoutes);
   app.use('/snapshot', snapshotRoutes);
   app.use('/connector', connectorRoutes);
+  app.use('/contributions', contributionsRoutes);
 
   // Unknown endpoint — stable machine envelope, same as every other error.
   app.use((req, res) => {
     fail(res, 404, 'NOT_FOUND', `Unknown endpoint: ${req.method} ${req.path}`);
+  });
+
+  // Malformed JSON in a request body: a stable 400 envelope, not a
+  // fall-through 500.
+  // eslint-disable-next-line no-unused-vars
+  app.use((err, req, res, next) => {
+    if (err && err.type === 'entity.parse.failed') {
+      fail(res, 400, 'INVALID_REQUEST', 'Request body is not valid JSON');
+      return;
+    }
+    next(err);
   });
 
   // Last-resort handler for unexpected route errors.

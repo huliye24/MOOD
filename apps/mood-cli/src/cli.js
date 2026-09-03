@@ -127,6 +127,15 @@ ${bold('AI Agent layer:')}
                                     [--agent <key|name>] explicit agent(s)
   mood connector status            Show connector status (agents, network)
 
+${bold('Contribution layer:')}
+  mood contribution create --actor <ref>
+                                    Record a contribution event + proof
+                                    [--type <action>] default code_change
+                                    [--description <text>] what was done
+                                    [--actor-type <t>] human|ai_agent|organization
+  mood contribution list          Contributions recorded on this node
+  mood contribution verify [id]   Recompute proof hashes (detects tampering)
+
 ${bold('Identity & Invitations:')}
   mood identity show                Show node identity (public side only)
   mood invite create --email <addr> Issue a .moodinvite for a new node

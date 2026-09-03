@@ -80,6 +80,7 @@ mood stop                           # 4. stop the runtime (data is preserved)
 mood api start                      # 5. (optional) open the AI Agent API
 mood connector detect               # 6. (optional) connect installed AI Agent
 mood connector register             #    tools (Claude Code, Codex, Cursor, …)
+mood contribution create            # 7. record work + mint its proof
 ```
 
 The first run is exactly three commands:
@@ -123,6 +124,10 @@ $ mood snapshot verify
 ├── config/
 │   └── node.json          # network, relay, organization, bootstrap peers
 ├── snapshots/             # epoch snapshots + latest.json pointer
+├── connector/             # connector identity + registered AI Agents
+├── contributions/         # contribution records (proof layer)
+│   ├── events/            # ContributionEvents — one JSON file per event
+│   └── proofs/            # ContributionProofs — SHA-256 over each event
 ├── logs/
 │   ├── node.log           # daemon log
 │   └── api.log            # Agent Layer API log
@@ -256,6 +261,56 @@ only, contents are never read). Agents read the same state via
 [`docs/agent/connector.md`](../agent/connector.md), and
 [`docs/demo/agent-connection-demo.md`](../demo/agent-connection-demo.md).
 
+### `mood contribution create` / `list` / `verify`
+
+The **contribution proof layer** (packages/contribution-proof) — the
+chain `AI Agent / human / organization → ContributionEvent →
+ContributionProof → node storage`. A proof attests one thing: the
+contribution event existed and was not modified after recording. Not a
+reward, not a score, not token accounting.
+
+```bash
+$ mood contribution create --actor claude-code --type code_change \
+                           --description "Updated node API"
+
+  MOOD Contribution created.
+
+  Event:         event:mood:c2307ceaa3259a8f56aac3fd
+  Agent:         Claude Code
+  Type:          code_change
+  Proof:         sha256:5da66d0c407652fdc73d6e46cd93609b28bc428c748ea1c20e3ab8ce48bb08df
+  Verified:      true
+
+$ mood contribution list
+$ mood contribution verify [event-id|proof-id]   # exit 1 when anything failed
+```
+
+| Subcommand | Meaning |
+|------|---------|
+| `create` | record a ContributionEvent and mint its SHA-256 proof (one command, both files) |
+| `list` | the contributions recorded on this node, newest first, each with its proof status |
+| `verify` | recompute every stored hash — tamper-evident; pass an ID to check one |
+
+| Flag (create) | Meaning |
+|------|---------|
+| `--actor <ref>` | required — an agent key/name/ID (registered connector agents are resolved to their identity), or any human/organization reference |
+| `--type <verb>` | action type, snake_case (default `code_change`) |
+| `--description <text>` | what the work was (max 2000 chars) |
+| `--actor-type <t>` | `ai_agent` (default) · `human` · `organization` |
+
+Actor resolution: a registered connector agent wins for `ai_agent`
+contributions — the record then carries the registered `agent:mood:…`
+ID and the connector in `source`. Anything else derives a deterministic
+ID from `(type, reference)`: same reference → same ID, on any node,
+without registration. Descriptions and IDs are guarded against
+credential-shaped content at creation **and** at verification. Records
+live in `~/.mood/contributions/{events,proofs}/` — one JSON file per
+object. Agents read the same records via `GET /contributions` and
+`POST /contributions/verify` on the API. Full reference:
+[`packages/contribution-proof`](../../packages/contribution-proof),
+[`docs/protocol/contribution-proof.md`](../protocol/contribution-proof.md),
+and [`docs/agent/contribution-demo.md`](../agent/contribution-demo.md).
+
 ### `mood identity show`
 
 Public side of the identity only. **Never displays: private key.** The
@@ -382,6 +437,7 @@ apps/mood-cli/
 │   ├── commands/             # one file per command
 │   │   init · start · stop · status · api
 │   │   identity · invite · peers · snapshot · protocol
+│   │   connector · contribution
 │   ├── ui/                   # logo + terminal renderers + JSON emit
 │   └── config/defaults.js    # single source of display constants
 └── tests/cli.test.js         # end-to-end: spawns the real binary

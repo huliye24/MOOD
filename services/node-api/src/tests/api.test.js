@@ -16,6 +16,8 @@
  *   8. Not initialized — 409 envelope on every data endpoint
  *   9. Unknown route   — 404 envelope
  *  10. Connector       — /connector/status independent of node identity
+ *  11. Contributions   — GET /contributions, POST /contributions/verify;
+ *                       tampering detected; secrets never served
  *
  * Run: npm test   (from services/node-api)
  */
@@ -172,6 +174,17 @@ async function postJson(port, path, headers = {}) {
   const res = await fetch(`http://127.0.0.1:${port}${path}`, {
     method: 'POST',
     headers,
+  });
+  const text = await res.text();
+  return { status: res.status, text, body: safeJson(text) };
+}
+
+/** POST with a JSON body (object, or raw string for malformed payloads). */
+async function postJsonBody(port, path, body, headers = {}) {
+  const res = await fetch(`http://127.0.0.1:${port}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...headers },
+    body: typeof body === 'string' ? body : JSON.stringify(body),
   });
   const text = await res.text();
   return { status: res.status, text, body: safeJson(text) };
@@ -560,6 +573,105 @@ test('connector: /connector/status works without node identity; activates via CL
     const recordFile = readFileSync(join(box.home, 'connector', 'agent-record.json'), 'utf8');
     assert.ok(!recordFile.includes('sk-ant'), 'no API keys in the agent record');
     assert.ok(!recordFile.includes('apiKey'), 'no key fields in the agent record');
+  } finally {
+    stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+// ── 11. Contributions (contribution proof layer) ────────────────────────────
+
+test('contributions: list → create via CLI → POST verify; tampering detected; secrets never served', async () => {
+  const box = sandbox();
+  let child;
+  try {
+    // NOTE: no `mood init` here. The contribution layer is independent of
+    // node identity — it must answer before a node exists.
+    assert.equal(existsSync(join(box.home, 'identity', 'node.json')), false);
+
+    const port = await freePort();
+    child = await startApiServer({ home: box.home, port });
+
+    // Empty list is honest.
+    const empty = await getJson(port, '/contributions');
+    assert.equal(empty.status, 200);
+    assert.deepEqual(empty.body, { contributions: [] });
+
+    // A human (or agent) records a contribution through the CLI.
+    const r = mood(box, ['contribution', 'create', '--actor', 'claude-code',
+      '--type', 'code_change', '--description', 'Updated node API', '--json']);
+    assert.equal(r.status, 0, `contribution create failed:\n${r.stderr}\n${r.stdout}`);
+    const created = JSON.parse(r.stdout);
+
+    // GET shows exactly what was recorded — the full public record.
+    const list = await getJson(port, '/contributions');
+    assert.equal(list.status, 200);
+    assert.equal(list.body.contributions.length, 1);
+    assert.deepEqual(list.body.contributions[0], {
+      event: created.event,
+      proof: created.proof,
+    });
+
+    // SECURITY: nothing credential-shaped in any response body.
+    for (const body of [empty.text, list.text]) {
+      assert.ok(!body.includes('sk-'), 'no api-key-shaped string served');
+      assert.ok(!body.includes('password'), 'no password-shaped string served');
+      assert.ok(!body.includes('PRIVATE KEY'), 'no private key material served');
+    }
+
+    // POST the proof back → verified: the event existed, unmodified.
+    const ok = await postJsonBody(port, '/contributions/verify', created.proof);
+    assert.equal(ok.status, 200);
+    assert.deepEqual(ok.body, { verified: true });
+
+    // A tampered proof (hash altered) → verified:false, with the reason.
+    const tampered = { ...created.proof, eventHash: 'sha256:' + '0'.repeat(64) };
+    const bad = await postJsonBody(port, '/contributions/verify', tampered);
+    assert.equal(bad.status, 200, 'a failed verification is a result, not an API error');
+    assert.equal(bad.body.verified, false);
+    assert.ok(Array.isArray(bad.body.errors) && bad.body.errors.length > 0);
+    assert.ok(bad.body.errors.some((e) => String(e).includes('hash mismatch')),
+      `errors explain the mismatch, got: ${JSON.stringify(bad.body.errors)}`);
+
+    // A proof naming an event this node never stored → verified:false.
+    const stranger = { ...created.proof, eventId: 'event:mood:ffffffffffffffffffffffff' };
+    const unknown = await postJsonBody(port, '/contributions/verify', stranger);
+    assert.equal(unknown.status, 200);
+    assert.equal(unknown.body.verified, false);
+    assert.ok(unknown.body.errors.some((e) => String(e).includes('no ContributionEvent stored')));
+
+    // Malformed request bodies → the stable 400 envelope.
+    const notObject = await postJsonBody(port, '/contributions/verify', 'just a string');
+    assert.equal(notObject.status, 400);
+    assert.equal(notObject.body.error.code, 'INVALID_REQUEST');
+
+    const malformed = await postJsonBody(port, '/contributions/verify', '{not valid json');
+    assert.equal(malformed.status, 400);
+    assert.equal(malformed.body.error.code, 'INVALID_REQUEST');
+
+    // SECURITY: a hand-planted record with credential-shaped content is
+    // refused — present in the list, but none of its content is served.
+    const plantedId = 'event:mood:ffff9999ffff9999ffff9999';
+    const eventsDir = join(box.home, 'contributions', 'events');
+    mkdirSync(eventsDir, { recursive: true });
+    writeFileSync(join(eventsDir, 'event-mood-ffff9999ffff9999ffff9999.json'), JSON.stringify({
+      id: plantedId,
+      type: 'contribution_event',
+      actor: { id: 'agent:mood:deadbeefdeadbeef', type: 'ai_agent' },
+      action: { type: 'code_change', description: 'the api_key=supersecret123 was here' },
+      timestamp: '2026-01-01T00:00:00.000Z',
+      source: { connector: '', node: '' },
+    }));
+
+    const after = await getJson(port, '/contributions');
+    assert.equal(after.status, 200);
+    assert.equal(after.body.contributions.length, 2);
+    const refused = after.body.contributions.find((c) => c.refused);
+    assert.ok(refused, 'the planted record is listed — but refused');
+    assert.equal(refused.event, null);
+    assert.equal(refused.proof, null);
+    assert.ok(!after.text.includes('supersecret123'), 'the secret VALUE never appears in the response');
+    assert.ok(!after.text.includes('api_key'), 'the credential-shaped content is not echoed');
   } finally {
     stopApiServer(child);
     box.cleanup();

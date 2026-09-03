@@ -34,6 +34,7 @@
   "license": "AGPL-3.0",
   "dependencies": {
     "@mood/connector": "0.1.0-alpha.1",
+    "@mood/contribution-proof": "0.1.0-alpha.1",
     "@mood/node-runtime": "0.1.0-alpha.1"
   },
   "author": "MOOD Project",
