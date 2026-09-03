@@ -136,6 +136,14 @@ ${bold('Contribution layer:')}
   mood contribution list          Contributions recorded on this node
   mood contribution verify [id]   Recompute proof hashes (detects tampering)
 
+${bold('Protocol object layer:')}
+  mood object create [--type <t>]  Wrap a stored proof into a network-
+                                    verifiable object (default type:
+                                    contribution, default proof: latest)
+                                    [--proof <id|hash>] a specific proof
+  mood object list                Protocol objects stored on this node
+  mood object verify [object-id]  Recompute object IDs (integrity + linkage)
+
 ${bold('Identity & Invitations:')}
   mood identity show                Show node identity (public side only)
   mood invite create --email <addr> Issue a .moodinvite for a new node

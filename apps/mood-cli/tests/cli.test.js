@@ -3,7 +3,8 @@
  *
  * These are end-to-end tests: every case spawns the real bin/mood.js as a
  * subprocess with an isolated MOOD_HOME, exactly like a human or an AI
- * agent would run it. Covered per the Alpha 002 spec:
+ * agent would run it. Covered per the Alpha 002 and Protocol Object Alpha
+ * 001 specs:
  *
  *   1. CLI startup       — home screen renders, exit 0
  *   2. Identity creation — `mood init` builds ~/.mood, idempotent
@@ -14,6 +15,8 @@
  *   7. Connector         — detect/init/register/status over a faked machine
  *   8. Contribution proof — create/list/verify, tamper detection, secret
  *                           rejection, registered-agent chain
+ *   9. Protocol object   — proof → object create/list/verify, tamper
+ *                           detection, error cases
  *
  * Run: npm test   (from apps/mood-cli)
  */
@@ -601,6 +604,183 @@ test('contribution: a registered connector agent records provenance', () => {
     // and it verifies
     const verified = moodJson(box, ['contribution', 'verify'], fake.env);
     assert.equal(verified.passed, 1);
+  } finally {
+    box.cleanup();
+  }
+});
+
+// ── 9. Protocol object layer ────────────────────────────────────────────────
+
+const OBJECT_ID_RE = /^object:mood:[0-9a-f]{24}$/;
+
+test('object: init → contribution → object create → list → verify', () => {
+  const box = sandbox();
+  try {
+    moodOk(box, ['init']);
+
+    // the proof this object will wrap
+    const created = moodJson(box, [
+      'contribution', 'create',
+      '--actor', 'claude-code',
+      '--type', 'code_change',
+      '--description', 'Protocol object test',
+    ]);
+
+    // create — JSON envelope carries the full object + where it landed
+    const obj = moodJson(box, ['object', 'create', '--type', 'contribution']);
+    assert.equal(obj.created, true);
+    assert.match(obj.object.id, OBJECT_ID_RE);
+    assert.equal(obj.object.type, 'contribution');
+    assert.equal(obj.object.version, '0.1');
+    assert.match(obj.object.createdAt, /^\d{4}-\d{2}-\d{2}T/);
+    assert.match(obj.object.issuer.nodeId, NODE_ID_RE);
+    assert.deepEqual(
+      Object.keys(obj.object.payload).sort(),
+      ['algorithm', 'eventHash', 'eventId', 'proofId'],
+    );
+    assert.equal(obj.object.payload.eventId, created.event.id);
+    assert.equal(obj.object.payload.proofId, created.proof.proofId);
+    assert.equal(obj.object.payload.eventHash, created.proof.eventHash);
+    assert.equal(obj.object.payload.algorithm, 'SHA-256');
+
+    // stored under ~/.mood/objects/, indexed, with sync metadata
+    const objectFile = join(
+      box.home, 'objects', 'contribution',
+      `object-mood-${obj.object.id.slice('object:mood:'.length)}.json`,
+    );
+    assert.equal(obj.objectFile, objectFile);
+    assert.ok(existsSync(objectFile));
+    assert.ok(existsSync(join(box.home, 'objects', 'metadata', `object-mood-${obj.object.id.slice('object:mood:'.length)}.json`)));
+    const index = JSON.parse(readFileSync(join(box.home, 'objects', 'index', 'by-type.json'), 'utf8'));
+    assert.deepEqual(index, { contribution: [obj.object.id] });
+
+    // a second contribution, then a second object over the FIRST proof
+    // via --proof (proof ID) — the human output path
+    moodOk(box, [
+      'contribution', 'create',
+      '--actor', 'codex',
+      '--description', 'Second contribution',
+    ]);
+    const human = moodOk(box, ['object', 'create', '--proof', created.proof.proofId]);
+    assert.match(human, /MOOD Protocol Object created\./);
+    assert.match(human, /Object ID:\s+object:mood:[0-9a-f]{24}/);
+    assert.match(human, /Type:\s+contribution/);
+    assert.match(human, /Event:\s+event:mood:[0-9a-f]{24}/);
+    assert.match(human, /Proof:\s+sha256:[0-9a-f]{64}/);
+    assert.match(human, /Verified:\s+true/);
+
+    // list — human + JSON
+    const listHuman = moodOk(box, ['object', 'list']);
+    assert.match(listHuman, /MOOD Protocol Objects/);
+    assert.match(listHuman, /Type:\s+contribution/);
+    assert.match(listHuman, /Issuer:\s+mood:node:[0-9a-f]{64}/);
+    assert.match(listHuman, /Status:\s+Verified/);
+    const listed = moodJson(box, ['object', 'list']);
+    assert.equal(listed.objects.length, 2);
+    for (const o of listed.objects) {
+      assert.match(o.id, OBJECT_ID_RE);
+      assert.equal(o.type, 'contribution');
+      assert.equal(o.verified, true);
+    }
+
+    // verify — PASS + summary, exit 0
+    const verifyHuman = moodOk(box, ['object', 'verify']);
+    assert.match(verifyHuman, /Object verification/);
+    assert.match(verifyHuman, /PASS\s+object:mood:[0-9a-f]{24}/);
+    assert.match(verifyHuman, /Linkage:\s+cross-checked against the stored proof/);
+    assert.match(verifyHuman, /Summary:\s+2\/2 verified/);
+    const verified = moodJson(box, ['object', 'verify']);
+    assert.equal(verified.total, 2);
+    assert.equal(verified.passed, 2);
+    assert.equal(verified.failed, 0);
+    for (const r of verified.results) {
+      assert.equal(r.valid, true);
+      assert.equal(r.integrityValid, true);
+      assert.equal(r.linked, true);
+    }
+
+    // single object verify by id
+    const single = moodJson(box, ['object', 'verify', obj.object.id]);
+    assert.equal(single.total, 1);
+    assert.equal(single.passed, 1);
+  } finally {
+    box.cleanup();
+  }
+});
+
+test('object: a tampered object file fails verification with exit 1', () => {
+  const box = sandbox();
+  try {
+    moodOk(box, ['init']);
+    moodJson(box, [
+      'contribution', 'create',
+      '--actor', 'claude-code',
+      '--description', 'Alpha contribution',
+    ]);
+    const obj = moodJson(box, ['object', 'create']);
+
+    // Rewrite the stored object — the content no longer matches its ID.
+    const objectFile = join(
+      box.home, 'objects', 'contribution',
+      `object-mood-${obj.object.id.slice('object:mood:'.length)}.json`,
+    );
+    const stored = JSON.parse(readFileSync(objectFile, 'utf8'));
+    stored.payload.eventHash = 'sha256:' + '0'.repeat(64);
+    writeFileSync(objectFile, JSON.stringify(stored, null, 2) + '\n', 'utf8');
+
+    const r = mood(box, ['object', 'verify']);
+    assert.equal(r.status, 1, 'tampered object must exit 1');
+    assert.match(r.stdout, /FAIL\s+object:mood:[0-9a-f]{24}/);
+    assert.match(r.stdout, /id mismatch/);
+    assert.match(r.stdout, /Summary:\s+0\/1 verified — 1 FAILED/);
+
+    const asJson = mood(box, ['object', 'verify', '--json']);
+    assert.equal(asJson.status, 1);
+    const envelope = JSON.parse(asJson.stdout);
+    assert.equal(envelope.ok, true, 'a failed verification is a result, not an API error');
+    assert.equal(envelope.failed, 1);
+    assert.equal(envelope.results[0].integrityValid, false);
+    assert.ok(envelope.results[0].errors.some((e) => e.includes('id mismatch')));
+  } finally {
+    box.cleanup();
+  }
+});
+
+test('object: error cases — no identity, no proof, bad type, unknown ref', () => {
+  const box = sandbox();
+  try {
+    // object create without init — an object is issued BY a node
+    const noIdentity = mood(box, ['object', 'create', '--json']);
+    assert.equal(noIdentity.status, 1);
+    assert.match(JSON.parse(noIdentity.stdout).error, /no node identity/);
+
+    moodOk(box, ['init']);
+
+    // no contribution records to wrap yet
+    const noProof = mood(box, ['object', 'create', '--json']);
+    assert.equal(noProof.status, 1);
+    assert.match(JSON.parse(noProof.stdout).error, /no contribution records/);
+
+    // empty list and empty verify are results, not errors
+    const emptyList = moodOk(box, ['object', 'list']);
+    assert.match(emptyList, /\(none yet\)/);
+    const emptyVerify = moodJson(box, ['object', 'verify']);
+    assert.deepEqual(emptyVerify, { ok: true, total: 0, passed: 0, failed: 0, results: [] });
+
+    // only one type exists in Alpha 001
+    const badType = mood(box, ['object', 'create', '--type', 'token', '--json']);
+    assert.equal(badType.status, 1);
+    assert.match(JSON.parse(badType.stdout).error, /--type must be one of/);
+
+    // unknown object id → clean failure
+    const missing = mood(box, ['object', 'verify', 'object:mood:' + '0'.repeat(24), '--json']);
+    assert.equal(missing.status, 1);
+    assert.equal(JSON.parse(missing.stdout).ok, false);
+
+    // unknown subcommand
+    const badSub = mood(box, ['object', 'mint', '--json']);
+    assert.equal(badSub.status, 1);
+    assert.match(JSON.parse(badSub.stdout).error, /unknown subcommand/);
   } finally {
     box.cleanup();
   }

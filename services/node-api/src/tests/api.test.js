@@ -18,6 +18,8 @@
  *  10. Connector       — /connector/status independent of node identity
  *  11. Contributions   — GET /contributions, POST /contributions/verify;
  *                       tampering detected; secrets never served
+ *  12. Objects         — GET /objects, GET /objects/:id, POST /objects/verify;
+ *                       a foreign object verifies; tampering detected
  *
  * Run: npm test   (from services/node-api)
  */
@@ -670,6 +672,162 @@ test('contributions: list → create via CLI → POST verify; tampering detected
     assert.ok(refused, 'the planted record is listed — but refused');
     assert.equal(refused.event, null);
     assert.equal(refused.proof, null);
+    assert.ok(!after.text.includes('supersecret123'), 'the secret VALUE never appears in the response');
+    assert.ok(!after.text.includes('api_key'), 'the credential-shaped content is not echoed');
+  } finally {
+    stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+// ── 12. Objects (protocol object layer) ─────────────────────────────────────
+
+test('objects: list → create via CLI → GET by id → POST verify; a foreign object verifies; tampering detected', async () => {
+  const box = sandbox();
+  let child;
+  try {
+    // NOTE: no `mood init` yet. The object layer reads storage without a
+    // node identity — it must answer before a node exists.
+    assert.equal(existsSync(join(box.home, 'identity', 'node.json')), false);
+
+    const port = await freePort();
+    child = await startApiServer({ home: box.home, port });
+
+    // Empty list is honest.
+    const empty = await getJson(port, '/objects');
+    assert.equal(empty.status, 200);
+    assert.deepEqual(empty.body, { objects: [] });
+
+    // An object is issued BY a node: init, record a contribution, wrap it.
+    moodInitOk(box);
+    const rc = mood(box, ['contribution', 'create', '--actor', 'claude-code',
+      '--type', 'code_change', '--description', 'Protocol object test', '--json']);
+    assert.equal(rc.status, 0, `contribution create failed:\n${rc.stderr}\n${rc.stdout}`);
+    const ro = mood(box, ['object', 'create', '--type', 'contribution', '--json']);
+    assert.equal(ro.status, 0, `object create failed:\n${ro.stderr}\n${ro.stdout}`);
+    const created = JSON.parse(ro.stdout);
+    assert.equal(created.object.type, 'contribution');
+    assert.match(created.object.id, /^object:mood:[0-9a-f]{24}$/);
+    assert.equal(created.object.payload.eventId, JSON.parse(rc.stdout).event.id);
+    assert.ok(existsSync(created.objectFile), 'the object file exists on disk');
+
+    // GET /objects — the documented summary per object.
+    const list = await getJson(port, '/objects');
+    assert.equal(list.status, 200);
+    assert.equal(list.body.objects.length, 1);
+    assert.deepEqual(list.body.objects[0], {
+      id: created.object.id,
+      type: 'contribution',
+      verified: true,
+    });
+
+    // SECURITY: nothing credential-shaped in any response body.
+    for (const body of [empty.text, list.text]) {
+      assert.ok(!body.includes('sk-'), 'no api-key-shaped string served');
+      assert.ok(!body.includes('password'), 'no password-shaped string served');
+      assert.ok(!body.includes('PRIVATE KEY'), 'no private key material served');
+    }
+
+    // GET /objects/:id — the object plus its verification status.
+    const one = await getJson(port, `/objects/${encodeURIComponent(created.object.id)}`);
+    assert.equal(one.status, 200);
+    assert.deepEqual(one.body, {
+      id: created.object.id,
+      type: 'contribution',
+      verified: true,
+      object: created.object,
+    });
+
+    // GET /objects/:id for an unknown object → the 404 envelope.
+    const missing = await getJson(port, `/objects/${encodeURIComponent('object:mood:' + '0'.repeat(24))}`);
+    assert.equal(missing.status, 404);
+    assert.equal(missing.body.error.code, 'NOT_FOUND');
+
+    // POST the object back → verified. The referenced proof is stored here
+    // and agrees, so BOTH levels pass (integrity + linkage).
+    const ok = await postJsonBody(port, '/objects/verify', created.object);
+    assert.equal(ok.status, 200);
+    assert.deepEqual(ok.body, { verified: true });
+
+    // A tampered object (hash altered → ID no longer matches content).
+    const tampered = {
+      ...created.object,
+      payload: { ...created.object.payload, eventHash: 'sha256:' + '0'.repeat(64) },
+    };
+    const bad = await postJsonBody(port, '/objects/verify', tampered);
+    assert.equal(bad.status, 200, 'a failed verification is a result, not an API error');
+    assert.equal(bad.body.verified, false);
+    assert.ok(Array.isArray(bad.body.errors) && bad.body.errors.length > 0);
+    assert.ok(bad.body.errors.some((e) => String(e).includes('id mismatch')),
+      `errors explain the mismatch, got: ${JSON.stringify(bad.body.errors)}`);
+
+    // A FOREIGN object — minted by another "node", over a contribution
+    // this node never stored — still verifies on its own. This is the
+    // whole point of the layer: network verification minus the transport.
+    const foreignObject = {
+      id: 'object:mood:' + 'f'.repeat(24),
+      type: 'contribution',
+      version: '0.1',
+      createdAt: '2026-09-03T12:00:00.000Z',
+      issuer: { nodeId: 'mood:node:' + 'ab'.repeat(32) },
+      payload: {
+        eventId: 'event:mood:' + 'f'.repeat(24),
+        proofId: 'proof:mood:' + 'e'.repeat(24),
+        eventHash: 'sha256:' + 'c'.repeat(64),
+        algorithm: 'SHA-256',
+      },
+    };
+    // Recompute the honest ID for the foreign content so the object is
+    // well-formed — the test is about absence of the local record, not
+    // about a broken ID.
+    const { deriveObjectId } = await import('@mood/protocol-object');
+    foreignObject.id = deriveObjectId({
+      type: foreignObject.type,
+      version: foreignObject.version,
+      createdAt: foreignObject.createdAt,
+      issuer: foreignObject.issuer,
+      payload: foreignObject.payload,
+    });
+
+    const foreign = await postJsonBody(port, '/objects/verify', foreignObject);
+    assert.equal(foreign.status, 200);
+    assert.deepEqual(foreign.body, { verified: true },
+      'an object this node has never seen verifies by content alone');
+
+    // Malformed request bodies → the stable 400 envelope.
+    const notObject = await postJsonBody(port, '/objects/verify', 'just a string');
+    assert.equal(notObject.status, 400);
+    assert.equal(notObject.body.error.code, 'INVALID_REQUEST');
+
+    const malformed = await postJsonBody(port, '/objects/verify', '{not valid json');
+    assert.equal(malformed.status, 400);
+    assert.equal(malformed.body.error.code, 'INVALID_REQUEST');
+
+    // SECURITY: a hand-planted object with credential-shaped content is
+    // refused — present in the list, but none of its content is served.
+    const plantedDir = join(box.home, 'objects', 'contribution');
+    mkdirSync(plantedDir, { recursive: true });
+    writeFileSync(join(plantedDir, 'object-mood-' + '9'.repeat(24) + '.json'), JSON.stringify({
+      id: 'object:mood:' + '9'.repeat(24),
+      type: 'contribution',
+      version: '0.1',
+      createdAt: '2026-09-03T00:00:00.000Z',
+      issuer: { nodeId: 'mood:node:' + 'cd'.repeat(32) },
+      payload: {
+        eventId: 'event:mood:' + '9'.repeat(24),
+        proofId: 'proof:mood:' + '9'.repeat(24),
+        eventHash: 'sha256:the api_key=supersecret123 was here',
+        algorithm: 'SHA-256',
+      },
+    }));
+
+    const after = await getJson(port, '/objects');
+    assert.equal(after.status, 200);
+    assert.equal(after.body.objects.length, 2);
+    const refused = after.body.objects.find((o) => o.refused);
+    assert.ok(refused, 'the planted object is listed — but refused');
+    assert.equal(refused.id, 'object:mood:' + '9'.repeat(24));
+    assert.equal(refused.type, null);
     assert.ok(!after.text.includes('supersecret123'), 'the secret VALUE never appears in the response');
     assert.ok(!after.text.includes('api_key'), 'the credential-shaped content is not echoed');
   } finally {

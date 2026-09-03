@@ -1,0 +1,42 @@
+{
+  "name": "@mood/protocol-object",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Protocol Object Alpha 001 — the network layer of a contribution: wraps a ContributionProof into a content-addressed object any node can store and verify. Proof: why the contribution happened. Object: how the network stores and verifies it.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./schema": "./src/schema.js",
+    "./serializer": "./src/serializer.js",
+    "./object": "./src/object.js",
+    "./types/contribution": "./src/types/contribution.js",
+    "./validator": "./src/validator.js",
+    "./linkage": "./src/linkage.js",
+    "./storage": "./src/storage.js",
+    "./sync": "./src/sync.js"
+  },
+  "scripts": {
+    "test": "node src/tests/protocol-object.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mood",
+    "protocol-object",
+    "content-addressed",
+    "contribution",
+    "verification",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@mood/contribution-proof": "0.1.0-alpha.1"
+  },
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}

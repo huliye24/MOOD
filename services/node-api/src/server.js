@@ -10,6 +10,7 @@
  *   reads      → ~/.mood/ files (the documented on-disk contract)
  *   verify     → @mood/node-runtime (digest verification)
  *   proofs     → @mood/contribution-proof (contribution verification)
+ *   objects    → @mood/protocol-object (protocol object verification)
  *   lifecycle  → the canonical `mood start` / `mood stop` commands
  *
  * Security posture:
@@ -42,6 +43,7 @@ import peersRoutes from './routes/peers.js';
 import snapshotRoutes from './routes/snapshot.js';
 import connectorRoutes from './routes/connector.js';
 import contributionsRoutes from './routes/contributions.js';
+import objectsRoutes from './routes/objects.js';
 
 const DEFAULT_PORT = 8788;
 const DEFAULT_BIND = '127.0.0.1';
@@ -94,6 +96,7 @@ export function createApp({ apiKey } = {}) {
   app.use('/snapshot', snapshotRoutes);
   app.use('/connector', connectorRoutes);
   app.use('/contributions', contributionsRoutes);
+  app.use('/objects', objectsRoutes);
 
   // Unknown endpoint — stable machine envelope, same as every other error.
   app.use((req, res) => {
