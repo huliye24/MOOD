@@ -1,0 +1,18 @@
+{
+  "version": "0.1.0",
+  "network": "MOOD",
+  "genesis_timestamp": "2026-09-02T00:00:00Z",
+  "description": "Initial reputation state for MOOD Network Genesis contributors",
+  "reputations": [
+    {
+      "contributor": "genesis_001",
+      "score": 10,
+      "level": "Genesis",
+      "reason": "Created MOOD Protocol architecture",
+      "contribution_type": "protocol",
+      "verification": "core_verification"
+    }
+  ],
+  "total_genesis_contributors": 1,
+  "total_initial_score": 10
+}

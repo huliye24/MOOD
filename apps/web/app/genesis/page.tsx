@@ -418,6 +418,9 @@ export default function GenesisPage() {
           </span>
           <span style={{ fontSize: "var(--text-sm)", color: "var(--text-faint)" }}>签名版本:{GENESIS_CONFIG.signatureVersion} · 条款版本:{GENESIS_CONFIG.termsVersion}</span>
         </div>
+        <Link href="/genesis/verification" style={{ width: "fit-content", color: "var(--text)", textUnderlineOffset: 4 }}>
+          查看第一次 Genesis 验证记录 →
+        </Link>
       </header>
 
       <section aria-label="Genesis 说明" style={{ display: "grid", gap: "var(--space-8)", maxWidth: 760 }}>

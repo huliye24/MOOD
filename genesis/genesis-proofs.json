@@ -1,0 +1,30 @@
+{
+  "version": "0.1.0",
+  "network": "MOOD",
+  "genesis_timestamp": "2026-09-02T00:00:00Z",
+  "proofs": [
+    {
+      "id": "proof_genesis_001",
+      "contribution": "MOOD Protocol Architecture",
+      "type": "documentation",
+      "verification_method": "timestamp",
+      "status": "verified",
+      "evidence": {
+        "source": "mood_network",
+        "timestamp": "2026-09-02T00:00:00Z"
+      }
+    },
+    {
+      "id": "proof_genesis_002",
+      "contribution": "MOOD Network v0.1 Implementation",
+      "type": "code",
+      "verification_method": "github_commit",
+      "status": "verified",
+      "evidence": {
+        "source": "github.com",
+        "reference": "initial_commit",
+        "repository": "huliye24/MOOD"
+      }
+    }
+  ]
+}
