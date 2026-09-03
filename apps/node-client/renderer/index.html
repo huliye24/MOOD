@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'">
+  <title>MOOD Node</title>
+  <style>
+    /* ─── CSS Variables ───────────────────────────────────────────────────── */
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #12121a;
+      --bg-tertiary: #1a1a24;
+      --border: #2a2a3a;
+      --text-primary: #e8e8f0;
+      --text-secondary: #8888a0;
+      --text-muted: #555566;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --info: #3b82f6;
+    }
+
+    /* ─── Reset & Base ─────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ─── Layout ────────────────────────────────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ─── Header ───────────────────────────────────────────────────────────── */
+    .header {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-logo {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent) 0%, #a855f7 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .header-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .header-version {
+      font-size: 12px;
+      color: var(--text-muted);
+      background: var(--bg-tertiary);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .header-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+    }
+
+    .status-dot.connected { background: var(--success); }
+    .status-dot.connecting { background: var(--warning); animation: pulse 1.5s infinite; }
+    .status-dot.error { background: var(--error); }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    /* ─── Navigation ──────────────────────────────────────────────────────── */
+    .nav {
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .nav-item:hover {
+      color: var(--text-primary);
+      background: var(--bg-tertiary);
+    }
+
+    .nav-item.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    /* ─── Main Content ─────────────────────────────────────────────────────── */
+    .main {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ─── Cards ───────────────────────────────────────────────────────────── */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    /* ─── Status Cards ──────────────────────────────────────────────────────── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .status-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .status-card-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .status-card-value {
+      font-size: 14px;
+      font-family: 'SF Mono', Monaco, monospace;
+      word-break: break-all;
+    }
+
+    .status-card-value.large {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    /* ─── Buttons ──────────────────────────────────────────────────────────── */
+    .btn {
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: var(--bg-tertiary);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: var(--border);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    .btn-danger {
+      background: var(--error);
+      color: white;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* ─── Form Elements ────────────────────────────────────────────────────── */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* ─── Lists ───────────────────────────────────────────────────────────── */
+    .list {
+      list-style: none;
+    }
+
+    .list-item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    /* ─── Badges ──────────────────────────────────────────────────────────── */
+    .badge {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .badge-success { background: rgba(34, 197, 94, 0.2); color: var(--success); }
+    .badge-warning { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+    .badge-error { background: rgba(239, 68, 68, 0.2); color: var(--error); }
+    .badge-info { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+
+    /* ─── Alerts ──────────────────────────────────────────────────────────── */
+    .alert {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .alert-info {
+      background: rgba(59, 130, 246, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+      color: var(--info);
+    }
+
+    .alert-warning {
+      background: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      color: var(--warning);
+    }
+
+    .alert-error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: var(--error);
+    }
+
+    .alert-success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: var(--success);
+    }
+
+    /* ─── Loading ─────────────────────────────────────────────────────────── */
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 24px;
+      height: 24px;
+      border: 2px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 12px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ─── Empty State ─────────────────────────────────────────────────────── */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .empty-state-title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--text-secondary);
+    }
+
+    /* ─── Footer ──────────────────────────────────────────────────────────── */
+    .footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--border);
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ─── Protocol Objects ────────────────────────────────────────────────── */
+    .protocol-object {
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 12px;
+    }
+
+    .protocol-object-id {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .protocol-object-status {
+      float: right;
+    }
+
+    /* ─── Modal ────────────────────────────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      display: none;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* ─── Scrollbar ───────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-primary); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-brand">
+        <div class="header-logo">M</div>
+        <div>
+          <div class="header-title">MOOD Node</div>
+          <span class="header-version">v0.1.0-alpha.1</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <div id="connectionDot" class="status-dot"></div>
+        <span id="connectionStatus">Loading...</span>
+      </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+      <div class="nav-item active" data-page="welcome">Welcome</div>
+      <div class="nav-item" data-page="status">Status</div>
+      <div class="nav-item" data-page="identity">Identity</div>
+      <div class="nav-item" data-page="peers">Peers</div>
+      <div class="nav-item" data-page="objects">Protocol Objects</div>
+      <div class="nav-item" data-page="snapshot">Snapshot</div>
+      <div class="nav-item" data-page="invitation">Invitation</div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Welcome Page -->
+      <div id="page-welcome" class="page active">
+        <div class="card">
+          <h2 class="card-title">Welcome to MOOD Node</h2>
+          <div class="alert alert-info">
+            <strong>Alpha Enrollment</strong><br>
+            This is a federated test network. Running a node does not earn tokens,
+            financial rewards, or governance rights.
+          </div>
+
+          <div id="welcome-identity" class="status-grid">
+            <div class="status-card">
+              <div class="status-card-label">Node ID</div>
+              <div id="welcome-node-id" class="status-card-value">Loading...</div>
+            </div>
+            <div class="status-card">
+              <div class="status-card-label">Network</div>
+              <div class="status-card-value">mood-testnet-001</div>
+            </div>
+          </div>
+
+          <div class="btn-group">
+            <button id="btn-connect" class="btn btn-primary" onclick="handleConnect()">
+              Start Node
+            </button>
+            <button class="btn btn-secondary" onclick="showPage('invitation')">
+              Import Invitation
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Quick Actions</h2>
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="handleCreateContribution()">
+              Create Test Contribution
+            </button>
+            <button class="btn btn-secondary" onclick="handleCreateSnapshot()">
+              Create Epoch Snapshot
+            </button>
+            <button class="btn btn-secondary" onclick="handleExportBundle()">
+              Export Proof Bundle
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Page -->
+      <div id="page-status" class="page">
+        <h2 style="margin-bottom: 20px;">Node Status</h2>
+
+        <div id="status-grid" class="status-grid">
+          <div class="status-card">
+            <div class="status-card-label">Node ID</div>
+            <div id="status-node-id" class="status-card-value">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Network ID</div>
+            <div id="status-network-id" class="status-card-value">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Protocol Version</div>
+            <div id="status-protocol-version" class="status-card-value">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Client Version</div>
+            <div id="status-client-version" class="status-card-value">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Connection</div>
+            <div id="status-connection" class="status-card-value">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Connected Peers</div>
+            <div id="status-peers-count" class="status-card-value large">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Latest Epoch</div>
+            <div id="status-latest-epoch" class="status-card-value large">-</div>
+          </div>
+          <div class="status-card">
+            <div class="status-card-label">Local Snapshot Digest</div>
+            <div id="status-snapshot-digest" class="status-card-value" style="font-size: 11px;">-</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Agreement Status</h3>
+          <div id="agreement-status" class="alert alert-info">
+            Connect to relay to synchronize with other nodes.
+          </div>
+        </div>
+      </div>
+
+      <!-- Identity Page -->
+      <div id="page-identity" class="page">
+        <h2 style="margin-bottom: 20px;">Node Identity</h2>
+
+        <div class="card">
+          <h3 class="card-title">Identity Information</h3>
+          <div class="status-grid">
+            <div class="status-card">
+              <div class="status-card-label">Node ID</div>
+              <div id="identity-node-id" class="status-card-value">-</div>
+            </div>
+            <div class="status-card">
+              <div class="status-card-label">Member Subject ID</div>
+              <div id="identity-member-id" class="status-card-value">-</div>
+            </div>
+            <div class="status-card">
+              <div class="status-card-label">Organization ID</div>
+              <div id="identity-org-id" class="status-card-value">-</div>
+            </div>
+            <div class="status-card">
+              <div class="status-card-label">Network ID</div>
+              <div id="identity-network-id" class="status-card-value">-</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Public Key</h3>
+          <div id="identity-public-key" class="protocol-object" style="word-break: break-all;">-</div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Node Manifest</h3>
+          <pre id="identity-manifest" class="protocol-object" style="white-space: pre-wrap;">-</pre>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Backup & Recovery</h3>
+          <div class="btn-group">
+            <button class="btn btn-secondary" onclick="showBackupModal()">
+              Export Encrypted Backup
+            </button>
+            <button class="btn btn-danger" onclick="showDeleteModal()">
+              Delete Local Data
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Peers Page -->
+      <div id="page-peers" class="page">
+        <h2 style="margin-bottom: 20px;">Connected Peers</h2>
+
+        <div class="card">
+          <h3 class="card-title">Network Peers</h3>
+          <div id="peers-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">🌐</div>
+              <div class="empty-state-title">No peers connected</div>
+              <p>Connect to the relay to discover and connect with other nodes.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Relay Connection</h3>
+          <div id="relay-status" class="alert alert-info">
+            Not connected to relay
+          </div>
+          <div class="btn-group">
+            <button id="btn-relay-connect" class="btn btn-primary" onclick="handleConnect()">
+              Connect to Relay
+            </button>
+            <button id="btn-relay-disconnect" class="btn btn-secondary" onclick="handleDisconnect()" disabled>
+              Disconnect
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Protocol Objects Page -->
+      <div id="page-objects" class="page">
+        <h2 style="margin-bottom: 20px;">Protocol Objects</h2>
+
+        <div class="card">
+          <h3 class="card-title">Contributions</h3>
+          <div id="contributions-list">
+            <div class="loading">
+              <div class="spinner"></div>
+              Loading...
+            </div>
+          </div>
+          <div style="margin-top: 16px;">
+            <button class="btn btn-primary" onclick="handleCreateContribution()">
+              Create Test Contribution
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Snapshot Page -->
+      <div id="page-snapshot" class="page">
+        <h2 style="margin-bottom: 20px;">Snapshot</h2>
+
+        <div class="card">
+          <h3 class="card-title">Epoch Snapshots</h3>
+          <div id="snapshots-list">
+            <div class="loading">
+              <div class="spinner"></div>
+              Loading...
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">Latest Snapshot</h3>
+          <div id="latest-snapshot">
+            <div class="empty-state">
+              <div class="empty-state-icon">📦</div>
+              <div class="empty-state-title">No snapshots yet</div>
+              <p>Create your first epoch snapshot after adding contributions.</p>
+            </div>
+          </div>
+          <div style="margin-top: 16px;" class="btn-group">
+            <button class="btn btn-primary" onclick="handleCreateSnapshot()">
+              Create Epoch Snapshot
+            </button>
+            <button class="btn btn-secondary" onclick="handleExportBundle()">
+              Export Proof Bundle
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invitation Page -->
+      <div id="page-invitation" class="page">
+        <h2 style="margin-bottom: 20px;">Organization Invitation</h2>
+
+        <div class="card">
+          <h3 class="card-title">Import Invitation File</h3>
+          <p style="color: var(--text-secondary); margin-bottom: 16px;">
+            Import a .moodinvite file to join an organization and participate in the network.
+          </p>
+          <button class="btn btn-primary" onclick="handleImportInvitation()">
+            Import .moodinvite File
+          </button>
+        </div>
+
+        <div id="invitation-details" style="display: none;">
+          <div class="card">
+            <h3 class="card-title">Invitation Details</h3>
+            <div class="status-grid">
+              <div class="status-card">
+                <div class="status-card-label">Organization</div>
+                <div id="invite-org-name" class="status-card-value">-</div>
+              </div>
+              <div class="status-card">
+                <div class="status-card-label">Organization ID</div>
+                <div id="invite-org-id" class="status-card-value">-</div>
+              </div>
+              <div class="status-card">
+                <div class="status-card-label">Invited Email</div>
+                <div id="invite-email" class="status-card-value">-</div>
+              </div>
+              <div class="status-card">
+                <div class="status-card-label">Expires</div>
+                <div id="invite-expires" class="status-card-value">-</div>
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 20px;">
+              <label class="form-label">Your Email Address</label>
+              <input type="email" id="enroll-email" class="form-input" placeholder="your@company.com">
+            </div>
+
+            <div class="alert alert-warning" id="invite-warning" style="display: none;">
+              <strong>Email Domain Mismatch</strong><br>
+              Your email must match the organization domain.
+            </div>
+
+            <div class="btn-group" style="margin-top: 16px;">
+              <button class="btn btn-success" onclick="handleEnroll()">
+                Accept Invitation
+              </button>
+              <button class="btn btn-secondary" onclick="clearInvitation()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>
+        MOOD Node v0.1.0-alpha.1 | Protocol v0.2.0 | mood-testnet-001
+        <br>
+        <span style="color: var(--warning);">⚠ Alpha Federated Testnet — Not Production — No Financial Rewards</span>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Backup Modal -->
+  <div id="backup-modal" class="modal-overlay">
+    <div class="modal">
+      <h3 class="modal-title">Export Encrypted Backup</h3>
+      <div class="form-group">
+        <label class="form-label">Encryption Password</label>
+        <input type="password" id="backup-password" class="form-input" placeholder="Enter a strong password">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" id="backup-password-confirm" class="form-input" placeholder="Confirm password">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('backup-modal')">Cancel</button>
+        <button class="btn btn-primary" onclick="handleExportBackup()">Export</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div id="delete-modal" class="modal-overlay">
+    <div class="modal">
+      <h3 class="modal-title">Delete Local Data</h3>
+      <div class="alert alert-error">
+        <strong>⚠ Warning: This action cannot be undone!</strong><br><br>
+        This will permanently delete:
+        <ul style="margin: 8px 0 0 20px;">
+          <li>Your private key and identity</li>
+          <li>All contributions and snapshots</li>
+          <li>All local data</li>
+        </ul>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Type "DELETE" to confirm</label>
+        <input type="text" id="delete-confirm" class="form-input" placeholder="DELETE">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+        <button class="btn btn-danger" onclick="handleDeleteData()">Delete All Data</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ─── State ────────────────────────────────────────────────────────────────
+    let currentStatus = null;
+    let currentIdentity = null;
+    let currentInvitation = null;
+    let isConnected = false;
+
+    // ─── Navigation ──────────────────────────────────────────────────────────
+    function showPage(pageName) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+      document.getElementById(`page-${pageName}`).classList.add('active');
+      document.querySelector(`.nav-item[data-page="${pageName}"]`).classList.add('active');
+
+      // Refresh page content
+      if (pageName === 'status') refreshStatus();
+      if (pageName === 'identity') refreshIdentity();
+      if (pageName === 'peers') refreshPeers();
+      if (pageName === 'objects') refreshContributions();
+      if (pageName === 'snapshot') refreshSnapshots();
+    }
+
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => showPage(item.dataset.page));
+    });
+
+    // ─── Status Updates ───────────────────────────────────────────────────────
+    async function refreshStatus() {
+      try {
+        const status = await window.moodNode.getStatus();
+        currentStatus = status;
+
+        document.getElementById('status-node-id').textContent = status.nodeId || '-';
+        document.getElementById('status-network-id').textContent = status.protocol?.networkId || '-';
+        document.getElementById('status-protocol-version').textContent = status.protocol?.protocolVersion || '-';
+        document.getElementById('status-client-version').textContent = status.manifest?.clientVersion || '-';
+
+        const syncState = status.sync?.state || 'disconnected';
+        document.getElementById('status-connection').textContent = syncState;
+        document.getElementById('status-peers-count').textContent = status.sync?.connectedPeers?.length || 0;
+
+        if (status.snapshot?.currentEpoch > 0) {
+          document.getElementById('status-latest-epoch').textContent = status.snapshot.currentEpoch;
+          document.getElementById('status-snapshot-digest').textContent = status.snapshot.latestDigest || '-';
+        } else {
+          document.getElementById('status-latest-epoch').textContent = '-';
+          document.getElementById('status-snapshot-digest').textContent = '-';
+        }
+
+        updateConnectionUI(syncState);
+      } catch (error) {
+        console.error('Failed to refresh status:', error);
+      }
+    }
+
+    async function refreshIdentity() {
+      try {
+        const identity = await window.moodNode.getIdentity();
+        currentIdentity = identity;
+
+        document.getElementById('identity-node-id').textContent = identity.nodeId || '-';
+        document.getElementById('identity-member-id').textContent = identity.memberSubjectId || 'Not enrolled';
+        document.getElementById('identity-network-id').textContent = identity.networkId || '-';
+        document.getElementById('identity-public-key').textContent = identity.publicKey || '-';
+        document.getElementById('identity-manifest').textContent = JSON.stringify(identity.manifest, null, 2);
+
+        // Update welcome page
+        document.getElementById('welcome-node-id').textContent = identity.nodeId || '-';
+      } catch (error) {
+        console.error('Failed to refresh identity:', error);
+      }
+    }
+
+    async function refreshPeers() {
+      try {
+        const peers = await window.moodNode.getPeers();
+        const peersList = document.getElementById('peers-list');
+
+        if (peers.length === 0) {
+          peersList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🌐</div>
+              <div class="empty-state-title">No peers connected</div>
+              <p>Connect to the relay to discover and connect with other nodes.</p>
+            </div>
+          `;
+        } else {
+          peersList.innerHTML = '<ul class="list">' +
+            peers.map(p => `<li class="list-item"><span class="protocol-object-id">${p}</span><span class="badge badge-success">Connected</span></li>`).join('') +
+            '</ul>';
+        }
+
+        // Update relay status
+        const relayStatus = document.getElementById('relay-status');
+        if (isConnected) {
+          relayStatus.className = 'alert alert-success';
+          relayStatus.innerHTML = `<strong>Connected</strong><br>Relay: ${currentStatus?.sync?.relayUrl || 'localhost:8080'}<br>Peers: ${peers.length}`;
+        } else {
+          relayStatus.className = 'alert alert-info';
+          relayStatus.innerHTML = 'Not connected to relay';
+        }
+      } catch (error) {
+        console.error('Failed to refresh peers:', error);
+      }
+    }
+
+    async function refreshContributions() {
+      try {
+        const contributions = await window.moodNode.getContributions();
+        const list = document.getElementById('contributions-list');
+
+        if (contributions.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📝</div>
+              <div class="empty-state-title">No contributions yet</div>
+              <p>Create a test contribution to begin.</p>
+            </div>
+          `;
+        } else {
+          list.innerHTML = contributions.map(c => `
+            <div class="protocol-object">
+              <span class="protocol-object-id">${c.contributionId || c.id}</span>
+              <span class="protocol-object-status badge badge-${getStatusBadge(c.status)}">${c.status}</span>
+              <div style="margin-top: 8px; color: var(--text-secondary);">${c.title || 'Untitled'}</div>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Failed to refresh contributions:', error);
+      }
+    }
+
+    async function refreshSnapshots() {
+      try {
+        const snapshots = await window.moodNode.getSnapshots();
+        const latest = await window.moodNode.getLatestSnapshot();
+
+        const list = document.getElementById('snapshots-list');
+        if (snapshots.length === 0) {
+          list.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📦</div>
+              <div class="empty-state-title">No snapshots yet</div>
+            </div>
+          `;
+        } else {
+          list.innerHTML = snapshots.map(s => `
+            <div class="protocol-object">
+              <span class="protocol-object-id">${s.epochId}</span>
+              <span class="protocol-object-status">${s.contributionCount} contributions</span>
+              <div style="margin-top: 8px; font-size: 11px; color: var(--text-muted);">
+                Digest: ${s.digest}<br>
+                Attestations: ${s.attestations?.length || 0}
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Update latest snapshot
+        const latestDiv = document.getElementById('latest-snapshot');
+        if (latest) {
+          latestDiv.innerHTML = `
+            <div class="protocol-object">
+              <strong>Epoch:</strong> ${latest.epochId}<br>
+              <strong>Contributions:</strong> ${latest.contributionCount}<br>
+              <strong>Digest:</strong> ${latest.digest}<br>
+              <strong>Attestations:</strong> ${latest.attestations?.length || 0}
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Failed to refresh snapshots:', error);
+      }
+    }
+
+    function getStatusBadge(status) {
+      const map = {
+        draft: 'info',
+        submitted: 'info',
+        under_review: 'warning',
+        verified: 'success',
+        scored: 'success',
+        finalized: 'success',
+        rejected: 'error'
+      };
+      return map[status] || 'info';
+    }
+
+    function updateConnectionUI(state) {
+      const dot = document.getElementById('connectionDot');
+      const status = document.getElementById('connectionStatus');
+
+      dot.className = 'status-dot';
+
+      if (state === 'authenticated' || state === 'connected') {
+        dot.classList.add('connected');
+        status.textContent = 'Synchronized';
+        isConnected = true;
+      } else if (state === 'connecting') {
+        dot.classList.add('connecting');
+        status.textContent = 'Connecting...';
+        isConnected = false;
+      } else if (state === 'error') {
+        dot.classList.add('error');
+        status.textContent = 'Error';
+        isConnected = false;
+      } else {
+        status.textContent = 'Disconnected';
+        isConnected = false;
+      }
+
+      // Update button states
+      document.getElementById('btn-connect').disabled = isConnected;
+      document.getElementById('btn-relay-connect').disabled = isConnected;
+      document.getElementById('btn-relay-disconnect').disabled = !isConnected;
+    }
+
+    // ─── Actions ───────────────────────────────────────────────────────────────
+    async function handleConnect() {
+      try {
+        const result = await window.moodNode.connect();
+        if (result.success) {
+          updateConnectionUI('authenticated');
+          refreshStatus();
+          refreshPeers();
+        } else {
+          alert('Failed to connect: ' + (result.error || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Connect error:', error);
+        updateConnectionUI('error');
+      }
+    }
+
+    async function handleDisconnect() {
+      try {
+        await window.moodNode.disconnect();
+        updateConnectionUI('disconnected');
+        refreshStatus();
+        refreshPeers();
+      } catch (error) {
+        console.error('Disconnect error:', error);
+      }
+    }
+
+    async function handleCreateContribution() {
+      try {
+        const result = await window.moodNode.createTestContribution();
+        if (result.success) {
+          alert('Test contribution created: ' + result.contribution?.contributionId);
+          refreshContributions();
+        } else {
+          alert('Failed: ' + (result.errors?.join(', ') || result.error));
+        }
+      } catch (error) {
+        console.error('Create contribution error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function handleCreateSnapshot() {
+      try {
+        const result = await window.moodNode.createEpochSnapshot();
+        if (result.success) {
+          alert('Epoch snapshot created: ' + result.snapshot?.epochId);
+          refreshSnapshots();
+          refreshStatus();
+        } else {
+          alert('Failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Create snapshot error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function handleExportBundle() {
+      try {
+        const result = await window.moodNode.exportProofBundle();
+        if (result.success) {
+          alert('Proof bundle exported to: ' + result.path);
+        } else {
+          alert('Failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Export bundle error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function handleImportInvitation() {
+      try {
+        const result = await window.moodNode.importInvitation();
+        if (result.success) {
+          currentInvitation = result.raw;
+
+          document.getElementById('invitation-details').style.display = 'block';
+          document.getElementById('invite-org-name').textContent = result.invitation.organizationName;
+          document.getElementById('invite-org-id').textContent = result.invitation.organizationId;
+          document.getElementById('invite-email').textContent = result.invitation.memberEmail;
+          document.getElementById('invite-expires').textContent = new Date(result.invitation.expiresAt).toLocaleString();
+
+          showPage('invitation');
+        } else {
+          alert('Import cancelled or failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Import invitation error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function handleEnroll() {
+      const email = document.getElementById('enroll-email').value.trim();
+
+      if (!email) {
+        alert('Please enter your email address');
+        return;
+      }
+
+      if (!currentInvitation) {
+        alert('No invitation loaded');
+        return;
+      }
+
+      try {
+        const result = await window.moodNode.enrollWithInvitation(currentInvitation, email);
+        if (result.success) {
+          alert('Successfully enrolled!\n\nMember Subject ID: ' + result.enrollment.memberSubjectId);
+          clearInvitation();
+          refreshIdentity();
+          refreshStatus();
+        } else {
+          alert('Enrollment failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Enroll error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    function clearInvitation() {
+      currentInvitation = null;
+      document.getElementById('invitation-details').style.display = 'none';
+      document.getElementById('enroll-email').value = '';
+    }
+
+    function showBackupModal() {
+      document.getElementById('backup-modal').classList.add('active');
+    }
+
+    function showDeleteModal() {
+      document.getElementById('delete-modal').classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    async function handleExportBackup() {
+      const password = document.getElementById('backup-password').value;
+      const confirm = document.getElementById('backup-password-confirm').value;
+
+      if (!password || password.length < 8) {
+        alert('Password must be at least 8 characters');
+        return;
+      }
+
+      if (password !== confirm) {
+        alert('Passwords do not match');
+        return;
+      }
+
+      try {
+        const result = await window.moodNode.exportBackup(password);
+        if (result.success) {
+          alert('Backup exported to: ' + result.path);
+          closeModal('backup-modal');
+          document.getElementById('backup-password').value = '';
+          document.getElementById('backup-password-confirm').value = '';
+        } else {
+          alert('Export failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Export backup error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    async function handleDeleteData() {
+      const confirm = document.getElementById('delete-confirm').value;
+
+      if (confirm !== 'DELETE') {
+        alert('Please type DELETE to confirm');
+        return;
+      }
+
+      try {
+        const result = await window.moodNode.deleteData(true);
+        if (result.success) {
+          alert('All data has been deleted. Please restart the application.');
+          closeModal('delete-modal');
+          // Refresh to show cleared state
+          location.reload();
+        } else {
+          alert('Delete failed: ' + result.error);
+        }
+      } catch (error) {
+        console.error('Delete data error:', error);
+        alert('Error: ' + error.message);
+      }
+    }
+
+    // ─── Initialize ────────────────────────────────────────────────────────────
+    async function init() {
+      await refreshIdentity();
+      await refreshStatus();
+    }
+
+    // Start initialization
+    init().catch(console.error);
+
+    // Refresh status periodically
+    setInterval(async () => {
+      try {
+        const status = await window.moodNode.getStatus();
+        updateConnectionUI(status.sync?.state || 'disconnected');
+      } catch (e) {
+        // Ignore errors during status refresh
+      }
+    }, 5000);
+  </script>
+</body>
+</html>

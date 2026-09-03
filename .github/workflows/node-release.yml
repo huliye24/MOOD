@@ -1,0 +1,358 @@
+name: MOOD Node Release
+
+on:
+  push:
+    tags:
+      - 'node-v*'
+
+# Only build release artifacts on tag push
+# Does NOT:
+# - Sign code (no certificates)
+# - Modify the release in any production way
+# - Trigger external services
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # ─── Build for Windows ──────────────────────────────────────────────────────
+  build-windows:
+    name: Build Windows
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Display tag info
+        run: |
+          echo "Tag: ${{ github.ref }}"
+          echo "Ref: ${{ github.ref_name }}"
+
+      - name: Install dependencies
+        shell: powershell
+        run: |
+          npm install
+          cd packages/node-runtime
+          npm install
+          cd ../..
+          cd services/relay
+          npm install
+          cd ../..
+
+      - name: Build Windows installer
+        shell: powershell
+        run: |
+          cd apps/node-client
+          $env:NODE_ENV = 'production'
+          npx electron-builder --win --publish never
+
+      - name: List built artifacts
+        shell: powershell
+        run: |
+          Get-ChildItem -Path apps/node-client/dist -Recurse -File | Select-Object FullName, Length
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mood-node-windows
+          path: |
+            apps/node-client/dist/*.exe
+            apps/node-client/dist/*.zip
+            apps/node-client/dist/*.blockmap
+          if-no-files-found: warn
+
+  # ─── Build for macOS ────────────────────────────────────────────────────────
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd packages/node-runtime && npm install && cd ../..
+          cd services/relay && npm install && cd ../..
+
+      - name: Build macOS installer
+        run: |
+          cd apps/node-client
+          NODE_ENV=production npx electron-builder --mac --publish never
+
+      - name: List built artifacts
+        run: |
+          find apps/node-client/dist -type f -name "*.dmg" -o -name "*.zip" -o -name "*.blockmap"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mood-node-macos
+          path: |
+            apps/node-client/dist/*.dmg
+            apps/node-client/dist/*.zip
+            apps/node-client/dist/*.blockmap
+          if-no-files-found: warn
+
+  # ─── Build for Linux ────────────────────────────────────────────────────────
+  build-linux:
+    name: Build Linux
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          npm install
+          cd packages/node-runtime && npm install && cd ../..
+          cd services/relay && npm install && cd ../..
+
+      - name: Build Linux package
+        run: |
+          cd apps/node-client
+          NODE_ENV=production npx electron-builder --linux --publish never
+
+      - name: List built artifacts
+        run: |
+          ls -la apps/node-client/dist/
+          find apps/node-client/dist -type f \( -name "*.AppImage" -o -name "*.tar.gz" \)
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mood-node-linux
+          path: |
+            apps/node-client/dist/*.AppImage
+            apps/node-client/dist/*.tar.gz
+            apps/node-client/dist/*.blockmap
+          if-no-files-found: warn
+
+  # ─── Generate SHA256SUMS ──────────────────────────────────────────────────────
+  sha256sums:
+    name: Generate SHA256SUMS
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-macos, build-linux]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Compute SHA256 hashes
+        run: |
+          cd artifacts
+          echo "# SHA256SUMS - MOOD Node v0.1.0-alpha.1" > SHA256SUMS
+          echo "# Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> SHA256SUMS
+          echo "# Source Commit: ${{ github.sha }}" >> SHA256SUMS
+          echo "" >> SHA256SUMS
+          find . -type f \( -name "*.exe" -o -name "*.zip" -o -name "*.dmg" -o -name "*.AppImage" -o -name "*.tar.gz" -o -name "*.blockmap" \) | while read file; do
+            hash=$(sha256sum "$file" | cut -d' ' -f1)
+            echo "$hash  $file" >> SHA256SUMS
+          done
+          cat SHA256SUMS
+
+      - name: Generate THREE_NODE_TEST_GUIDE
+        run: |
+          cd artifacts
+          cat > THREE_NODE_TEST_GUIDE.md << 'EOF'
+          # MOOD Three-Node Test Guide
+
+          ## For Recipients (Members)
+
+          1. **Download** the appropriate installer for your platform
+          2. **Install** by double-clicking the installer
+          3. **Receive** your `.moodinvite` file via email from your organization admin
+          4. **Open** MOOD Node
+          5. **Import** the `.moodinvite` file
+          6. **Enter** the email address you received the invitation at
+          7. **Click** "Start Node"
+          8. **Wait** for "Synchronized" status
+
+          ## Prerequisites
+
+          - Windows 10+, macOS 11+, or Ubuntu 20.04+
+          - Internet connection (to reach the relay)
+          - ~100MB disk space
+          - No need to open ports
+
+          ## Security Notes
+
+          - This is an unsigned internal alpha
+          - Your operating system may show a security warning
+          - Click "More info" then "Run anyway"
+          - Do not run as administrator unless required
+
+          ## What Happens
+
+          1. Your node connects to the relay
+          2. Discovers other nodes in the testnet
+          3. Synchronizes contributions and snapshots
+          4. Begins participating in the network
+          5. Sync status: "Synchronized"
+
+          ## If You Need Help
+
+          - Contact your organization admin
+          - Provide the node ID (in Status page)
+
+          ## Limitations
+
+          - Not for production use
+          - No token rewards
+          - No financial or governance rights
+          - Test only
+          EOF
+
+      - name: Generate SOURCE_COMMIT.txt
+        run: |
+          echo "Source Commit: ${{ github.sha }}" > artifacts/SOURCE_COMMIT.txt
+          echo "Tag: ${{ github.ref_name }}" >> artifacts/SOURCE_COMMIT.txt
+          echo "Build Date: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> artifacts/SOURCE_COMMIT.txt
+          echo "Client Version: 0.1.0-alpha.1" >> artifacts/SOURCE_COMMIT.txt
+          echo "Protocol Version: 0.2.0" >> artifacts/SOURCE_COMMIT.txt
+          echo "Network: mood-testnet-001" >> artifacts/SOURCE_COMMIT.txt
+          echo "" >> artifacts/SOURCE_COMMIT.txt
+          echo "Status: unsigned internal alpha" >> artifacts/SOURCE_COMMIT.txt
+          echo "No code signing" >> artifacts/SOURCE_COMMIT.txt
+          echo "Not for production" >> artifacts/SOURCE_COMMIT.txt
+
+      - name: Upload SHA256SUMS
+        uses: actions/upload-artifact@v4
+        with:
+          name: mood-node-checksums
+          path: artifacts/SHA256SUMS
+          if-no-files-found: error
+
+  # ─── Create GitHub Release ──────────────────────────────────────────────────
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: [build-windows, build-macos, build-linux, sha256sums]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Flatten artifacts
+        run: |
+          cd artifacts
+          # Move all files from subdirectories to top level
+          find . -mindepth 2 -type f | while read file; do
+            # Get relative path
+            rel=$(echo "$file" | sed 's|^\./[^/]*/||')
+            mv "$file" "./$rel" 2>/dev/null || true
+          done
+          ls -la
+
+      - name: Create GitHub Release (Prerelease)
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "MOOD Node v0.1.0-alpha.1 — first three-node federated client"
+          body: |
+            # MOOD Node v0.1.0-alpha.1
+
+            ## ⚠️ Important Notices
+
+            **This is a prerelease of an unsigned internal alpha build.**
+
+            - ❌ Not for production use
+            - ❌ No code signing
+            - ❌ Your operating system may show a security warning
+            - ❌ No token rewards, no financial value
+            - ❌ No governance authority
+
+            **Click "More info" → "Run anyway" if prompted by your OS.**
+
+            ## What is this?
+
+            This is the first MOOD Node Alpha client. It is a federated testnet client
+            that lets a member of an organization join the MOOD test network.
+
+            ## What's Included
+
+            ### Installers
+            - Windows: `.exe` installer + `.zip`
+            - macOS: `.dmg` package
+            - Linux: `.AppImage` + `.tar.gz`
+
+            ### Companion Files
+            - `SHA256SUMS` - File integrity verification
+            - `THREE_NODE_TEST_GUIDE.md` - User guide for three-node test
+            - `SOURCE_COMMIT.txt` - Build metadata
+
+            ## Quick Start
+
+            1. Download the installer for your platform
+            2. Install by clicking/double-clicking
+            3. Your admin will send you a `.moodinvite` file
+            4. Open MOOD Node
+            5. Import the invitation
+            6. Click "Start Node"
+
+            ## Technical Details
+
+            - **Client Version:** 0.1.0-alpha.1
+            - **Protocol Version:** 0.2.0
+            - **Network ID:** mood-testnet-001
+            - **License:** AGPL-3.0
+
+            ## Reporting Issues
+
+            Please report any issues to your organization admin.
+            Include your Node ID (visible in Status page).
+
+            ---
+            *Built automatically from tag ${{ github.ref_name }}*
+            *Commit: ${{ github.sha }}*
+          prerelease: true
+          generate_release_notes: true
+          files: |
+            artifacts/**/*.exe
+            artifacts/**/*.zip
+            artifacts/**/*.dmg
+            artifacts/**/*.AppImage
+            artifacts/**/*.tar.gz
+            artifacts/SHA256SUMS
+            artifacts/THREE_NODE_TEST_GUIDE.md
+            artifacts/SOURCE_COMMIT.txt
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

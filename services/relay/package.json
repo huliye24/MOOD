@@ -1,0 +1,26 @@
+{
+  "name": "@mood/relay",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Relay Service - WebSocket relay for federated node communication",
+  "type": "module",
+  "main": "src/relay.js",
+  "scripts": {
+    "start": "node src/relay.js",
+    "dev": "node --watch src/relay.js",
+    "test": "node tests/relay.test.js"
+  },
+  "keywords": [
+    "mood",
+    "relay",
+    "websocket",
+    "federated"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "ws": "^8.18.0",
+    "uuid": "^11.0.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

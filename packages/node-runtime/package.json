@@ -1,0 +1,41 @@
+{
+  "name": "@mood/node-runtime",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Node Runtime - Core node logic for MOOD Protocol v0.2",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./identity": "./src/identity/index.js",
+    "./organization": "./src/organization/index.js",
+    "./invitation": "./src/invitation/index.js",
+    "./storage": "./src/storage/index.js",
+    "./synchronization": "./src/synchronization/index.js",
+    "./snapshot": "./src/snapshot/index.js",
+    "./protocol-adapter": "./src/protocol-adapter/index.js"
+  },
+  "scripts": {
+    "test": "node src/tests/node-runtime.test.js",
+    "test:three-node": "node ../../testnet/three-node/run-three-node-test.mjs"
+  },
+  "keywords": [
+    "mood",
+    "node",
+    "protocol",
+    "identity",
+    "federated"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
+    "ws": "^8.18.0",
+    "uuid": "^11.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
