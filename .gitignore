@@ -28,3 +28,7 @@ Thumbs.db
 # Test output
 test-results/
 playwright-report/
+
+# WorkBuddy session data & agent worktrees (local tooling, not repo content)
+.workbuddy/
+.codex-worktrees/
