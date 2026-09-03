@@ -9,6 +9,9 @@
  *       private.json        ← private Ed25519 key (mode 0600 if possible)
  *     config/
  *       node.json           ← runtime config: network, protocol, peers, org
+ *     connector/
+ *       connector-id        ← connector identity (@mood/connector layer)
+ *       agent-record.json   ← registered AI Agents (names/types only)
  *     snapshots/
  *       latest.json         ← pointer to the most recent snapshot
  *       snapshot-*.json     ← snapshot objects written by the runtime

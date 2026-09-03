@@ -15,6 +15,7 @@
  *   7. Lifecycle       — POST /node/start, /node/stop (real daemon, idempotent)
  *   8. Not initialized — 409 envelope on every data endpoint
  *   9. Unknown route   — 404 envelope
+ *  10. Connector       — /connector/status independent of node identity
  *
  * Run: npm test   (from services/node-api)
  */
@@ -513,6 +514,52 @@ test('lifecycle: POST /node/start → running, POST /node/stop → stopped (idem
     const apiState = readFileSync(join(box.home, 'api-state.json'), 'utf8');
     assert.ok(!apiState.includes(priv.privateKey), 'private key never in api-state.json');
     assert.ok(existsSync(join(box.home, 'identity', 'private.json')), 'private key file untouched');
+  } finally {
+    stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+// ── 10. Connector (AI Agent contribution layer) ─────────────────────────────
+
+test('connector: /connector/status works without node identity; activates via CLI', async () => {
+  const box = sandbox();
+  let child;
+  try {
+    // NOTE: no `mood init` here. The connector layer is independent of
+    // node identity — it must answer before a node exists.
+    assert.equal(existsSync(join(box.home, 'identity', 'node.json')), false);
+
+    const port = await freePort();
+    child = await startApiServer({ home: box.home, port });
+
+    // Before init: the documented inactive shape.
+    const before = await getJson(port, '/connector/status');
+    assert.equal(before.status, 200);
+    assert.deepEqual(before.body, { connector: 'inactive', agents: [] });
+
+    // A human (or agent) runs the connector commands through the CLI.
+    const rInit = mood(box, ['connector', 'init', '--json']);
+    assert.equal(rInit.status, 0, `connector init failed:\n${rInit.stderr}`);
+    const rReg = mood(box, ['connector', 'register', '--agent', 'claude-code,codex', '--json']);
+    assert.equal(rReg.status, 0, `connector register failed:\n${rReg.stderr}`);
+
+    // After registration: exactly the documented shape — name and type
+    // only. No IDs beyond what the record holds, no paths, no secrets.
+    const after = await getJson(port, '/connector/status');
+    assert.equal(after.status, 200);
+    assert.deepEqual(after.body, {
+      connector: 'active',
+      agents: [
+        { name: 'Claude Code', type: 'coding-agent' },
+        { name: 'Codex', type: 'coding-agent' },
+      ],
+    });
+
+    // SECURITY: no credential-shaped string is served or written.
+    const recordFile = readFileSync(join(box.home, 'connector', 'agent-record.json'), 'utf8');
+    assert.ok(!recordFile.includes('sk-ant'), 'no API keys in the agent record');
+    assert.ok(!recordFile.includes('apiKey'), 'no key fields in the agent record');
   } finally {
     stopApiServer(child);
     box.cleanup();

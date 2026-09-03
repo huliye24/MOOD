@@ -11,6 +11,7 @@
  *   4. JSON output       -- `--json` emits a stable envelope
  *   5. Invite generation — .moodinvite is written and verifiable
  *   6. Node lifecycle    — start → snapshot → verify → stop
+ *   7. Connector         — detect/init/register/status over a faked machine
  *
  * Run: npm test   (from apps/mood-cli)
  */
@@ -25,6 +26,7 @@ import {
   existsSync,
   readFileSync,
   readdirSync,
+  writeFileSync,
 } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname, resolve } from 'node:path';
@@ -307,6 +309,118 @@ test('lifecycle: start → snapshot verified → stop', { timeout: 60_000 }, () 
     const after = moodJson(box, ['status']);
     assert.equal(after.status, 'Stopped');
     assert.ok(after.digest, 'snapshot digest preserved after stop');
+  } finally {
+    box.cleanup();
+  }
+});
+
+// ── 7. AI Agent connector ──────────────────────────────────────────────────
+
+/** A fully faked machine for connector detection: fake home, fake PATH,
+ * fake LOCALAPPDATA — results never depend on the real host. */
+function fakeAgentMachine(box) {
+  const agentRoot = join(box.root, 'agent-env');
+  const home = join(agentRoot, 'home');
+  const bin = join(agentRoot, 'bin');
+  mkdirSync(home, { recursive: true });
+  mkdirSync(bin, { recursive: true });
+
+  // Claude Code: command + config (the config carries a planted fake key —
+  // it must never leak into connector storage).
+  writeFileSync(join(bin, process.platform === 'win32' ? 'claude.cmd' : 'claude'), '# fake\n');
+  mkdirSync(join(home, '.claude'));
+  writeFileSync(join(home, '.claude', 'settings.json'),
+    '{"apiKey":"sk-ant-api03-FAKE-KEY-MUST-NEVER-LEAK"}');
+  // Codex: config only. Cursor: absent → "not detected".
+  mkdirSync(join(home, '.codex'));
+
+  return {
+    env: {
+      PATH: bin,
+      USERPROFILE: home,
+      HOME: home,
+      LOCALAPPDATA: join(agentRoot, 'localappdata'),
+    },
+    connectorDir: join(box.home, 'connector'),
+  };
+}
+
+test('connector: detect → init → register → status on a faked machine', () => {
+  const box = sandbox();
+  try {
+    const fake = fakeAgentMachine(box);
+
+    // detect — human wording per the spec.
+    const detectOut = moodOk(box, ['connector', 'detect'], fake.env);
+    assert.match(detectOut, /Claude Code\s+installed/);
+    assert.match(detectOut, /Codex\s+installed/);
+    assert.match(detectOut, /Cursor\s+not detected/);
+    assert.match(detectOut, /Ready for connection\./);
+    assert.match(detectOut, /Detection only\. Do not call these tools\./);
+
+    // detect — JSON envelope for AI Agents.
+    const detected = moodJson(box, ['connector', 'detect'], fake.env);
+    assert.equal(detected.ready, true);
+    const claude = detected.agents.find((a) => a.key === 'claude-code');
+    assert.equal(claude.detected, true);
+    assert.deepEqual(claude.sources, ['command', 'config']);
+    assert.equal(detected.agents.find((a) => a.key === 'cursor').detected, false);
+
+    // status before init — inactive.
+    const before = moodJson(box, ['connector', 'status'], fake.env);
+    assert.equal(before.connector, 'inactive');
+    assert.deepEqual(before.agents, []);
+
+    // register before init — clean failure.
+    const early = mood(box, ['connector', 'register', '--json'], fake.env);
+    assert.equal(early.status, 1);
+    assert.equal(JSON.parse(early.stdout).ok, false);
+
+    // init — creates the connector identity; idempotent.
+    const init1 = moodJson(box, ['connector', 'init'], fake.env);
+    assert.equal(init1.created, true);
+    assert.match(init1.connectorId, /^connector:mood:[0-9a-f]{32}$/);
+    const init2 = moodJson(box, ['connector', 'init'], fake.env);
+    assert.equal(init2.created, false);
+    assert.equal(init2.connectorId, init1.connectorId);
+
+    // register (batch) — every detected agent gets a contribution identity.
+    const reg = moodJson(box, ['connector', 'register'], fake.env);
+    assert.deepEqual(reg.registered.map((r) => r.name), ['Claude Code', 'Codex']);
+    for (const r of reg.registered) {
+      assert.match(r.agentId, /^agent:mood:[0-9a-f]{16}$/);
+      assert.equal(r.registered, true);
+    }
+
+    // register again — same IDs, no duplicates.
+    const reg2 = moodJson(box, ['connector', 'register'], fake.env);
+    assert.deepEqual(
+      reg2.registered.map((r) => r.agentId),
+      reg.registered.map((r) => r.agentId),
+    );
+
+    // register --agent with a generic (unknown) agent.
+    const reg3 = moodJson(box, ['connector', 'register', '--agent', 'Aider'], fake.env);
+    assert.equal(reg3.registered[0].type, 'generic-agent');
+
+    // status — the spec's one-screen summary.
+    const statusOut = moodOk(box, ['connector', 'status'], fake.env);
+    assert.match(statusOut, /Connector:\s+active/);
+    assert.match(statusOut, /Agents:\s+Claude Code, Codex, Aider/);
+    assert.match(statusOut, /Network:\s+Ready/);
+    const status = moodJson(box, ['connector', 'status'], fake.env);
+    assert.equal(status.connector, 'active');
+    assert.equal(status.agents.length, 3);
+    assert.equal(status.network, 'Ready');
+
+    // storage: exactly two files, and no credentials in either.
+    const files = readdirSync(fake.connectorDir).sort();
+    assert.deepEqual(files, ['agent-record.json', 'connector-id']);
+    for (const f of files) {
+      const content = readFileSync(join(fake.connectorDir, f), 'utf8');
+      assert.ok(!content.includes('sk-ant'), `${f} must not contain API keys`);
+      assert.ok(!content.includes('apiKey'), `${f} must not contain key fields`);
+    }
   } finally {
     box.cleanup();
   }

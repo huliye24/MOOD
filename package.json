@@ -18,6 +18,7 @@
     "test:web": "npm --prefix apps/web run test",
     "test:protocol": "npm install --prefix protocol/contribution && npm test --prefix protocol/contribution",
     "test:node": "npm test --prefix packages/node-runtime",
+    "test:connector": "npm test --prefix packages/mood-connector",
     "test:cli": "npm test --prefix apps/mood-cli",
     "test:api": "npm test --prefix services/node-api",
     "test:relay": "npm install --prefix services/relay && npm test --prefix services/relay",

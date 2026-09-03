@@ -39,6 +39,7 @@ import nodeRoutes from './routes/node.js';
 import identityRoutes from './routes/identity.js';
 import peersRoutes from './routes/peers.js';
 import snapshotRoutes from './routes/snapshot.js';
+import connectorRoutes from './routes/connector.js';
 
 const DEFAULT_PORT = 8788;
 const DEFAULT_BIND = '127.0.0.1';
@@ -84,6 +85,7 @@ export function createApp({ apiKey } = {}) {
   app.use('/identity', identityRoutes);
   app.use('/peers', peersRoutes);
   app.use('/snapshot', snapshotRoutes);
+  app.use('/connector', connectorRoutes);
 
   // Unknown endpoint — stable machine envelope, same as every other error.
   app.use((req, res) => {

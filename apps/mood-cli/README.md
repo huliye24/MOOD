@@ -55,6 +55,8 @@ Requires Node.js ≥ 22.13. No other dependencies.
 | `mood status` | Node ID, network, status, epoch, digest, agreement |
 | `mood api start` / `mood api stop` | Run / stop the AI Agent API (127.0.0.1:8788) |
 | `mood api status` | API endpoint, key mode, health |
+| `mood connector detect` | Detect installed AI Agent tools (existence-only — never runs them) |
+| `mood connector init` / `register` / `status` | Connector identity + agent registration (contribution layer) |
 | `mood identity show` | Public identity — never the private key |
 | `mood invite create --email <addr>` | Issue a signed `.moodinvite` |
 | `mood peers` | Connected + bootstrap peers |
@@ -85,6 +87,18 @@ curl http://127.0.0.1:8788/node/status
 
 See [`services/node-api`](../../services/node-api) — the CLI is the human
 entry; the API is the AI entry.
+
+Agents already installed on the machine (Claude Code, Codex, Cursor, any
+other) connect through the contribution layer:
+
+```bash
+mood connector detect              # who is installed here?
+mood connector register            # give them a contribution identity
+curl http://127.0.0.1:8788/connector/status
+```
+
+See [`packages/mood-connector`](../../packages/mood-connector) — AI
+engines create; MOOD records contribution; the network verifies.
 
 ## Architecture
 

@@ -120,6 +120,12 @@ ${bold('AI Agent layer:')}
                                     [--key <secret>] require Bearer auth
   mood api status                   Show API status (endpoint, key, health)
   mood api stop                     Stop the local API
+  mood connector detect            Detect installed AI Agent tools (Claude Code,
+                                    Codex, Cursor) — detection only, never runs them
+  mood connector init              Create the local connector identity
+  mood connector register          Register agents as MOOD contributors
+                                    [--agent <key|name>] explicit agent(s)
+  mood connector status            Show connector status (agents, network)
 
 ${bold('Identity & Invitations:')}
   mood identity show                Show node identity (public side only)

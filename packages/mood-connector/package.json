@@ -1,0 +1,35 @@
+{
+  "name": "@mood/connector",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Connector Alpha 001 — the contribution connection layer between existing AI Agents (Claude Code, Codex, Cursor, ...) and the MOOD network. AI engines create; MOOD records contribution.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./detector": "./src/detector.js",
+    "./identity": "./src/identity.js",
+    "./contribution": "./src/contribution.js",
+    "./adapters": "./src/adapters/index.js"
+  },
+  "scripts": {
+    "test": "node src/tests/connector.test.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mood",
+    "connector",
+    "ai-agent",
+    "contribution",
+    "protocol",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}

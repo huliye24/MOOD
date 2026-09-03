@@ -30,6 +30,7 @@ below exactly; every error is the same envelope:
 | GET    | `/identity`    | `{"nodeId":"...","publicKey":"...","organization":null}` — public side only |
 | GET    | `/peers`       | `{"peers":[],"status":"running"}` |
 | GET    | `/snapshot`    | `{"epoch":"001","digest":"sha256:...","agreement":"verified"}` — digest re-verified on every request |
+| GET    | `/connector/status` | `{"connector":"active","agents":[{"name":"Claude Code","type":"coding-agent"}]}` — inactive before `mood connector init`; independent of node identity |
 
 Stable error codes: `NOT_INITIALIZED` (409), `NO_SNAPSHOT` (404),
 `UNAUTHORIZED` (401), `FORBIDDEN_HOST` (403), `NOT_FOUND` (404),

@@ -78,6 +78,8 @@ mood status                         # 3. inspect: identity, snapshot, peers, epo
 mood stop                           # 4. stop the runtime (data is preserved)
 
 mood api start                      # 5. (optional) open the AI Agent API
+mood connector detect               # 6. (optional) connect installed AI Agent
+mood connector register             #    tools (Claude Code, Codex, Cursor, …)
 ```
 
 The first run is exactly three commands:
@@ -208,6 +210,51 @@ only public identity data. The API drives the node through the canonical
 `mood start`/`mood stop` — agents and humans share one code path. Full
 reference: [`services/node-api`](../../services/node-api) and
 [`docs/agent/api-demo.md`](../agent/api-demo.md).
+
+### `mood connector detect` / `init` / `register` / `status`
+
+The **AI Agent contribution connector** (packages/mood-connector) — the
+bridge between installed AI Agent tools (Claude Code, Codex, Cursor, any
+other) and the MOOD network. MOOD does not compete with the engines and
+does not control them; it detects them, gives them a contribution
+identity, and records their work as Contribution Objects.
+
+```bash
+$ mood connector detect
+  Claude Code    installed (command, config)
+  Codex          installed (config)
+  Cursor         installed (command, install-path)
+  Ready for connection.
+  Detection only. Do not call these tools. Do not control these tools.
+
+$ mood connector init
+  Connector ID:  connector:mood:3884d919...
+  Storage:       ~/.mood/connector
+  Never stored here: AI API keys, user credentials, private keys.
+
+$ mood connector register [--agent <key|name>[,...]]   # default: all detected
+  Agent ID: agent:mood:4a119129a31c1e72                # deterministic, idempotent
+
+$ mood connector status
+  Connector:     active
+  Agents:        Claude Code, Codex, Cursor
+  Network:       Ready
+```
+
+| Subcommand | Meaning |
+|------|---------|
+| `detect` | existence-only detection: PATH commands, config dirs, install paths — never executes or reads the tools |
+| `init` | creates `~/.mood/connector/` (connector ID + agent record); idempotent |
+| `register` | registers detected agents (or `--agent` for explicit/generic agents) |
+| `status` | connector state, registered agents, network readiness |
+
+Storage holds names, types, IDs, and timestamps — never API keys,
+credentials, or private keys (config files are checked for existence
+only, contents are never read). Agents read the same state via
+`GET /connector/status` on the API. Full reference:
+[`packages/mood-connector`](../../packages/mood-connector),
+[`docs/agent/connector.md`](../agent/connector.md), and
+[`docs/demo/agent-connection-demo.md`](../demo/agent-connection-demo.md).
 
 ### `mood identity show`
 
