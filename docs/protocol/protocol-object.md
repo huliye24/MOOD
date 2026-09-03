@@ -191,6 +191,34 @@ spec.
   Content addressing already guarantees *what* the object says; it does
   not yet prove *who* minted it.
 
+## Alpha Evolution
+
+**Alpha 001 — completed 2026-09-03.** Object creation and verification:
+the content-addressed envelope, deterministic IDs, node storage, the
+object API, tamper detection, and external object verification.
+
+**Alpha 002 — planned.** Nothing below is implemented yet; the
+placeholders exist as directories with READMEs, nothing more:
+
+- **issuer signature** — a node-key signature over the object content,
+  so verification proves *who* minted the object, not only *what* it
+  says (`src/signature/`)
+- **node identity proof** — binding the declared `issuer.nodeId` to
+  the signing node's identity
+- **object registry** — authoritative management of object types,
+  versions, and schemas (`src/registry/`)
+- **genesis object** — the first object, defining the network's
+  starting state (`src/genesis/`)
+- **object state transition** — how an object's lifecycle state
+  changes without breaking immutability
+
+Each item lands in its own alpha with its own spec and its own
+acceptance gate. None of them may silently alter the v0.1 envelope, the
+ID derivation, or the hash algorithm.
+
+**Milestone record:**
+[`docs/history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md`](../history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md)
+
 ---
 
 *Reference: [`packages/protocol-object`](../../packages/protocol-object) ·

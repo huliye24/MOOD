@@ -16,7 +16,7 @@
     "./sync": "./src/sync.js"
   },
   "scripts": {
-    "test": "node src/tests/protocol-object.test.js"
+    "test": "node --test"
   },
   "engines": {
     "node": ">=18.0.0"

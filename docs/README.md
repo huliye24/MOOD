@@ -37,6 +37,27 @@ MOOD 的中英文核心词义与不可混淆边界位于 [`docs/lexicon/`](lexic
 
 协议层文档位于 [`docs/protocol/`](protocol/README.md)，描述 MOOD 如何运行。所有技术机制均从 Canon 与 Manifesto 的意义边界向下展开。
 
+## Protocol Evolution Timeline
+
+协议演进记录位于 [`docs/history/`](history/)。每个 Alpha 是一个历史节点：完成后固化，不回写。
+
+```text
+2026-09-03    Alpha 001    Contribution Proof → Protocol Object
+                           (application layer → protocol layer)
+                           Milestone: docs/history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md
+
+Future:
+              Alpha 002    Identity Signature
+              Alpha 003    Object Synchronization
+```
+
+- [Protocol Object Alpha 001 — Repository Audit](history/protocol-object-alpha-001-audit.md)
+- [MOOD Protocol Milestone Alpha 001](history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md)
+
+Alpha 002+ 的规划接口见
+[`docs/protocol/protocol-object.md`](protocol/protocol-object.md) 的
+Alpha Evolution 章节。
+
 ## Website
 
 The website is the presentation layer. It renders Canon; it does not author Canon.
