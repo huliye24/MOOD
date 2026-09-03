@@ -1,0 +1,59 @@
+{
+  "snapshotVersion": "1.0.0",
+  "snapshotId": "snapshot-genesis-epoch-0001",
+  "snapshotType": "genesis",
+  "epochId": "epoch-0001",
+  "epochNumber": 1,
+  "networkId": "mood-testnet-001",
+  "protocolVersion": "0.2.0",
+  "policyVersion": "002-draft-1",
+  "digest": "sha256:36ae53614c343d9b401b1c9ecf4f6188bfce0e2837557f0b640a1b41524b551a",
+  "digestAlgo": "sha256",
+  "digestInputFormat": "canonical-json",
+  "deterministicTimestamp": "2026-09-03T12:00:00.000Z",
+  "contributionCount": 1,
+  "memberCount": 1,
+  "contributions": [
+    {
+      "contributionId": "contrib-genesis-0001",
+      "category": "infrastructure",
+      "status": "submitted",
+      "contributorNodeId": "mood:node:63aa9414f8293f9f08edafb33199a037c55521b81719c8400080bf3487d7e122",
+      "contentFingerprint": "sha256:genesis-deterministic-fingerprint",
+      "title": "MOOD Alpha Genesis Contribution",
+      "description": "Test contribution propagated through three independent nodes to verify deterministic snapshot agreement."
+    }
+  ],
+  "agreement": {
+    "type": "three_node_federated_test",
+    "network": "mood-testnet-001",
+    "observedFinality": "2-of-3",
+    "fullConfirmation": "3-of-3",
+    "nodeA": {
+      "nodeId": "mood:node:63aa9414f8293f9f08edafb33199a037c55521b81719c8400080bf3487d7e122",
+      "digest": "sha256:36ae53614c343d9b401b1c9ecf4f6188bfce0e2837557f0b640a1b41524b551a"
+    },
+    "nodeB": {
+      "nodeId": "mood:node:7d5d1801a2f874554ac518992e0f6ad3f91340860eb5ee5a884b462c1f238536",
+      "digest": "sha256:36ae53614c343d9b401b1c9ecf4f6188bfce0e2837557f0b640a1b41524b551a"
+    },
+    "nodeC": {
+      "nodeId": "mood:node:e9093c2500f484903a8be3dcba2713de2609bff3391bdafd6da087132f4636d1",
+      "digest": "sha256:36ae53614c343d9b401b1c9ecf4f6188bfce0e2837557f0b640a1b41524b551a"
+    },
+    "allDigestsMatch": true
+  },
+  "metadata": {
+    "disclaimers": [
+      "This snapshot is a deterministic test artifact.",
+      "It is NOT mainnet consensus.",
+      "It is NOT proof of decentralization.",
+      "Three nodes from one organization is a TECHNICAL test, not a FEDERATED network.",
+      "Public network does not exist in this alpha."
+    ],
+    "noToken": true,
+    "noStake": true,
+    "noGovernance": true,
+    "noRewards": true
+  }
+}

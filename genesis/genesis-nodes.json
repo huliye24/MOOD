@@ -1,0 +1,51 @@
+{
+  "genesisVersion": "1.0.0",
+  "genesisType": "MOOD_Node_Alpha_001",
+  "networkId": "mood-testnet-001",
+  "protocolVersion": "0.2.0",
+  "clientVersion": "0.1.0-alpha.1",
+  "branch": "codex/mood-node-alpha-001",
+  "genesisCommit": "4ef0cc170cad76ecb151d941883ce487e65ba0bd",
+  "genesisDate": "2026-09-03",
+  "networkType": "federated_testnet",
+  "nodes": [
+    {
+      "alias": "Node A",
+      "nodeId": "mood:node:63aa9414f8293f9f08edafb33199a037c55521b81719c8400080bf3487d7e122",
+      "role": "genesis_contributor",
+      "seedAlias": "node-a-seed-001",
+      "epoch": 1,
+      "status": "active"
+    },
+    {
+      "alias": "Node B",
+      "nodeId": "mood:node:7d5d1801a2f874554ac518992e0f6ad3f91340860eb5ee5a884b462c1f238536",
+      "role": "genesis_contributor",
+      "seedAlias": "node-b-seed-002",
+      "epoch": 1,
+      "status": "active"
+    },
+    {
+      "alias": "Node C",
+      "nodeId": "mood:node:e9093c2500f484903a8be3dcba2713de2609bff3391bdafd6da087132f4636d1",
+      "role": "genesis_contributor",
+      "seedAlias": "node-c-seed-003",
+      "epoch": 1,
+      "status": "active"
+    }
+  ],
+  "metadata": {
+    "disclaimers": [
+      "This is a NOT a token allocation.",
+      "This is NOT an airdrop.",
+      "This is NOT a stake record.",
+      "This is NOT a governance proposal.",
+      "This is NOT a chain-level genesis.",
+      "This is an alpha-testnet record of three test nodes running on the same machine."
+    ],
+    "containsNoRealIdentity": true,
+    "containsNoPrivateMaterial": true,
+    "reproducible": true,
+    "reproductionCommand": "node testnet/three-node/run-three-node-test.mjs"
+  }
+}
