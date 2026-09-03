@@ -51,23 +51,23 @@ jobs:
       - name: Build Windows installer
         shell: powershell
         run: |
-          cd apps/node-client
+          cd apps/mood-desktop
           $env:NODE_ENV = 'production'
           npx electron-builder --win --publish never
 
       - name: List built artifacts
         shell: powershell
         run: |
-          Get-ChildItem -Path apps/node-client/dist -Recurse -File | Select-Object FullName, Length
+          Get-ChildItem -Path apps/mood-desktop/dist -Recurse -File | Select-Object FullName, Length
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mood-node-windows
           path: |
-            apps/node-client/dist/*.exe
-            apps/node-client/dist/*.zip
-            apps/node-client/dist/*.blockmap
+            apps/mood-desktop/dist/*.exe
+            apps/mood-desktop/dist/*.zip
+            apps/mood-desktop/dist/*.blockmap
           if-no-files-found: warn
 
   # ─── Build for macOS ────────────────────────────────────────────────────────
@@ -94,21 +94,21 @@ jobs:
 
       - name: Build macOS installer
         run: |
-          cd apps/node-client
+          cd apps/mood-desktop
           NODE_ENV=production npx electron-builder --mac --publish never
 
       - name: List built artifacts
         run: |
-          find apps/node-client/dist -type f -name "*.dmg" -o -name "*.zip" -o -name "*.blockmap"
+          find apps/mood-desktop/dist -type f -name "*.dmg" -o -name "*.zip" -o -name "*.blockmap"
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mood-node-macos
           path: |
-            apps/node-client/dist/*.dmg
-            apps/node-client/dist/*.zip
-            apps/node-client/dist/*.blockmap
+            apps/mood-desktop/dist/*.dmg
+            apps/mood-desktop/dist/*.zip
+            apps/mood-desktop/dist/*.blockmap
           if-no-files-found: warn
 
   # ─── Build for Linux ────────────────────────────────────────────────────────
@@ -135,22 +135,22 @@ jobs:
 
       - name: Build Linux package
         run: |
-          cd apps/node-client
+          cd apps/mood-desktop
           NODE_ENV=production npx electron-builder --linux --publish never
 
       - name: List built artifacts
         run: |
-          ls -la apps/node-client/dist/
-          find apps/node-client/dist -type f \( -name "*.AppImage" -o -name "*.tar.gz" \)
+          ls -la apps/mood-desktop/dist/
+          find apps/mood-desktop/dist -type f \( -name "*.AppImage" -o -name "*.tar.gz" \)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: mood-node-linux
           path: |
-            apps/node-client/dist/*.AppImage
-            apps/node-client/dist/*.tar.gz
-            apps/node-client/dist/*.blockmap
+            apps/mood-desktop/dist/*.AppImage
+            apps/mood-desktop/dist/*.tar.gz
+            apps/mood-desktop/dist/*.blockmap
           if-no-files-found: warn
 
   # ─── Generate SHA256SUMS ──────────────────────────────────────────────────────

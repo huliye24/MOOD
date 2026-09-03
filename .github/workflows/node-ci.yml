@@ -287,7 +287,7 @@ jobs:
         run: |
           # Verify no SSH, shell, or wallet operations
           echo "Checking for unsafe operations..."
-          if grep -r 'exec(\|spawn(\|child_process\|ssh.connect' packages/node-runtime/src/ apps/node-client/desktop/ apps/node-client/renderer/ 2>/dev/null; then
+          if grep -r 'exec(\|spawn(\|child_process\|ssh.connect' packages/node-runtime/src/ apps/mood-desktop/desktop/ apps/mood-desktop/renderer/ 2>/dev/null; then
             echo "WARN: shell execution imports detected"
           fi
           echo "✅ Lint check completed"

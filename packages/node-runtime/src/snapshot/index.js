@@ -8,8 +8,10 @@
  */
 
 import crypto from 'crypto';
+import nacl from 'tweetnacl';
+import { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } from '../internal/nacl-util.js';
 import { v4 as uuidv4 } from 'uuid';
-import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
 
 // Snapshot constants
@@ -195,16 +197,14 @@ export function verifyAttestation(attestation, nodePublicKey) {
 
     // Verify signature
     if (attestation.signature && nodePublicKey) {
-      const nacl = require('tweetnacl');
-      const { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } = require('tweetnacl-util');
-
-      // Create canonical payload for verification
+      // Canonical payload for verification — must match the payload
+      // signed by signSnapshot: the digest already commits to epoch
+      // number, timestamp, and policy version.
       const payload = {
         snapshotId: attestation.snapshotId,
         digest: attestation.digest,
         epochId: attestation.epochId,
-        nodeId: attestation.nodeId,
-        signedAt: attestation.signedAt
+        nodeId: attestation.nodeId
       };
 
       const canonical = JSON.stringify(payload, Object.keys(payload).sort());
@@ -233,15 +233,14 @@ export function verifyAttestation(attestation, nodePublicKey) {
  * @returns {string} Signature
  */
 export function signSnapshot(snapshot, secretKey) {
-  const nacl = require('tweetnacl');
-  const { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } = require('tweetnacl-util');
-
+  // Canonical payload — must match what verifyAttestation reconstructs.
+  // The digest already commits to epoch number, timestamp, and policy
+  // version, so signing the digest covers the full snapshot body.
   const payload = {
     snapshotId: snapshot.snapshotId,
     digest: snapshot.digest,
     epochId: snapshot.epochId,
-    epochNumber: snapshot.epochNumber,
-    timestamp: snapshot.timestamp
+    nodeId: snapshot.issuerNodeId
   };
 
   const canonical = JSON.stringify(payload, Object.keys(payload).sort());
@@ -281,6 +280,8 @@ export class SnapshotManager {
 
     // Load existing snapshots
     this._loadSnapshots();
+
+    return this;
   }
 
   /**
@@ -292,8 +293,7 @@ export class SnapshotManager {
       return;
     }
 
-    const fs = require('fs');
-    const files = fs.readdirSync(snapshotsDir).filter(f => f.endsWith('.json'));
+    const files = readdirSync(snapshotsDir).filter(f => f.endsWith('.json'));
 
     for (const file of files) {
       const path = join(snapshotsDir, file);

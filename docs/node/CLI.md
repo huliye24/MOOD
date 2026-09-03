@@ -1,0 +1,389 @@
+# MOOD CLI
+
+**The primary MOOD interface.**
+
+MOOD is not an application. MOOD is a protocol node. Anyone — any person,
+any organization, any AI Agent — runs the same node software, the same way
+a Bitcoin full node or an Ethereum geth node is run. The CLI is that node's
+native face.
+
+```text
+        ███╗   ███╗ ██████╗  ██████╗ ██████╗
+        ████╗ ████║██╔═══██╗██╔═══██╗██╔══██╗
+        ██╔████╔██║██║   ██║██║   ██║██║  ██║
+        ██║╚██╔╝██║██║   ██║██║   ██║██║  ██║
+        ██║ ╚═╝ ██║╚██████╔╝╚██████╔╝██████╔╝
+        ╚═╝     ╚═╝ ╚═════╝  ╚═════╝ ╚═════╝
+
+        ~ MOOD ~
+
+        Contribution Network
+
+        Protocol:  v0.1
+        Network:   MOOD Alpha Testnet
+        Node:      mood:node:63aa9414f8293f9f...
+        Status:    Running
+
+        "Contribution creates consensus."
+```
+
+---
+
+## Installation
+
+**Requirements:** Node.js ≥ 22.13 (the same engine the rest of the
+repository requires). No other dependency — the CLI is pure JavaScript
+over the shared runtime.
+
+### From the repository (monorepo)
+
+```bash
+git clone https://github.com/huliye24/MOOD.git
+cd MOOD
+npm install
+
+# Run via the workspace (no global install needed)
+npm --prefix apps/mood-cli start -- status
+
+# Or link the `mood` command into your PATH
+npm install -g apps/mood-cli
+mood
+```
+
+### From npm (when published)
+
+```bash
+npm install -g mood
+mood
+```
+
+### Verify the install
+
+```bash
+mood              # renders the home screen above
+mood protocol     # reports the active protocol and network
+```
+
+---
+
+## Usage
+
+A MOOD node has a lifecycle of four commands. Everything else is
+inspection.
+
+```bash
+mood init                           # 1. create ~/.mood/ and the node identity
+mood start                          # 2. run the node runtime (background daemon)
+mood status                         # 3. inspect: identity, snapshot, peers, epoch
+mood stop                           # 4. stop the runtime (data is preserved)
+```
+
+The first run is exactly three commands:
+
+```bash
+$ mood init
+  MOOD identity created.
+
+  Node ID:      mood:node:63aa9414f8293f9f08edafb33199a037c55521b81719c8400080bf3487d7e122
+  Home:         ~/.mood
+
+$ mood start
+  Starting MOOD Node...
+
+  Protocol      v0.1
+  Network       MOOD Alpha Testnet
+  Status        Running
+  PID           31824
+  Log           ~/.mood/logs/node.log
+
+$ mood snapshot verify
+  MOOD Snapshot Verification
+
+  Epoch:       epoch-0001
+  Digest:      sha256:36ae53614c343d9b...
+  Recomputed:  sha256:36ae53614c343d9b...
+  Agreement:   Verified
+  Attestations: 1
+```
+
+### Where the data lives
+
+`mood init` creates one tree and the CLI never writes outside it
+(`MOOD_HOME` overrides the location — used by tests and agents):
+
+```text
+~/.mood/
+├── identity/
+│   ├── node.json          # public identity (node ID, public key)
+│   └── private.json       # private key — never displayed, never sent
+├── config/
+│   └── node.json          # network, relay, organization, bootstrap peers
+├── snapshots/             # epoch snapshots + latest.json pointer
+├── logs/
+│   └── node.log           # daemon log
+└── state.json             # runtime state (status, pid, connected peers)
+```
+
+---
+
+## Commands
+
+### `mood` (no arguments)
+
+The terminal identity: logo, network, node ID, status. This is what a
+MOOD node *is* — one glance, no chrome.
+
+### `mood init`
+
+Creates `~/.mood/` and generates the Ed25519 node identity via the shared
+runtime. **Idempotent** — a second `init` never regenerates an existing
+identity.
+
+| Flag | Meaning |
+|------|---------|
+| `--org <id>` | affiliate with an explicit organization ID |
+| `--org-name <name>` | organization name (default: MOOD Alpha) |
+| `--org-domain <domain>` | organization domain (default: alpha.mood.example) |
+
+### `mood start`
+
+Starts the node runtime as a background daemon: identity loaded, relay
+synchronization armed, epoch snapshots created and self-attested on a
+schedule. Prints the PID and log path. A second `start` on a running node
+is a no-op that reports the existing PID.
+
+### `mood stop`
+
+Stops the daemon cleanly (flag file + signal, then state reconciliation).
+Snapshots and identity are preserved; `mood status` keeps reporting the
+last digest.
+
+### `mood status`
+
+```text
+  Node ID:      mood:node:63aa...
+  Network:      MOOD Alpha Testnet
+  Protocol:     v0.1
+  Status:       Running
+  Peers:        2 connected
+  Latest Epoch: 001
+  Snapshot:     sha256:36ae5361...
+  Agreement:    Verified
+```
+
+### `mood identity show`
+
+Public side of the identity only. **Never displays: private key.** The
+private key exists on disk (the daemon needs it to sign) and never leaves
+the machine.
+
+### `mood invite create --email <address>`
+
+Issues a signed `.moodinvite` file (72h expiry, one-time use, bound to one
+email) using the **existing invitation logic** from the shared runtime.
+The CLI adds no invitation machinery and no new identity system.
+
+| Flag | Meaning |
+|------|---------|
+| `--email <addr>` | required — the invitation is bound to this address |
+| `--org <id>` | issue under an explicit organization |
+| `--org-name <name>` / `--org-domain <d>` | override organization fields |
+| `--out <dir>` | output directory (default: current directory) |
+
+### `mood peers`
+
+Connected peers first (observed live via the relay), then the configured
+bootstrap roster. A stopped node honestly reports
+`(node not running — showing configured bootstrap peers only)`.
+
+### `mood snapshot verify`
+
+Digest agreement: reloads the latest epoch snapshot and recomputes the
+SHA-256 over its canonical JSON. If `Recomputed == Digest`, any honest
+node holding this snapshot derives the same value — that is the whole
+alpha consensus ("Snapshot Agreement"). Also counts and verifies
+attestation signatures.
+
+### `mood protocol`
+
+The protocol's machine-readable face: version `0.1`, mode `Federated
+Alpha`, consensus `Snapshot Agreement`, and the Phase Zero scope flags
+(token/wallet/financial/mining/staking/governance — all `false`).
+
+### `mood --help` / `mood help`
+
+Full command reference.
+
+---
+
+## Every command speaks JSON
+
+Any command accepts `--json` and answers with a stable envelope:
+
+```bash
+$ mood status --json
+{"ok":true,"nodeId":"mood:node:63aa...","network":"MOOD Alpha Testnet","networkId":"mood-testnet-001","protocol":"0.1","status":"Running","peers":2,"epoch":1,"digest":"36ae...","agreement":"Verified",...}
+```
+
+The envelope contract:
+
+- **Success:** `{ "ok": true, ...fields }` on stdout, exit code 0
+- **Failure:** `{ "ok": false, "error": "<message>" }` on stdout, exit code 1
+
+Setting the environment variable `MOOD_JSON=1` switches every invocation
+to JSON without adding a flag — for agents that cannot modify an existing
+command line.
+
+The JSON envelope is not a convenience; it is the guarantee that **the
+human interface and the agent interface are the same interface.** The
+command computes one data object; the human renderer and the JSON
+renderer both consume it. Nothing is shown to humans that agents cannot
+read, and nothing is exposed to agents that humans cannot see.
+
+---
+
+## Architecture
+
+The CLI is a thin shell. It owns presentation (terminal screens, JSON
+envelopes) and process management (the daemon) — nothing else.
+
+```text
+        ┌─────────────────────────────────┐
+        │  apps/mood-cli                  │
+        │  screens · JSON · daemon spawn  │  ← this package
+        └───────────────┬─────────────────┘
+                        │ imports
+                        ▼
+        ┌─────────────────────────────────┐
+        │  packages/node-runtime          │
+        │  identity · invitation ·        │
+        │  storage · sync · snapshot      │  ← all node logic, shared
+        └───────────────┬─────────────────┘
+                        │ validates with
+                        ▼
+        ┌─────────────────────────────────┐
+        │  protocol/*                     │
+        │  contribution · registry · ...  │  ← unchanged protocol layer
+        └───────────────┬─────────────────┘
+                        │ commits to
+                        ▼
+        ┌─────────────────────────────────┐
+        │  Snapshot Agreement             │
+        │  SHA-256 over canonical JSON    │
+        └─────────────────────────────────┘
+```
+
+**The rules:**
+
+- The CLI **reuses** `packages/node-runtime` — identity, invitation,
+  storage, synchronization, snapshot logic all come from the runtime.
+- The CLI **duplicates nothing**: no second identity system, no second
+  invitation system, no second snapshot verifier.
+- The protocol layer (`protocol/*`) is **unchanged** by the CLI's
+  introduction.
+- The desktop client ([`apps/mood-desktop`](../../apps/mood-desktop),
+  Experimental GUI) sits on the exact same runtime — GUI and CLI are two
+  shells over one node.
+
+### Layout
+
+```text
+apps/mood-cli/
+├── bin/mood.js               # entry point
+├── src/
+│   ├── cli.js                # argv router (no third-party parser)
+│   ├── state.js              # ~/.mood tree: identity, config, state
+│   ├── daemon.js             # background runtime loop
+│   ├── commands/             # one file per command
+│   │   init · start · stop · status
+│   │   identity · invite · peers · snapshot · protocol
+│   ├── ui/                   # logo + terminal renderers + JSON emit
+│   └── config/defaults.js    # single source of display constants
+└── tests/cli.test.js         # end-to-end: spawns the real binary
+```
+
+---
+
+## AI Agent Integration
+
+MOOD is designed so that an AI Agent is a **first-class node operator** —
+not a tool user driving a human GUI. The agent runs the same commands a
+human runs and reads the same output a human reads, but with `--json`
+the output becomes a structured, stable contract.
+
+```text
+   Human operator                    AI Agent
+   │                                │
+   │  $ mood status                 │  $ mood status --json
+   │  (terminal screens)            │  {"ok":true,"nodeId":...}
+   │                                │
+   └────────────┬───────────────────┴──────────────┬──────────────
+                │                                  │
+                ▼                                  ▼
+        ┌──────────────────────────────────────────────┐
+        │            apps/mood-cli                     │
+        │   same commands · same data · same node      │
+        └──────────────────────┬───────────────────────┘
+                               │
+                               ▼
+        ┌──────────────────────────────────────────────┐
+        │            @mood/node-runtime                │
+        │     identity · invitation · snapshot         │
+        └──────────────────────────────────────────────┘
+```
+
+### The agent contract
+
+1. **One binary, two audiences.** There is no separate agent API to
+   version, secure, or drift. `mood status` and `mood status --json`
+   come from the same code path.
+2. **Stable envelope.** `ok: true|false` first, fields after. Failures
+   are `{ok:false, error}` with exit code 1 — parseable, never a stack
+   trace.
+3. **No interactive prompts.** Every command completes without input.
+   What a human reads as a screen, an agent reads as one JSON object.
+4. **`MOOD_JSON=1`** forces JSON globally for agents that wrap the CLI
+   and cannot inject flags.
+
+### A complete agent session
+
+```bash
+mood init --json
+# → {"ok":true,"created":true,"nodeId":"mood:node:...","home":"~/.mood"}
+
+mood start --json
+# → {"ok":true,"started":true,"status":"Running","pid":31824,...}
+
+mood snapshot verify --json
+# → {"ok":true,"valid":true,"agreement":"Verified","digest":"36ae...","recomputed":"36ae...","attestations":1}
+
+mood status --json
+# → {"ok":true,"nodeId":"mood:node:...","status":"Running","epoch":1,"digest":"36ae...","agreement":"Verified"}
+
+mood invite create --email alice@example.com --json
+# → {"ok":true,"inviteId":"...","path":"./mood-invite-....moodinvite",...}
+
+mood stop --json
+# → {"ok":true,"stopped":true,"clean":true,"status":"Stopped"}
+```
+
+An agent that can run a shell and parse JSON can operate a MOOD node —
+join, observe, verify consensus, and invite the next node. That is the
+entire integration surface, and it is deliberate.
+
+---
+
+## Phase Zero scope
+
+The CLI — like everything in this repository — respects the Canon: there
+is **no token, no wallet, no financial feature, no mining, no staking, no
+governance**. `mood protocol` prints these scope flags explicitly so any
+human or agent can confirm what network they are talking to.
+
+> Build the network before the economy.
+
+---
+
+*See also: [MOOD Desktop (Experimental GUI)](../../apps/mood-desktop) ·
+[Node Release Audit](../node-release-audit.md) ·
+[Release: v0.2.0-alpha.2](../releases/MOOD_NODE_v0.2.0-alpha.2.md)*

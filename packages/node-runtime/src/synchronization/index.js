@@ -11,6 +11,8 @@ import WebSocket from 'ws';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import { EventEmitter } from 'events';
+import nacl from 'tweetnacl';
+import { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } from '../internal/nacl-util.js';
 
 // Message types
 export const MESSAGE_TYPES = {
@@ -76,8 +78,6 @@ export function createMessageEnvelope(type, payload, senderId, signature = null)
 export function signMessage(envelope, secretKey) {
   const { signature, ...rest } = envelope;
   const canonical = JSON.stringify(rest, Object.keys(rest).sort());
-  const nacl = require('tweetnacl');
-  const { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } = require('tweetnacl-util');
 
   const messageBytes = decodeUTF8(canonical);
   const secretKeyBytes = decodeBase64(secretKey);

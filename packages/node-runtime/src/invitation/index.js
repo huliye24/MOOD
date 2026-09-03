@@ -8,10 +8,10 @@
  */
 
 import nacl from 'tweetnacl';
-import { encodeBase64, decodeBase64, decodeUTF8 } from 'tweetnacl-util';
+import { encodeBase64, decodeBase64, decodeUTF8 } from '../internal/nacl-util.js';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
-import { writeFileSync, readFileSync, existsSync } from 'fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
 // Constants
@@ -384,8 +384,7 @@ export function generateEnrollmentProof(invitation, memberPublicKey) {
  */
 export function exportInvitation(invitation, directory, filename = null) {
   if (!existsSync(directory)) {
-    const fs = require('fs');
-    fs.mkdirSync(directory, { recursive: true });
+    mkdirSync(directory, { recursive: true });
   }
 
   const baseName = filename || `mood-invite-${invitation.payload.invitationId}`;

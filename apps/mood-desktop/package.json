@@ -1,7 +1,7 @@
 {
-  "name": "@mood/node-client",
+  "name": "@mood/mood-desktop",
   "version": "0.1.0-alpha.1",
-  "description": "MOOD Node Desktop Client - One-click node for MOOD Protocol v0.2",
+  "description": "MOOD Node Desktop Client (Experimental GUI) - One-click node for MOOD Protocol v0.2. The CLI is the primary MOOD interface.",
   "main": "desktop/main.js",
   "type": "module",
   "scripts": {

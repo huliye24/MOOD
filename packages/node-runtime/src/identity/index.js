@@ -8,7 +8,7 @@
  */
 
 import nacl from 'tweetnacl';
-import { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } from 'tweetnacl-util';
+import { encodeBase64, decodeBase64, encodeUTF8, decodeUTF8 } from '../internal/nacl-util.js';
 import { v4 as uuidv4 } from 'uuid';
 import crypto from 'crypto';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
@@ -58,7 +58,7 @@ export function generateNodeId(publicKey, networkId = NETWORK_IDS.TESTNET_001) {
 
   // Create deterministic input for hashing
   const input = [
-    NODE_ID_VERSION || KEYPAIR_VERSION,
+    KEYPAIR_VERSION,
     networkId,
     publicKey
   ].join('|');

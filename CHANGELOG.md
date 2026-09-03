@@ -7,6 +7,93 @@ adapted for MOOD's phase-zero worldbuilding posture.
 
 ---
 
+## v0.2.0-alpha.2 — 2026-09-03
+
+**Tag:** `node-v0.2.0-alpha.2`
+**Type:** Pre-release / Experimental Alpha
+**Network:** `mood-testnet-001` (federated testnet, not mainnet)
+**Protocol:** v0.1
+**Status:** ⚠️ UNSIGNED INTERNAL ALPHA — NOT PRODUCTION
+
+> MOOD Node becomes an AI-native command line client. The CLI is the
+> primary MOOD interface. Still no token, no wallet, no staking, no
+> rewards, no governance — phase zero.
+
+### Features
+
+#### CLI-first architecture
+
+- New workspace package `apps/mood-cli` (`@mood/cli`)
+- Zero third-party dependencies — pure Node.js over the shared runtime
+- Full command surface: `mood init / start / stop / status`,
+  `mood identity show`, `mood invite create`,
+  `mood peers`, `mood snapshot verify`, `mood protocol`
+- Background daemon with clean stop and state reconciliation
+- `~/.mood/` data root (overridable via `MOOD_HOME`)
+
+#### Terminal identity
+
+- ASCII logo + `~ MOOD ~` home screen: network, node ID, status
+- The logo is frozen — changing it requires a protocol-version bump
+
+#### AI Agent compatible interface
+
+- Every command supports `--json` → stable envelope
+  `{ok:true, ...}` / `{ok:false, error}` with exit codes
+- `MOOD_JSON=1` forces JSON globally for agent wrappers
+- Human screens and agent envelopes render from the same data object
+
+#### Protocol runtime integration
+
+- CLI reuses `packages/node-runtime` for identity, invitation, storage,
+  sync, and snapshot logic — duplicates nothing
+- `.moodinvite` creation uses the existing invitation logic (no new
+  identity system)
+- Protocol layer (`protocol/*`) unchanged
+
+#### Desktop client repositioned
+
+- `apps/node-client` → `apps/mood-desktop` (`@mood/mood-desktop`)
+- Marked **Experimental GUI**; README states the CLI is the primary
+  interface
+- Electron app preserved — not deleted
+
+### Fixes
+
+- `packages/node-runtime` root export repaired (it had never been
+  imported end-to-end before the CLI): ESM/CJS interop shim for
+  `tweetnacl-util`, duplicate/phantom exports removed, Windows-safe
+  dynamic imports, `SnapshotManager.initialize()` chaining
+- Snapshot self-attestation sign/verify payloads aligned
+  (`{snapshotId, digest, epochId, nodeId}`) so the documented
+  verification path actually verifies
+
+### Tests
+
+- `apps/mood-cli/tests/cli.test.js` — 12 end-to-end tests: startup
+  screen, identity creation + idempotency, private-key non-disclosure,
+  status, JSON envelopes, `MOOD_JSON=1`, error envelopes, invitation
+  generation + signature validity, full daemon lifecycle
+  (`start` → snapshot verified → `stop`)
+- `npm run test:cli` added at the repository root
+- All existing suites remain passing (protocol, relay, three-node,
+  web)
+
+### Documentation added
+
+- `docs/node/CLI.md` — installation, usage, commands, architecture,
+  AI Agent integration
+- `docs/releases/MOOD_NODE_v0.2.0-alpha.2.md`
+- `apps/mood-cli/README.md`, `apps/mood-desktop/README.md`
+
+### What this release is NOT
+
+- Not mainnet, not a token launch, not a financial product
+- Not a governance vehicle, not a decentralization claim
+- Not production-ready
+
+---
+
 ## v0.1.0-alpha.1 — 2026-09-03
 
 **Tag:** `node-v0.1.0-alpha.1`

@@ -7,7 +7,7 @@
  * @module protocol-adapter
  */
 
-import { ContributionService, ContributionStatus } from '../../../protocol/contribution/src/service.js';
+import { ContributionService, ContributionStatus } from '@moodify/protocol-contribution';
 
 /**
  * Protocol Adapter

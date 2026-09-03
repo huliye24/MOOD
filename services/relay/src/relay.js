@@ -475,4 +475,4 @@ main().catch((error) => {
   process.exit(1);
 });
 
-export { server: null }; // Placeholder for potential HTTP server export
+export const server = null; // Placeholder for potential HTTP server export

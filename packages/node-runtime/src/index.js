@@ -8,14 +8,23 @@
  * @module @mood/node-runtime
  */
 
-// Re-export all modules
-export { NodeIdentityManager } from './identity/index.js';
-export { OrganizationManager } from './organization/index.js';
-export { InvitationManager } from './invitation/index.js';
-export { StorageManager } from './storage/index.js';
-export { SyncManager } from './synchronization/index.js';
-export { SnapshotManager } from './snapshot/index.js';
-export { ProtocolAdapter } from './protocol-adapter/index.js';
+// Re-export all modules (imported, not `export … from`, so the class
+// identifiers are also bound locally for the default export below).
+import { NodeIdentityManager } from './identity/index.js';
+import { OrganizationManager } from './organization/index.js';
+import { StorageManager } from './storage/index.js';
+import { SyncManager } from './synchronization/index.js';
+import { SnapshotManager } from './snapshot/index.js';
+import { ProtocolAdapter } from './protocol-adapter/index.js';
+
+export {
+  NodeIdentityManager,
+  OrganizationManager,
+  StorageManager,
+  SyncManager,
+  SnapshotManager,
+  ProtocolAdapter
+};
 
 // Identity exports
 export {
@@ -66,8 +75,7 @@ export {
 
 // Storage exports
 export {
-  STORAGE_COLLECTIONS,
-  StorageManager
+  STORAGE_COLLECTIONS
 } from './storage/index.js';
 
 // Synchronization exports
@@ -75,8 +83,7 @@ export {
   MESSAGE_TYPES,
   CONNECTION_STATE,
   createMessageEnvelope,
-  signMessage,
-  SyncManager
+  signMessage
 } from './synchronization/index.js';
 
 // Snapshot exports
@@ -189,3 +196,4 @@ export default {
   SnapshotManager,
   ProtocolAdapter
 };
+// Note: the invitation module exposes functions only (no manager class).

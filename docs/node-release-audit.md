@@ -6,6 +6,12 @@
 **Commit:** `4ef0cc170cad76ecb151d941883ce487e65ba0bd`
 **Target Release:** `MOOD Node v0.1.0-alpha.1`
 
+> **Post-release note (Alpha 002):** this audit is a point-in-time record of
+> commit `4ef0cc1`. Since then, the desktop client moved from
+> `apps/node-client` to [`apps/mood-desktop`](../apps/mood-desktop)
+> (Experimental GUI), and the CLI at [`apps/mood-cli`](../apps/mood-cli)
+> became the primary MOOD interface. Path references below are historical.
+
 ---
 
 ## Purpose

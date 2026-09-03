@@ -1,0 +1,44 @@
+{
+  "name": "@mood/cli",
+  "version": "0.2.0-alpha.2",
+  "description": "MOOD CLI Node Alpha 002 — the primary command-line interface to the MOOD contribution network. The CLI is the primary MOOD interface.",
+  "type": "module",
+  "bin": {
+    "mood": "./bin/mood.js"
+  },
+  "main": "./src/cli.js",
+  "publishConfig": {
+    "name": "mood"
+  },
+  "scripts": {
+    "mood": "node ./bin/mood.js",
+    "start": "node ./bin/mood.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md"
+  ],
+  "keywords": [
+    "mood",
+    "contribution-network",
+    "protocol-node",
+    "cli",
+    "decentralized",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@mood/node-runtime": "0.1.0-alpha.1"
+  },
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}
