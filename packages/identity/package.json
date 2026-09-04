@@ -1,0 +1,44 @@
+{
+  "name": "@mood/identity",
+  "version": "0.1.0-alpha.1",
+  "description": "MOOD Protocol Identity Alpha 002-B — the cryptographic identity runtime: Ed25519 node identities, node-local private keys, and signatures over 256-bit canonical object digests. Alpha 001 defines what the object is. Alpha 002 defines who created it.",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./identity": "./src/identity.js",
+    "./key-manager": "./src/key-manager.js",
+    "./signer": "./src/signer.js",
+    "./verifier": "./src/verifier.js",
+    "./serializer": "./src/serializer.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "mood",
+    "identity",
+    "ed25519",
+    "signature",
+    "protocol",
+    "alpha-002",
+    "phase-zero"
+  ],
+  "license": "AGPL-3.0",
+  "dependencies": {
+    "@mood/contribution-proof": "0.1.0-alpha.1"
+  },
+  "devDependencies": {
+    "@mood/protocol-object": "0.1.0-alpha.1",
+    "tweetnacl": "^1.0.3"
+  },
+  "author": "MOOD Project",
+  "homepage": "https://github.com/huliye24/MOOD",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huliye24/MOOD.git"
+  }
+}

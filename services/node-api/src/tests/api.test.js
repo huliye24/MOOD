@@ -8,7 +8,8 @@
  *
  *   1. Health          — exact documented body
  *   2. Node status     — shape, values, determinism (byte-identical)
- *   3. Identity        — public fields only; PRIVATE KEY NEVER APPEARS
+ *   3. Identity        — public fields only; PRIVATE KEY NEVER APPEARS;
+ *                       protocol record, legacy fallback, tamper → 500
  *   4. Snapshot        — verified digest; tamper → unverified; none → 404
  *   5. Authentication  — Bearer key: 401 / 401 / 200; /health stays open
  *   6. Host validation — DNS-rebinding Host → 403
@@ -336,14 +337,47 @@ test('node status + identity + peers on an initialized (stopped) node', async ()
     const r2 = await getJson(port, '/node/status');
     assert.equal(r.text, r2.text, 'response is deterministic');
 
-    // /identity — public side only.
+    // /identity — public side only: the Alpha 002 protocol record
+    // (identity/public.json), which `mood init` now activates.
     const id = await getJson(port, '/identity');
     assert.equal(id.status, 200);
     assert.deepEqual(id.body, {
       nodeId: identity.nodeId,
       publicKey: identity.publicKey,
+      algorithm: 'ed25519',
+      networkId: 'mood-testnet-001',
+      createdAt: identity.createdAt,
+      identityVersion: 'alpha-002',
       organization: null,
     });
+
+    // Legacy fallback: without public.json the node still answers from
+    // identity/node.json (same key, no identityVersion field).
+    const publicFile = join(box.home, 'identity', 'public.json');
+    rmSync(publicFile);
+    const legacy = await getJson(port, '/identity');
+    assert.equal(legacy.status, 200);
+    assert.deepEqual(legacy.body, {
+      nodeId: identity.nodeId,
+      publicKey: identity.publicKey,
+      algorithm: 'ed25519',
+      networkId: 'mood-testnet-001',
+      createdAt: identity.createdAt,
+      organization: null,
+    });
+
+    // A tampered public.json (key swapped, node ID kept) is rejected,
+    // never served.
+    writeFileSync(publicFile, JSON.stringify({
+      ...identity,
+      publicKey: Buffer.alloc(32, 7).toString('base64'),
+      networkId: 'mood-testnet-001',
+      identityVersion: 'alpha-002',
+    }, null, 2));
+    const tampered = await getJson(port, '/identity');
+    assert.equal(tampered.status, 500);
+    assert.equal(tampered.body.error.code, 'IDENTITY_INVALID');
+    rmSync(publicFile);
 
     // SECURITY: the private key never appears — not as a key, not as a
     // value substring, in any response of this server.

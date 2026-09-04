@@ -1,9 +1,11 @@
 /**
  * `mood init` — initialize the local MOOD node.
  *
- * Creates ~/.mood/ (identity/, config/, snapshots/, logs/) and generates
- * an Ed25519 node identity via the shared runtime. Idempotent: running
- * it again never regenerates an existing identity.
+ * Creates ~/.mood/ (identity/, config/, snapshots/, logs/), generates an
+ * Ed25519 node identity via the shared runtime (or adopts an existing
+ * one), and activates the Alpha 002 protocol identity over the same
+ * key. Idempotent: running it again never regenerates an existing
+ * identity.
  */
 
 import { emit, renderKeyValue, green, dim } from '../ui/terminal.js';

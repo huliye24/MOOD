@@ -145,6 +145,8 @@ ${bold('Protocol object layer:')}
   mood object verify [object-id]  Recompute object IDs (integrity + linkage)
 
 ${bold('Identity & Invitations:')}
+  mood identity create              Activate the Alpha 002 cryptographic identity
+                                    (adopts the existing node key; never rekeys)
   mood identity show                Show node identity (public side only)
   mood invite create --email <addr> Issue a .moodinvite for a new node
 

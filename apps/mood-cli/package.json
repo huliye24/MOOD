@@ -35,6 +35,7 @@
   "dependencies": {
     "@mood/connector": "0.1.0-alpha.1",
     "@mood/contribution-proof": "0.1.0-alpha.1",
+    "@mood/identity": "0.1.0-alpha.1",
     "@mood/node-runtime": "0.1.0-alpha.1",
     "@mood/protocol-object": "0.1.0-alpha.1"
   },

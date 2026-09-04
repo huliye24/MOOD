@@ -50,13 +50,17 @@ MOOD 的中英文核心词义与不可混淆边界位于 [`docs/lexicon/`](lexic
                            (Protocol Object → Identity Signature)
                            Spec: docs/protocol/identity-layer.md — ACCEPTED
 
-In design:
 2026-09-04    Alpha 002-A  Cryptographic Identity Design
                            (trust model before implementation)
-                           Spec: docs/protocol/identity-cryptography.md
+                           Spec: docs/protocol/identity-cryptography.md — ACCEPTED
+
+2026-09-04    Alpha 002-B  Identity Runtime Implementation
+                           (@mood/identity — node identity, key management,
+                            signature & verification; Alpha 001 unchanged)
+                           Runtime: docs/protocol/identity-runtime.md
 
 Future:
-              Alpha 002-B  Implementation
+              Alpha 002-C  Object Signature Integration
               Alpha 003    Object Synchronization
 ```
 
@@ -65,9 +69,12 @@ Future:
 - [MOOD Protocol Identity Layer Specification Alpha 002](protocol/identity-layer.md) — *specification accepted, not implemented*
 - [Alpha 002 Roadmap](history/alpha-002-roadmap.md) — milestones toward implementation
 - [ADR-002: Introduce Identity Layer in Alpha 002](decisions/ADR-002-identity-layer.md) — *Proposed*
-- [MOOD Protocol Alpha 002-A — Cryptographic Identity Design Specification](protocol/identity-cryptography.md) — *design phase, nothing implemented*
+- [MOOD Protocol Alpha 002-A — Cryptographic Identity Design Specification](protocol/identity-cryptography.md) — *design accepted, nothing implemented by 002-A itself*
 - [Alpha 002-A Roadmap](history/alpha-002-a-roadmap.md) — algorithm review → security review
 - [ADR-003: Cryptographic Identity Design](decisions/ADR-003-cryptographic-identity-design.md) — *Proposed*
+- [MOOD Protocol Alpha 002-B — Identity Runtime Implementation](protocol/identity-runtime.md) — *the implemented identity runtime*
+- [ADR-004: Identity Algorithm Selection](decisions/ADR-004-identity-algorithm-selection.md) — *Accepted: Ed25519*
+- [Alpha 002-B Implementation Plan](history/ALPHA002B_IMPLEMENTATION_PLAN.md) — audit + scope + security considerations
 
 Alpha 002+ 的规划接口见
 [`docs/protocol/protocol-object.md`](protocol/protocol-object.md) 的
