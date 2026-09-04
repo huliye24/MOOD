@@ -58,6 +58,13 @@ Alpha 002+ 的规划接口见
 [`docs/protocol/protocol-object.md`](protocol/protocol-object.md) 的
 Alpha Evolution 章节。
 
+## Protocol History
+
+协议历史与未来演进路线图：
+
+- [MOOD Protocol History](history/MOOD_PROTOCOL_HISTORY.md) — Origin 与已固化的协议里程碑
+- [MOOD Protocol Roadmap](history/MOOD_PROTOCOL_ROADMAP.md) — Alpha 002 → Alpha 004 演进方向
+
 ## Website
 
 The website is the presentation layer. It renders Canon; it does not author Canon.
