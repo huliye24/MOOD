@@ -46,13 +46,20 @@ MOOD 的中英文核心词义与不可混淆边界位于 [`docs/lexicon/`](lexic
                            (application layer → protocol layer)
                            Milestone: docs/history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md
 
+In specification:
+2026-09-04    Alpha 002    Identity Layer
+                           (Protocol Object → Identity Signature)
+                           Spec: docs/protocol/identity-layer.md
+
 Future:
-              Alpha 002    Identity Signature
               Alpha 003    Object Synchronization
 ```
 
 - [Protocol Object Alpha 001 — Repository Audit](history/protocol-object-alpha-001-audit.md)
 - [MOOD Protocol Milestone Alpha 001](history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md)
+- [MOOD Protocol Identity Layer Specification Alpha 002](protocol/identity-layer.md) — *specification only, not implemented*
+- [Alpha 002 Roadmap](history/alpha-002-roadmap.md) — milestones toward implementation
+- [ADR-002: Introduce Identity Layer in Alpha 002](decisions/ADR-002-identity-layer.md) — *Proposed*
 
 Alpha 002+ 的规划接口见
 [`docs/protocol/protocol-object.md`](protocol/protocol-object.md) 的
