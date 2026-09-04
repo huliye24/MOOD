@@ -1,375 +1,167 @@
 # MOOD
 
-## A Contribution-Driven Network Civilization
+**A Contribution-Driven Network Civilization**
 
 > MOODISM coordinates human creativity, machine intelligence, and digital
 > resources through open protocols.
 
-**Current phase:** Phase Zero — Worldbuilding
-
-**Canonical authority:** [`MOOD_CANON.md`](MOOD_CANON.md)
-
-**Protocol and economy status:** Foundational / Draft unless supported by
-explicit evidence
-
 ---
-
-## Repository Structure v0.1
-
-```
-MOOD/
-├── protocol/           # Protocol specifications
-│   ├── architecture/
-│   ├── specification/
-│   ├── state-machine/
-│   └── economics/
-├── contracts/          # Smart contracts
-│   ├── registry/
-│   ├── proof/
-│   └── reputation/
-├── backend/           # Backend services
-│   ├── api/
-│   ├── database/
-│   └── services/
-├── frontend/          # User interfaces
-│   ├── explorer/
-│   └── portal/
-├── proof-engine/      # Contribution verification
-│   ├── verifier/
-│   ├── schemas/
-│   └── tests/
-├── reputation-engine/ # Reputation calculation
-│   ├── scoring/
-│   ├── rules/
-│   └── tests/
-├── genesis/           # Genesis state
-├── docs/              # Documentation
-│   ├── whitepaper/
-│   ├── manifesto/
-│   └── research/
-├── scripts/           # Utility scripts
-└── tests/             # Integration tests
-```
-
----
-
-## Quick Links
-
-| Layer | Location | Purpose |
-|-------|----------|---------|
-| Protocol | `protocol/` | Rule specifications |
-| Contracts | `contracts/` | Blockchain implementation |
-| Backend | `backend/` | Server-side logic |
-| Frontend | `frontend/` | User interfaces |
-| Docs | `docs/` | Human-readable docs |
-
----
-
-## AI Agent Rules
-
-See [`AGENTS.md`](AGENTS.md) for repository AI behavior rules.
-
-------------------------------------------------------------------------
 
 ## What is MOOD?
 
-MOOD is the independent project and open coordination world through which the
-MOODISM vision is explored.
-
-MOODISM is the civilizational philosophy: a contribution-driven vision of
-network society.
-
-MOOD Protocol is the institutional and technical layer that may translate
-stable concepts into explicit rules for identity, contribution, proof,
-reputation, rights, responsibility, coordination, governance, and settlement.
-
-Any token or economic instrument remains downstream of the world, the Canon,
-and the protocol. It cannot substitute for real contribution.
-
-MOOD is not a company.
-
-MOOD is not a platform.
-
-MOOD is an open world and network in formation.
-
-------------------------------------------------------------------------
-
-## The Problem
-
-The traditional innovation model was built around companies.
-
-    Talent
-       ↓
-    Company
-       ↓
-    Employment
-       ↓
-    Product
-       ↓
-    Equity
-
-This model created enormous technological progress.
-
-However, in the AI era, innovation is becoming faster, more distributed,
-more individual, and more autonomous.
-
-A single person with AI agents can now create what previously required a
-large organization.
-
-The old company-centric model is no longer the only way to organize
-human creativity.
-
-------------------------------------------------------------------------
-
-## The Vision
-
-MOOD imagines a new innovation structure:
-
-    Builder
-    Researcher
-    Creator
-    AI Agent
-    Compute
-    Capital
-    
-            ↓
-    
-         MOOD Network
-    
-            ↓
-    
-    Contribution
-    Proof
-    Reputation
-    Rights & Responsibility
-    Coordination
-
-Instead of asking:
-
-> "Which company do you work for?"
-
-MOOD asks:
-
-> "What value do you contribute?"
-
-------------------------------------------------------------------------
-
-# Digital Silicon Valley
-
-Silicon Valley was never only about geography.
-
-Its true value came from:
-
--   talent networks
--   open collaboration
--   entrepreneurship
--   capital flow
--   knowledge exchange
-
-MOOD aims to transform this invisible system into an open digital
-network.
-
-A Silicon Valley without borders.
-
-A place where anyone can participate.
-
-------------------------------------------------------------------------
-
-# Beyond Companies
-
-Traditional organizations:
-
-    Company
-        |
-    Employees
-        |
-    Products
-
-MOOD:
-
-    Network
-        |
-    Contributors
-        |
-    Projects
-        |
-    Value Creation
-
-Companies can participate.
-
-Individuals can participate.
-
-AI Agents can participate.
-
-The network becomes the coordination layer.
-
-------------------------------------------------------------------------
-
-# The MOOD Principles
-
-## 1. Contribution over Position
-
-Value should come from what you create, not your title.
-
-## 2. Network over Hierarchy
-
-Innovation should emerge from collaboration, not only from centralized
-organizations.
-
-## 3. Open Participation
-
-Anyone who contributes can become part of the network.
-
-## 4. Reputation over Resume
-
-Future credibility will come from demonstrated contribution.
-
-## 5. AI-Native Organization
-
-MOOD is designed for a world where humans and AI agents collaborate.
-
-------------------------------------------------------------------------
-
-# Architecture
-
-                     MOOD
-    
-            Culture & Consensus
-    
-                    ↓
-    
-              Protocol Layer
-    
-                    ↓
-    
-         Contribution / Reputation
-    
-                    ↓
-    
-           AI Builders & Agents
-    
-                    ↓
-    
-            Applications & Projects
-
-------------------------------------------------------------------------
-
-# Ecosystem
-
-MOOD provides an environment for:
-
-## AI Builders
-
-Develop AI products and infrastructure.
-
-## Researchers
-
-Share discoveries and experiments.
-
-## Creators
-
-Create new forms of digital value.
-
-## AI Agents
-
-Participate as autonomous contributors.
-
-## Communities
-
-Organize around shared missions.
-
-------------------------------------------------------------------------
-
-# First Native Project
-
-## Moodify
-
-Moodify is the first application exploring AI-native creativity.
-
-It focuses on building intelligent systems for understanding and
-creating with sound.
-
-Moodify is part of the MOOD ecosystem.
-
-MOOD is larger than Moodify.
-
-------------------------------------------------------------------------
-
-# Roadmap
-
-## Genesis Phase
-
-Building the foundation:
-
--   Open documentation
--   Protocol design
--   GitHub infrastructure
--   Community foundation
--   Initial contributors
-
-------------------------------------------------------------------------
-
-## Network Phase
-
-Expanding:
-
--   AI builders
--   Agents
--   Research groups
--   Applications
--   Nodes
-
-------------------------------------------------------------------------
-
-## Ecosystem Phase
-
-Creating:
-
--   Open innovation economy
--   Contribution systems
--   Governance
--   Global collaboration
-
-------------------------------------------------------------------------
-
-# Join MOOD
+MOOD is an **open coordination protocol** and **digital world** for human and machine agency.
+
+- **Not a product** — It's a protocol
+- **Not a token** — Value comes from contribution
+- **Not a website** — The website is an entrance to the world
+- **Not Moodify** — MOOD is the independent project
+
+**Current phase:** Phase Zero — Worldbuilding
+
+---
+
+## Quick Entry Points
+
+### For Humans
+
+| Resource | Purpose |
+|----------|---------|
+| [`MOOD_CANON.md`](MOOD_CANON.md) | What MOOD is (read this first) |
+| [`docs/manifesto/`](docs/manifesto/) | MOODISM philosophy |
+| [`docs/world/`](docs/world/) | World layer documents |
+
+### For AI Agents
+
+| Resource | Purpose |
+|----------|---------|
+| [`.ai/START_HERE.md`](.ai/START_HERE.md) | **AI entry point (start here)** |
+| [`AGENTS.md`](AGENTS.md) | AI behavior rules |
+| [`.ai/COGNITIVE_MAP.md`](.ai/COGNITIVE_MAP.md) | Current world model |
+
+### For Developers
+
+| Resource | Purpose |
+|----------|---------|
+| [`docs/protocol/`](docs/protocol/) | Protocol specifications |
+| [`docs/decisions/`](docs/decisions/) | Architecture decisions (ADRs) |
+| [`packages/`](packages/) | Protocol implementations |
+
+---
+
+## Protocol Status
+
+```
+Alpha 001: Protocol Object     [FROZEN]
+Alpha 002: Identity Layer      [ACCEPTED]
+Alpha 002-A: Crypto Design     [ACCEPTED]
+Alpha 002-B: Implementation   [PLANNING]
+Alpha 003: Synchronization     [FUTURE]
+Alpha 004: State Machine       [FUTURE]
+```
+
+See [`.ai/STATUS.md`](.ai/STATUS.md) for full status.
+
+---
+
+## Three-Layer Principle
+
+```
+Canon (defines truth)
+    ↓
+AGENTS (defines behavior)
+    ↓
+Cognitive Map (defines current state)
+    ↓
+Code (implements)
+```
+
+**Code has no automatic authority over Canon.**
+
+---
+
+## Key Documents
+
+| Document | Authority | Status |
+|----------|-----------|--------|
+| `MOOD_CANON.md` | Highest | Authoritative |
+| `AGENTS.md` | High | Authoritative |
+| `MOOD_AI_COGNITIVE_MAP.md` | Navigation | Living |
+| `docs/decisions/ADR-001-alpha001-freeze.md` | ADR | Accepted |
+| `docs/decisions/ADR-004-identity-algorithm-selection.md` | ADR | Accepted |
+
+---
+
+## Repository Structure
+
+```
+MOOD/
+├── .ai/                    # AI Navigation Layer
+│   ├── START_HERE.md      # AI entry point
+│   ├── COGNITIVE_MAP.md   # World model
+│   ├── PROJECT_STATE.md   # Current milestone
+│   ├── ARCHITECTURE_INDEX.md
+│   ├── FILE_INDEX.md
+│   ├── DECISION_INDEX.md
+│   ├── STATUS.md
+│   └── AI_RULES.md
+├── MOOD_CANON.md           # Highest authority
+├── AGENTS.md               # AI behavior rules
+├── MOOD_AI_COGNITIVE_MAP.md  # Cognitive state
+├── docs/
+│   ├── decisions/          # ADRs
+│   ├── protocol/           # Protocol specs
+│   ├── manifesto/          # MOODISM
+│   └── world/             # World layer
+├── packages/
+│   ├── protocol-object/    # FROZEN
+│   ├── contribution-proof/ # FROZEN
+│   └── identity/          # PLANNING
+└── apps/
+    ├── mood-cli/           # CLI tool
+    └── web/                # Website
+```
+
+---
+
+## Not Implemented
+
+The following **do not exist**:
+
+- [ ] Governance system
+- [ ] Reputation system
+- [ ] Token or economy
+- [ ] P2P networking
+- [ ] Consensus mechanism
+- [ ] Treasury or rewards
+
+**Do not claim these are active.**
+
+---
+
+## Documentation Map
+
+| Layer | Location | Canon basis |
+|-------|----------|-------------|
+| World | `docs/world/` | §6.1 |
+| Manifesto | `docs/manifesto/` | §6.3 |
+| Canon | `docs/constitution/` | §6.2 |
+| Protocol | `docs/protocol/` | §6.4 |
+| History | `docs/history/` | Archive |
+
+---
+
+## Contributing
 
 MOOD is built by contributors.
 
-You can participate as:
+Read [`MOOD_CANON.md`](MOOD_CANON.md) first, then follow [`AGENTS.md`](AGENTS.md).
 
--   Developer
--   Researcher
--   Creator
--   Builder
--   Community member
+**Principle:** Meaning before mechanism. Canon before code.
 
-The future will not be built by companies alone.
+---
 
-It will be built by networks.
+## MOOD
 
-------------------------------------------------------------------------
-
-# Documentation
-
-The MOOD world is documented through Markdown under `docs/`.
-
-| Layer | Location | Canon basis |
-|---|---|---|
-| World | `docs/manifesto/`, `docs/network/` | §6.1 / §6.3 |
-| Constitution | `docs/constitution/` | §6.2 |
-| Protocol & Architecture | `docs/architecture/` | §6.4 |
-| Economy & Settlement | `docs/blockchain/` | §6.5 |
-
-> The website is an entrance into these documents — not the world itself
-> (`MOOD_CANON.md` §7).
-
-------------------------------------------------------------------------
-
-# MOOD
-
-## Build Beyond Companies.
-
-## Create Beyond Borders.
-
-## The Innovation Network for the AI Era.
+**Build Beyond Companies.**
+**Create Beyond Borders.**
+**The Innovation Network for the AI Era.**
