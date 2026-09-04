@@ -46,20 +46,28 @@ MOOD 的中英文核心词义与不可混淆边界位于 [`docs/lexicon/`](lexic
                            (application layer → protocol layer)
                            Milestone: docs/history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md
 
-In specification:
 2026-09-04    Alpha 002    Identity Layer
                            (Protocol Object → Identity Signature)
-                           Spec: docs/protocol/identity-layer.md
+                           Spec: docs/protocol/identity-layer.md — ACCEPTED
+
+In design:
+2026-09-04    Alpha 002-A  Cryptographic Identity Design
+                           (trust model before implementation)
+                           Spec: docs/protocol/identity-cryptography.md
 
 Future:
+              Alpha 002-B  Implementation
               Alpha 003    Object Synchronization
 ```
 
 - [Protocol Object Alpha 001 — Repository Audit](history/protocol-object-alpha-001-audit.md)
 - [MOOD Protocol Milestone Alpha 001](history/MOOD_PROTOCOL_MILESTONE_ALPHA_001.md)
-- [MOOD Protocol Identity Layer Specification Alpha 002](protocol/identity-layer.md) — *specification only, not implemented*
+- [MOOD Protocol Identity Layer Specification Alpha 002](protocol/identity-layer.md) — *specification accepted, not implemented*
 - [Alpha 002 Roadmap](history/alpha-002-roadmap.md) — milestones toward implementation
 - [ADR-002: Introduce Identity Layer in Alpha 002](decisions/ADR-002-identity-layer.md) — *Proposed*
+- [MOOD Protocol Alpha 002-A — Cryptographic Identity Design Specification](protocol/identity-cryptography.md) — *design phase, nothing implemented*
+- [Alpha 002-A Roadmap](history/alpha-002-a-roadmap.md) — algorithm review → security review
+- [ADR-003: Cryptographic Identity Design](decisions/ADR-003-cryptographic-identity-design.md) — *Proposed*
 
 Alpha 002+ 的规划接口见
 [`docs/protocol/protocol-object.md`](protocol/protocol-object.md) 的
