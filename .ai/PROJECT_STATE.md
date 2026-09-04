@@ -6,13 +6,13 @@
 
 ## Current Milestone
 
-**MOOD Protocol Alpha 002-B** — Identity Runtime Implementation (Planning)
+**MOOD Protocol Alpha 002-C** — Object Signature Integration (Planning)
 
 The protocol has completed:
 - Alpha 001 (Protocol Object) — FROZEN
 - Alpha 002 (Identity Layer spec) — ACCEPTED
 - Alpha 002-A (Crypto Design) — ACCEPTED
-- Alpha 002-B (Implementation) — PLANNING, not started
+- Alpha 002-B (Identity Runtime) — **FROZEN**
 
 ---
 
@@ -44,10 +44,19 @@ The protocol has completed:
 - **Authority:** ADR-003
 
 ### Alpha 002-B: Identity Runtime Implementation
-- **Status:** PLANNING
-- **Algorithm:** Ed25519 (ADR-004)
-- **Implementation:** Not started
-- **Authority:** ADR-004
+- **Status:** **FROZEN** (2026-09-04)
+- **Authority:** ADR-005
+- **Frozen components:**
+  - `packages/identity/` — Identity package
+  - `apps/mood-cli/src/commands/identity.js` — CLI
+  - `services/node-api/src/routes/identity.js` — API
+- **Capabilities frozen:**
+  - Ed25519 identity generation
+  - Local private key storage
+  - Public identity export
+  - Object hash signing
+  - Signature verification
+- **Test results:** 26/26 identity tests passing
 
 ---
 
@@ -59,7 +68,11 @@ These components **must not be modified** without an ADR:
 |-----------|----------|--------|
 | Protocol Object | `packages/protocol-object/` | FROZEN |
 | Contribution Proof | `packages/contribution-proof/` | FROZEN |
+| Identity Package | `packages/identity/` | **FROZEN (Alpha 002-B)** |
+| Identity CLI | `apps/mood-cli/src/commands/identity.js` | **FROZEN (Alpha 002-B)** |
+| Identity API | `services/node-api/src/routes/identity.js` | **FROZEN (Alpha 002-B)** |
 | Alpha 001 Archive | `docs/history/alpha-001/` | FROZEN |
+| Alpha 002-B Archive | `docs/history/alpha-002-b/` | **FROZEN** |
 
 ---
 
@@ -73,7 +86,7 @@ The following are **NOT decided** and remain open:
 - **Multi-device identity** — one node across multiple devices
 
 ### Identity Integration
-- **Alpha 002-C** — Object Signature Integration (not designed)
+- **Alpha 002-C** — Object Signature Integration (planning)
 - **Identity ↔ Reputation** — interaction not designed (Alpha 004 concern)
 
 ### Network
@@ -102,13 +115,13 @@ The following features are **NOT implemented**:
 ## What to Work On
 
 ### Active Development
-- **Alpha 002-B implementation** — Identity runtime with Ed25519
-  - Key generation and storage
-  - Signing and verification
-  - Node ID derivation
+- **Alpha 002-C** — Object Signature Integration (next)
+  - Sign Protocol Objects at creation
+  - Verify signature chain on load
+  - Integration only (signature format is frozen in Alpha 002-B)
 
 ### Planning
-- Alpha 002-C integration design
+- Alpha 003 synchronization design
 
 ### Research
 - Key rotation mechanisms
@@ -136,10 +149,18 @@ Required for acceptance:
 2026-09-03: Alpha 001 FROZEN
 2026-09-04: Alpha 002 ACCEPTED
 2026-09-04: Alpha 002-A ACCEPTED
-2026-09-04: Alpha 002-B PLANNING
+2026-09-04: Alpha 002-B IMPLEMENTED (commit 0af6f83)
+2026-09-04: Alpha 002-B FROZEN (ADR-005)
 ```
 
-The protocol is in early stages. Focus is on:
-1. Stable identity model
-2. Minimal, correct implementation
-3. Documentation over features
+The protocol is now built on:
+
+```
+Object (Alpha 001)
+    +
+Identity (Alpha 002-B)
+    =
+Cryptographic Protocol Foundation
+```
+
+Next: Alpha 002-C — Object Signature Integration

@@ -54,7 +54,8 @@ MOOD is an **open coordination protocol** and **digital world** for human and ma
 Alpha 001: Protocol Object     [FROZEN]
 Alpha 002: Identity Layer      [ACCEPTED]
 Alpha 002-A: Crypto Design     [ACCEPTED]
-Alpha 002-B: Implementation   [PLANNING]
+Alpha 002-B: Identity Runtime  [FROZEN]
+Alpha 002-C: Object Sig Int   [PLANNING]
 Alpha 003: Synchronization     [FUTURE]
 Alpha 004: State Machine       [FUTURE]
 ```

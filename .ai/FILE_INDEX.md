@@ -51,6 +51,7 @@
 | `docs/decisions/ADR-003-cryptographic-identity-design.md` | Crypto design | ADR-003 | Accepted |
 | `docs/decisions/ADR-004-identity-algorithm-selection.md` | Ed25519 selection | ADR-004 | Accepted |
 | `docs/decisions/ADR-005-cognitive-map.md` | AI navigation layer | — | Accepted |
+| `docs/decisions/ADR-005-alpha002b-freeze.md` | Alpha 002-B freeze | ADR-005 | **Accepted** |
 
 ---
 
@@ -62,6 +63,7 @@
 | `docs/history/MOOD_PROTOCOL_ROADMAP.md` | Future roadmap | — | Reference |
 | `docs/history/alpha-001/` | Alpha 001 archive | ADR-001 | Frozen |
 | `docs/history/alpha-002-a/` | Alpha 002-A archive | ADR-003 | Accepted |
+| `docs/history/alpha-002-b/` | Alpha 002-B archive | ADR-005 | **Frozen** |
 | `docs/history/ALPHA002B_IMPLEMENTATION_PLAN.md` | Alpha 002-B plan | — | Planning |
 
 ---
@@ -92,7 +94,7 @@
 |------|---------|----------|--------|
 | `packages/protocol-object/` | Object layer | ADR-001 | **FROZEN** |
 | `packages/contribution-proof/` | Hash engine | ADR-001 | **FROZEN** |
-| `packages/identity/` | Identity runtime | ADR-004 | **PLANNING** |
+| `packages/identity/` | Identity runtime | ADR-005 | **FROZEN** |
 | `packages/mood-connector/` | AI Agent connector | — | Active |
 | `packages/node-runtime/` | Node runtime | — | Active |
 

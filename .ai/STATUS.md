@@ -40,16 +40,21 @@
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Alpha 002-B: Identity Runtime                    [PLANNING] │
+│ Alpha 002-B: Identity Runtime                     [FROZEN] │
 │ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
-│ Spec: docs/protocol/identity-runtime.md                     │
+│ Date: 2026-09-04                                           │
+│ Commit: 0af6f83                                             │
 │ Algorithm: Ed25519 (ADR-004)                                │
-│ Status: Implementation not started                          │
-│ Packages: packages/identity/                                │
+│ Package: packages/identity/                                 │
+│ Authority: ADR-005                                          │
+│ Status: Frozen as immutable protocol history                │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
-│ Alpha 002-C: Object Signature Integration           [FUTURE]│
+│ Alpha 002-C: Object Signature Integration        [PLANNING]│
+│ ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━  │
+│ Scope: Sign Protocol Objects, verify signature chain         │
+│ Note: Integration only — signature format frozen in 002-B  │
 └─────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────┐
@@ -71,7 +76,9 @@
 |-----------|----------|-------------|-----------|
 | Protocol Object | `packages/protocol-object/` | 2026-09-03 | ADR-001 |
 | Contribution Proof | `packages/contribution-proof/` | 2026-09-03 | ADR-001 |
+| Identity Package | `packages/identity/` | 2026-09-04 | **ADR-005** |
 | Alpha 001 Archive | `docs/history/alpha-001/` | 2026-09-03 | ADR-001 |
+| Alpha 002-B Archive | `docs/history/alpha-002-b/` | 2026-09-04 | **ADR-005** |
 
 **Warning:** Modifying frozen components requires an ADR.
 
@@ -79,7 +86,6 @@
 
 | Component | Location | Status | Next Milestone |
 |-----------|----------|--------|----------------|
-| Identity Runtime | `packages/identity/` | PLANNING | Alpha 002-B Acceptance |
 | MOOD CLI | `apps/mood-cli/` | Active | Alpha 001 surface |
 | Node API | `services/node-api/` | Active | Alpha 001 surface |
 
@@ -113,7 +119,8 @@
 | Identity Layer Spec | ADR-002 | ✓ Accepted | 2026-09-04 |
 | Crypto Design | ADR-003 | ✓ Accepted | 2026-09-04 |
 | Algorithm Selection | ADR-004 | ✓ Accepted | 2026-09-04 |
-| AI Navigation Layer | ADR-005 | ✓ Accepted | 2026-09-04 |
+| AI Navigation Layer | (see .ai/) | ✓ Accepted | 2026-09-04 |
+| **Alpha 002-B Freeze** | **ADR-005** | **✓ Accepted** | **2026-09-04** |
 
 ---
 
@@ -132,7 +139,7 @@
 |----------|--------|--------|
 | Multi-device identity | OPEN | Medium |
 | Identity ↔ Reputation | OPEN | Medium |
-| Alpha 002-C design | OPEN | Medium |
+| **Alpha 002-C design** | **PLANNING** | **Medium** |
 
 ### Low Impact (Research)
 

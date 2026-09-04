@@ -210,6 +210,51 @@ Updated only after:
 
 ---
 
+## ADR-005-alpha002b: Freeze Alpha 002-B Identity Runtime
+
+**Status:** Accepted
+**Date:** 2026-09-04
+**Note:** This is a parallel ADR-005 (the AI Navigation Layer ADR also uses filename ADR-005-cognitive-map.md in `docs/decisions/`). The freeze decision is documented at `docs/decisions/ADR-005-alpha002b-freeze.md`.
+
+### Decision
+Freeze the Alpha 002-B Identity Runtime as immutable protocol history.
+
+### Reason
+The identity runtime has been:
+- Implemented (commit `0af6f83`)
+- Accepted (WorkBuddy independent verification)
+- Validated (26/26 identity tests passing)
+- Secured (no private key leakage)
+
+### Frozen Surface
+
+| Component | Location |
+|-----------|----------|
+| Identity package | `packages/identity/` |
+| Identity CLI | `apps/mood-cli/src/commands/identity.js` |
+| Identity API | `services/node-api/src/routes/identity.js` |
+| Identity spec | `docs/protocol/identity-runtime.md` |
+| Implementation report | `docs/history/MOOD_ALPHA002B_IMPLEMENTATION_REPORT.md` |
+| Acceptance report | `docs/history/alpha-002-b/MOOD_ALPHA002B_IDENTITY_RUNTIME_ACCEPTANCE.md` |
+
+### Consequences
+**Positive:**
+- Stable identity reference
+- Reproducible implementation
+- Future compatibility for Alpha 002-C+
+
+**Negative:**
+- Bug fixes require new ADR
+- Future changes require new protocol versions
+
+### Forbidden Actions (Without New ADR)
+- Modifying `packages/identity/src/` (except tests)
+- Changing identity CLI/API interface
+- Changing signature format
+- Changing key derivation algorithm
+
+---
+
 ## Pending Decisions
 
 ### Key Rotation
@@ -254,7 +299,8 @@ None currently.
 | ADR-002 | Identity Layer | ✓ Accepted | 2026-09-04 |
 | ADR-003 | Crypto Design | ✓ Accepted | 2026-09-04 |
 | ADR-004 | Algorithm Selection | ✓ Accepted | 2026-09-04 |
-| ADR-005 | AI Navigation Layer | ✓ Accepted | 2026-09-04 |
+| ADR-005-cognitive-map | AI Navigation Layer | ✓ Accepted | 2026-09-04 |
+| ADR-005-alpha002b-freeze | Alpha 002-B Freeze | ✓ Accepted | 2026-09-04 |
 | — | Key Rotation | OPEN | — |
 | — | Key Recovery | OPEN | — |
 | — | Multi-Device Identity | OPEN | — |

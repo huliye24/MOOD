@@ -57,15 +57,19 @@ Phase Zero — Worldbuilding (CURRENT)
     ├─→ Alpha 002-A: Crypto Design      [ACCEPTED]
     │       └── Key model, threat model, lifecycle
     │
-    ├─→ Alpha 002-B: Implementation    [PLANNING]
+    ├─→ Alpha 002-B: Implementation    [FROZEN]
     │       └── Ed25519, key management, signing
     │
-    ├─→ Alpha 002-C: Object Sig Int    [FUTURE]
+    ├─→ Alpha 002-C: Object Sig Int    [PLANNING]
     │
     ├─→ Alpha 003: Synchronization      [FUTURE]
     │
     └─→ Alpha 004: State Machine        [FUTURE]
 ```
+
+## Frozen Surface (Protocol Object)
+
+The Protocol Object (Alpha 001) is frozen. Future changes require new alpha versions.
 
 ---
 
@@ -77,6 +81,7 @@ Phase Zero — Worldbuilding (CURRENT)
 | ADR-002 | Alpha 002 Identity Layer Specification | Accepted |
 | ADR-003 | Alpha 002-A Cryptographic Design | Accepted |
 | ADR-004 | Ed25519 Algorithm Selection | Accepted |
+| ADR-005 | Alpha 002-B Identity Runtime Freeze | Accepted |
 
 ---
 
