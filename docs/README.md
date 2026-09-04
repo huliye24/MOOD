@@ -65,6 +65,14 @@ Alpha Evolution 章节。
 - [MOOD Protocol History](history/MOOD_PROTOCOL_HISTORY.md) — Origin 与已固化的协议里程碑
 - [MOOD Protocol Roadmap](history/MOOD_PROTOCOL_ROADMAP.md) — Alpha 002 → Alpha 004 演进方向
 
+## Protocol Archives
+
+已冻结的协议版本归档位于 [`docs/history/alpha-001/`](history/alpha-001/)：
+
+- [Alpha 001 Archive](history/alpha-001/README.md) — FROZEN 2026-09-03
+- [Alpha 001 Acceptance](history/alpha-001/acceptance.md)
+- [Alpha 001 Decisions](decisions/ADR-001-alpha001-freeze.md)
+
 ## Website
 
 The website is the presentation layer. It renders Canon; it does not author Canon.
