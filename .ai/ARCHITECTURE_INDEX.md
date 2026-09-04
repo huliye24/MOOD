@@ -58,11 +58,21 @@ Layer 4: Economy/Governance (Future)
 **Purpose:** Execute the defined rules.
 
 **Packages:**
-| Package | Purpose | Status |
-|---------|---------|--------|
-| `packages/protocol-object/` | Object envelope, serialization, validation | FROZEN |
-| `packages/contribution-proof/` | Hash engine, canonicalization | FROZEN |
-| `packages/identity/` | Key management, signing, verification | PLANNING |
+| Package | Purpose | Status | Authority |
+|---------|---------|--------|-----------|
+| `packages/protocol-object/` | Object envelope, serialization, validation | FROZEN | ADR-001 |
+| `packages/contribution-proof/` | Hash engine, canonicalization | FROZEN | ADR-001 |
+| `packages/identity/` | Key management, signing, verification | **FROZEN** | **ADR-005** |
+
+**Identity Runtime Layer (Alpha 002-B):**
+The identity runtime is the second implementation layer added to MOOD.
+It provides:
+- Identity derivation (`hash(public key)` → Node ID)
+- Key lifecycle management
+- Ed25519 signing
+- Signature verification
+
+Frozen as immutable protocol history (ADR-005). Future identity concerns (key rotation, recovery, multi-device) must be designed as new alpha versions, not modifications.
 
 **Rule:** Code has no automatic authority over specification.
 

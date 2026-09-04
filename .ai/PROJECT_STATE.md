@@ -132,14 +132,17 @@ The following features are **NOT implemented**:
 
 ## Next Milestone
 
-**Alpha 002-B Acceptance Gate**
+**Alpha 002-C — Object Signature Integration**
 
 Required for acceptance:
-1. All tests passing
-2. Key generation working
-3. Signing/verification working
-4. Node ID derivation matching spec
+1. Sign Protocol Objects at creation (using frozen identity package)
+2. Attach signature to object envelope
+3. Verify signature chain on object load
+4. Update tests
 5. Documentation updated
+
+**Note:** Alpha 002-C is **integration only**.
+The signature format is already frozen in Alpha 002-B (ADR-005).
 
 ---
 

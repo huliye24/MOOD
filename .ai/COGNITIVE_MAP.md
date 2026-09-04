@@ -57,10 +57,15 @@ Phase Zero — Worldbuilding (CURRENT)
     ├─→ Alpha 002-A: Crypto Design      [ACCEPTED]
     │       └── Key model, threat model, lifecycle
     │
-    ├─→ Alpha 002-B: Implementation    [FROZEN]
-    │       └── Ed25519, key management, signing
+    ├─→ Alpha 002-B: Identity Runtime     [ACCEPTED + FROZEN]
+    │       └── Ed25519, key management, signing (ADR-004)
+    │       └── Frozen as immutable protocol history
+    │       └── Authority: ADR-005-alpha002b-freeze
     │
-    ├─→ Alpha 002-C: Object Sig Int    [PLANNING]
+    ├─→ Alpha 002-C: Object Signature Int  [NEXT]
+    │       └── Sign Protocol Objects at creation
+    │       └── Verify signature chain on object load
+    │       └── Integration only — signature format frozen in 002-B
     │
     ├─→ Alpha 003: Synchronization      [FUTURE]
     │

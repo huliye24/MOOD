@@ -37,7 +37,7 @@
 | `docs/protocol/identity-cryptography.md` | Crypto design | ADR-003 | Accepted |
 | `docs/protocol/contribution-proof.md` | Proof verification | ADR-001 | Frozen |
 | `docs/protocol/protocol-object.md` | Object structure | ADR-001 | Frozen |
-| `docs/protocol/identity-runtime.md` | Runtime implementation | ADR-004 | Planning |
+| `docs/protocol/identity-runtime.md` | Runtime implementation spec | ADR-005 | **Frozen** |
 | `docs/protocol/README.md` | Protocol docs index | — | Reference |
 
 ---
@@ -64,7 +64,7 @@
 | `docs/history/alpha-001/` | Alpha 001 archive | ADR-001 | Frozen |
 | `docs/history/alpha-002-a/` | Alpha 002-A archive | ADR-003 | Accepted |
 | `docs/history/alpha-002-b/` | Alpha 002-B archive | ADR-005 | **Frozen** |
-| `docs/history/ALPHA002B_IMPLEMENTATION_PLAN.md` | Alpha 002-B plan | — | Planning |
+| `docs/history/ALPHA002B_IMPLEMENTATION_PLAN.md` | Alpha 002-B plan (superseded) | — | Historical |
 
 ---
 
@@ -97,6 +97,12 @@
 | `packages/identity/` | Identity runtime | ADR-005 | **FROZEN** |
 | `packages/mood-connector/` | AI Agent connector | — | Active |
 | `packages/node-runtime/` | Node runtime | — | Active |
+
+**Identity package provides:**
+- Node identity (`hash(public key)`)
+- Ed25519 key management
+- Object signing
+- Signature verification
 
 ---
 
