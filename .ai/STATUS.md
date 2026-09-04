@@ -55,7 +55,7 @@
 │ Commit: 0af6f83                                             │
 │ Algorithm: Ed25519 (ADR-004)                                │
 │ Package: packages/identity/                                 │
-│ Authority: ADR-005                                          │
+│ Authority: ADR-006                                          │
 │ Status: Frozen as immutable protocol history                │
 └─────────────────────────────────────────────────────────────┘
                             ↓
@@ -85,9 +85,9 @@
 |-----------|----------|-------------|-----------|
 | Protocol Object | `packages/protocol-object/` | 2026-09-03 | ADR-001 |
 | Contribution Proof | `packages/contribution-proof/` | 2026-09-03 | ADR-001 |
-| Identity Package | `packages/identity/` | 2026-09-04 | **ADR-005** |
+| Identity Package | `packages/identity/` | 2026-09-04 | **ADR-006** |
 | Alpha 001 Archive | `docs/history/alpha-001/` | 2026-09-03 | ADR-001 |
-| Alpha 002-B Archive | `docs/history/alpha-002-b/` | 2026-09-04 | **ADR-005** |
+| Alpha 002-B Archive | `docs/history/alpha-002-b/` | 2026-09-04 | **ADR-006** |
 
 **Warning:** Modifying frozen components requires an ADR.
 
@@ -129,7 +129,7 @@
 | Crypto Design | ADR-003 | ✓ Accepted | 2026-09-04 |
 | Algorithm Selection | ADR-004 | ✓ Accepted | 2026-09-04 |
 | AI Navigation Layer | (see .ai/) | ✓ Accepted | 2026-09-04 |
-| **Alpha 002-B Freeze** | **ADR-005** | **✓ Accepted** | **2026-09-04** |
+| **Alpha 002-B Freeze** | **ADR-006** | **✓ Accepted** | **2026-09-04** |
 
 ---
 

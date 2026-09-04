@@ -66,7 +66,7 @@ The current protocol implementation lives in:
 This marker is maintained by the AI Navigation Layer (`.ai/`) and reflects the consensus position of:
 
 - ADR-001 (Protocol Object freeze)
-- ADR-005-alpha002b-freeze (Identity Runtime freeze)
+- ADR-006-alpha002b-freeze (Identity Runtime freeze)
 - `.ai/ARCHITECTURE_INDEX.md` (current layer model)
 
 ---

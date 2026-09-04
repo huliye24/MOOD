@@ -61,7 +61,7 @@ The implementation documented in this archive is **immutable protocol history**.
 | Implementation Report | `docs/history/MOOD_ALPHA002B_IMPLEMENTATION_REPORT.md` |
 | Acceptance Report | `docs/history/alpha-002-b/MOOD_ALPHA002B_IDENTITY_RUNTIME_ACCEPTANCE.md` |
 | Freeze Audit | `docs/engineering-log/alpha-002-b-freeze-audit.md` |
-| ADR-005 | `docs/decisions/ADR-005-alpha002b-freeze.md` |
+| ADR-006 | `docs/decisions/ADR-006-alpha002b-freeze.md` |
 
 ---
 

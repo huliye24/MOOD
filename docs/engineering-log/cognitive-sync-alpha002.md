@@ -43,9 +43,11 @@ docs/history/alpha-002-b/MOOD_ALPHA002B_IDENTITY_RUNTIME_ACCEPTANCE.md
 
 **Freeze Decision:**
 ```
-ADR-005-alpha002b-freeze.md
+ADR-006-alpha002b-freeze.md
 Commit: 213a5f1
 ```
+
+**Note:** The freeze decision was originally filed as ADR-005-alpha002b-freeze.md, but a numbering collision with ADR-005-cognitive-map.md required renumbering in the Documentation Governance Alpha 001 task.
 
 **Test Status:**
 - 26/26 identity tests passing

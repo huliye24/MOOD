@@ -82,6 +82,75 @@ When modifying files:
 
 ---
 
+## Documentation Rules
+
+### Rule 7: Never Create an ADR with an Existing Number
+
+ADRs are numbered sequentially. Each number may be used only once.
+
+Before creating an ADR:
+1. Check `.ai/ADR_REGISTRY.md` for next available number
+2. Never reuse a number, even for superseded decisions
+3. Renumbering is allowed to resolve collisions (see Renumbering Rule)
+
+### Rule 8: Always Update ADR Registry After ADR Creation
+
+The ADR registry is the navigation index. Every ADR must be reflected.
+
+When creating/modifying an ADR:
+1. Create/modify file in `docs/decisions/`
+2. Update `.ai/ADR_REGISTRY.md` in the SAME commit
+3. Update `.ai/DECISION_INDEX.md` summary if applicable
+4. Update `.ai/COGNITIVE_MAP.md` and `.ai/STATUS.md` if the decision changes protocol state
+
+### Rule 9: Never Treat Registry as Authority
+
+The registry is a navigation aid, not the source of truth.
+
+```
+ADR document  >  ADR registry
+```
+
+If a registry entry disagrees with an ADR document, the document wins.
+
+### Rule 10: Always Distinguish Document Classes
+
+Different document types have different modification rules:
+
+| Class | Examples | Modification Rule |
+|-------|----------|-------------------|
+| **Canonical** | `MOOD_CANON.md` | Cannot modify. New version only. |
+| **Agent** | `AGENTS.md`, `.ai/` | Controlled, follows change protocol |
+| **Specification** | `docs/protocol/` | Spec change + ADR if protocol-breaking |
+| **Decision** | `docs/decisions/ADR-*.md` | New ADR or supersede |
+| **Architecture** | `protocol/architecture/` | Light review |
+| **Implementation** | `packages/`, `apps/`, `services/` | Code + test + acceptance |
+| **Archive** | `docs/history/`, `docs/engineering-log/` | Append-only |
+| **Reference** | `docs/world/` | Canon-aligned review |
+| **Legacy** | `proof-engine/`, `contracts/`, etc. | Do not extend |
+
+### Rule 11: Never Make Silent Changes
+
+Every meaningful change must be:
+
+1. Recorded as a decision (ADR or spec change)
+2. Reflected in the cognitive layer (`.ai/`)
+3. Traced through the document lifecycle (see `.ai/CHANGE_PROTOCOL.md`)
+
+Silent changes create cognitive debt.
+
+### Rule 12: Always Follow the Lifecycle Loop
+
+After every milestone:
+
+```
+Acceptance → Archive → Cognitive Sync → Registry Update
+```
+
+This loop is the **cognitive debt prevention protocol**.
+
+---
+
 ## Terminology Rules
 
 ### Use These Terms

@@ -9,12 +9,16 @@
 Any AI agent entering this repository must read in this order:
 
 ```
-1. MOOD_CANON.md          ← What is MOOD? (highest authority)
-2. AGENTS.md              ← How must I behave?
-3. .ai/COGNITIVE_MAP.md  ← What is the current world model?
-4. .ai/PROJECT_STATE.md   ← What is the current milestone?
-5. [Authority doc]        ← The document for your specific task
-6. [Implementation]       ← Code, if needed
+1. MOOD_CANON.md            ← What is MOOD? (highest authority)
+2. AGENTS.md                ← How must I behave?
+3. .ai/COGNITIVE_MAP.md     ← What is the current world model?
+4. .ai/PROJECT_STATE.md     ← What is the current milestone?
+5. .ai/ADR_REGISTRY.md      ← Where are decisions recorded?
+6. .ai/DOCUMENT_STATUS.md   ← What are document lifecycle states?
+7. .ai/CHANGE_PROTOCOL.md   ← How do changes flow?
+8. .ai/AI_RULES.md          ← Documentation rules for AI
+9. [Authority doc]          ← The document for your specific task
+10. [Implementation]        ← Code, if needed
 ```
 
 ---

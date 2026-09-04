@@ -1,4 +1,4 @@
-# ADR-005: Freeze Alpha 002-B Identity Runtime
+# ADR-006: Freeze Alpha 002-B Identity Runtime
 
 **Status:** Accepted
 **Date:** 2026-09-04
@@ -123,8 +123,9 @@ docs/protocol
 | ADR-002 (Identity Layer) | Predecessor — defines identity concept |
 | ADR-003 (Crypto Design) | Predecessor — defines key model |
 | ADR-004 (Ed25519 Selection) | Predecessor — defines algorithm |
-| **ADR-005 (Alpha 002-B Freeze)** | **This ADR** — defines executable identity |
-| ADR-006 (Alpha 002-C Plan) | Successor — will build on this freeze |
+| ADR-005 (Cognitive Map) | Sibling — AI navigation layer |
+| **ADR-006 (Alpha 002-B Freeze)** | **This ADR** — defines executable identity |
+| ADR-(future) (Alpha 002-C Plan) | Successor — will build on this freeze |
 
 ---
 

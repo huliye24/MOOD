@@ -210,11 +210,11 @@ Updated only after:
 
 ---
 
-## ADR-005-alpha002b: Freeze Alpha 002-B Identity Runtime
+## ADR-006: Freeze Alpha 002-B Identity Runtime
 
 **Status:** Accepted
 **Date:** 2026-09-04
-**Note:** This is a parallel ADR-005 (the AI Navigation Layer ADR also uses filename ADR-005-cognitive-map.md in `docs/decisions/`). The freeze decision is documented at `docs/decisions/ADR-005-alpha002b-freeze.md`.
+**Note:** Originally created as ADR-005-alpha002b-freeze.md, but a numbering collision with ADR-005-cognitive-map.md required renumbering. The decision content and acceptance are unchanged.
 
 ### Decision
 Freeze the Alpha 002-B Identity Runtime as immutable protocol history.
@@ -226,16 +226,13 @@ The identity runtime has been:
 - Validated (26/26 identity tests passing)
 - Secured (no private key leakage)
 
-### Frozen Surface
+### Scope
+| File | Purpose |
+|------|---------|
+| `docs/decisions/ADR-006-alpha002b-freeze.md` | The actual ADR document (renamed from ADR-005-alpha002b-freeze.md due to collision) |
 
-| Component | Location |
-|-----------|----------|
-| Identity package | `packages/identity/` |
-| Identity CLI | `apps/mood-cli/src/commands/identity.js` |
-| Identity API | `services/node-api/src/routes/identity.js` |
-| Identity spec | `docs/protocol/identity-runtime.md` |
-| Implementation report | `docs/history/MOOD_ALPHA002B_IMPLEMENTATION_REPORT.md` |
-| Acceptance report | `docs/history/alpha-002-b/MOOD_ALPHA002B_IDENTITY_RUNTIME_ACCEPTANCE.md` |
+**Implementation Report:** `docs/history/MOOD_ALPHA002B_IMPLEMENTATION_REPORT.md`
+**Acceptance Report:** `docs/history/alpha-002-b/MOOD_ALPHA002B_IDENTITY_RUNTIME_ACCEPTANCE.md`
 
 ### Consequences
 **Positive:**
@@ -300,7 +297,7 @@ None currently.
 | ADR-003 | Crypto Design | ✓ Accepted | 2026-09-04 |
 | ADR-004 | Algorithm Selection | ✓ Accepted | 2026-09-04 |
 | ADR-005-cognitive-map | AI Navigation Layer | ✓ Accepted | 2026-09-04 |
-| ADR-005-alpha002b-freeze | Alpha 002-B Freeze | ✓ Accepted | 2026-09-04 |
+| ADR-006-alpha002b-freeze | Alpha 002-B Freeze | ✓ Accepted | 2026-09-04 |
 | — | Key Rotation | OPEN | — |
 | — | Key Recovery | OPEN | — |
 | — | Multi-Device Identity | OPEN | — |

@@ -60,7 +60,7 @@ Phase Zero — Worldbuilding (CURRENT)
     ├─→ Alpha 002-B: Identity Runtime     [ACCEPTED + FROZEN]
     │       └── Ed25519, key management, signing (ADR-004)
     │       └── Frozen as immutable protocol history
-    │       └── Authority: ADR-005-alpha002b-freeze
+    │       └── Authority: ADR-006-alpha002b-freeze
     │
     ├─→ Alpha 002-C: Object Signature Int  [NEXT]
     │       └── Sign Protocol Objects at creation
@@ -123,6 +123,49 @@ Verify Object → Canonicalize → Hash → Compare
 - Identity enables attribution only
 - Avoid identity-power solidification
 - No trust in stored `verified` flags
+
+---
+
+## Documentation Governance Layer
+
+MOOD maintains not only protocol evolution but also **knowledge evolution**.
+
+The Documentation Governance Layer ensures that documents, decisions, and references remain:
+
+1. **Discovered** — via registry
+2. **Traceable** — via change protocol
+3. **Consistent** — via cognitive sync
+
+### Governance Files
+
+| File | Purpose |
+|------|---------|
+| `.ai/ADR_REGISTRY.md` | Single navigation index for all ADRs |
+| `.ai/DOCUMENT_STATUS.md` | Document lifecycle states |
+| `.ai/CHANGE_PROTOCOL.md` | How changes flow through MOOD |
+
+### Governance Principles
+
+```
+ADR document  >  ADR registry
+Canon         >  Specification
+Authority     >  Implementation
+Explicit      >  Implicit
+```
+
+### Lifecycle Loop
+
+```
+Acceptance
+    ↓
+Archive (docs/history/)
+    ↓
+Cognitive Sync (.ai/)
+    ↓
+Registry Update
+```
+
+Every milestone must complete this loop.
 
 ---
 

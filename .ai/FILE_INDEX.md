@@ -23,9 +23,12 @@
 | `.ai/PROJECT_STATE.md` | Current milestone | Navigation | Required |
 | `.ai/ARCHITECTURE_INDEX.md` | Layer definitions | Navigation | Required |
 | `.ai/FILE_INDEX.md` | This file | Navigation | Required |
-| `.ai/DECISION_INDEX.md` | ADR decisions | Navigation | Required |
+| `.ai/DECISION_INDEX.md` | ADR decisions summary | Navigation | Required |
 | `.ai/STATUS.md` | Protocol status | Navigation | Required |
 | `.ai/AI_RULES.md` | AI-specific rules | Navigation | Required |
+| `.ai/ADR_REGISTRY.md` | ADR navigation index | Index | Required |
+| `.ai/DOCUMENT_STATUS.md` | Document lifecycle states | Index | Required |
+| `.ai/CHANGE_PROTOCOL.md` | Change governance | Process rule | Required |
 
 ---
 
@@ -51,7 +54,7 @@
 | `docs/decisions/ADR-003-cryptographic-identity-design.md` | Crypto design | ADR-003 | Accepted |
 | `docs/decisions/ADR-004-identity-algorithm-selection.md` | Ed25519 selection | ADR-004 | Accepted |
 | `docs/decisions/ADR-005-cognitive-map.md` | AI navigation layer | — | Accepted |
-| `docs/decisions/ADR-005-alpha002b-freeze.md` | Alpha 002-B freeze | ADR-005 | **Accepted** |
+| `docs/decisions/ADR-006-alpha002b-freeze.md` | Alpha 002-B freeze | ADR-006 | **Accepted** |
 
 ---
 
