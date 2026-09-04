@@ -69,14 +69,18 @@ docs/
 
 Before coding:
 
-1. Read `protocol/` directory
-2. Read `docs/` directory
-3. Understand architecture
+1. Read `MOOD_CANON.md` — the authority
+2. Read `MOOD_AI_COGNITIVE_MAP.md` — settled / open / forbidden snapshot
+3. Read `protocol/` directory
+4. Read `docs/` directory
+5. Understand architecture
 
 Rules:
 
 - Do not create duplicate systems.
 - Do not rename core concepts without approval.
+- Do not re-derive a settled conclusion; check `AI_COGNITIVE_MAP.md` first.
+- When a milestone is accepted/frozen/archived, update `AI_COGNITIVE_MAP.md` in the same change.
 
 ---
 

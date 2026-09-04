@@ -145,6 +145,15 @@ Portal architecture planning (Phase Zero, no live surface):
 
 `docs/mood/` 的numbered staging 文档（如 023、024）与 `docs/operations/` 的跨切规范互补：前者是部署专有，后者是全局规范。
 
+## AI Agent Navigation
+
+The AI Agent Navigation layer provides a machine-readable snapshot of current
+protocol state for fast agent onboarding. See
+[ADR-005: AI Cognitive Map as Navigation Layer](decisions/ADR-005-cognitive-map.md).
+
+- [MOOD AI Cognitive Map](https://github.com/huliye24/MOOD/blob/main/MOOD_AI_COGNITIVE_MAP.md) —
+  settled / open / forbidden snapshot; navigation layer, not canonical truth
+
 ## Compatibility
 
 历史 Moodify 标识的保留范围与迁移纪律见 [MOOD / Moodify Compatibility Boundary](MOODIFY_COMPATIBILITY_BOUNDARY.md)。
