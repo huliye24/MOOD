@@ -6,7 +6,7 @@
  * HTTP request — exactly what an AI Agent will do. Covered per the
  * Alpha 001 spec:
  *
- *   1. Health          — exact documented body
+ *   1. Health          — documented body (deployment-extended), open auth
  *   2. Node status     — shape, values, determinism (byte-identical)
  *   3. Identity        — public fields only; PRIVATE KEY NEVER APPEARS;
  *                       protocol record, legacy fallback, tamper → 500
@@ -21,6 +21,9 @@
  *                       tampering detected; secrets never served
  *  12. Objects         — GET /objects, GET /objects/:id, POST /objects/verify;
  *                       a foreign object verifies; tampering detected
+ *  13. Deployment      — dashboard: /status, /metrics, /events,
+ *                       /contribution (reputation honestly not_implemented),
+ *                       /node alias, MOOD_API_ALLOWED_HOSTS
  *
  * Run: npm test   (from services/node-api)
  */
@@ -120,7 +123,7 @@ function freePort() {
 }
 
 /** Spawn the real API server and wait until /health answers. */
-async function startApiServer({ home, port, key }) {
+async function startApiServer({ home, port, key, extraEnv }) {
   const env = {
     ...process.env,
     MOOD_HOME: home,
@@ -128,6 +131,7 @@ async function startApiServer({ home, port, key }) {
     MOOD_API_BIND: '127.0.0.1',
   };
   if (key) env.MOOD_API_KEY = key;
+  if (extraEnv) Object.assign(env, extraEnv);
 
   const child = spawn(process.execPath, [SERVER], {
     env,
@@ -256,19 +260,35 @@ function writeSnapshotFixture(home, { epochNumber = 1, tamper = false } = {}) {
 
 // ── 1. Health + unknown route + uninitialized envelopes ─────────────────────
 
-test('health: exact documented body, no auth required', async () => {
+test('health: documented body, no auth required, honest when uninitialized', async () => {
   const box = sandbox();
   let child;
+  let keyedChild;
   try {
     const port = await freePort();
     child = await startApiServer({ home: box.home, port });
 
     const r = await getJson(port, '/health');
     assert.equal(r.status, 200);
-    assert.deepEqual(r.body, { status: 'ok', service: 'mood-api' });
-    assert.equal(r.text, '{"status":"ok","service":"mood-api"}', 'byte-exact body');
+    assert.deepEqual(Object.keys(r.body).sort(), [
+      'lastHeartbeat', 'nodeId', 'service', 'status', 'uptimeSeconds', 'version',
+    ]);
+    assert.equal(r.body.status, 'ok');
+    assert.equal(r.body.service, 'mood-api');
+    assert.equal(r.body.nodeId, null, 'uninitialized node → null, not an error');
+    assert.equal(r.body.lastHeartbeat, null);
+    assert.equal(typeof r.body.uptimeSeconds, 'number');
+    assert.equal(typeof r.body.version, 'string');
+
+    // Liveness stays open even when a key is configured.
+    const keyPort = await freePort();
+    keyedChild = await startApiServer({ home: box.home, port: keyPort, key: 'k' });
+    const open = await getJson(keyPort, '/health');
+    assert.equal(open.status, 200);
+    assert.equal(open.body.status, 'ok');
   } finally {
     stopApiServer(child);
+    stopApiServer(keyedChild);
     box.cleanup();
   }
 });
@@ -280,7 +300,7 @@ test('not initialized: every data endpoint answers the 409 envelope', async () =
     const port = await freePort();
     child = await startApiServer({ home: box.home, port });
 
-    for (const path of ['/node/status', '/identity', '/peers', '/snapshot']) {
+    for (const path of ['/node', '/node/status', '/identity', '/peers', '/snapshot', '/status', '/metrics']) {
       const r = await getJson(port, path);
       assert.equal(r.status, 409, `${path} → 409`);
       assert.equal(r.body.ok, false, `${path} → ok:false`);
@@ -866,6 +886,239 @@ test('objects: list → create via CLI → GET by id → POST verify; a foreign 
     assert.ok(!after.text.includes('api_key'), 'the credential-shaped content is not echoed');
   } finally {
     stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+// ── 13. Deployment dashboard (Node Deployment Alpha 001) ────────────────────
+
+test('dashboard: stopped initialized node — honest zeros, metrics null', async () => {
+  const box = sandbox();
+  let child;
+  try {
+    moodInitOk(box);
+    const identity = JSON.parse(readFileSync(join(box.home, 'identity', 'node.json'), 'utf8'));
+
+    const port = await freePort();
+    child = await startApiServer({ home: box.home, port });
+
+    // /status — the dashboard summary, exactly this key set.
+    const status = await getJson(port, '/status');
+    assert.equal(status.status, 200);
+    assert.deepEqual(Object.keys(status.body).sort(), [
+      'connectedPeers', 'contributions', 'epoch', 'knownObjects', 'lastHeartbeat',
+      'network', 'nodeId', 'protocol', 'relay', 'simulation', 'snapshots',
+      'status', 'timeScale', 'uptimeSeconds',
+    ]);
+    assert.equal(status.body.nodeId, identity.nodeId);
+    assert.equal(status.body.status, 'stopped');
+    assert.equal(status.body.uptimeSeconds, null, 'no daemon → no uptime, not zero');
+    assert.equal(status.body.contributions, 0);
+    assert.equal(status.body.snapshots, 0);
+    assert.equal(status.body.lastHeartbeat, null);
+    assert.equal(status.body.simulation, false);
+    assert.equal(status.body.timeScale, 1);
+
+    // /metrics — node null before the daemon has ever run; API block live.
+    const metrics = await getJson(port, '/metrics');
+    assert.equal(metrics.status, 200);
+    assert.equal(metrics.body.node, null);
+    assert.equal(typeof metrics.body.api.pid, 'number');
+    assert.equal(typeof metrics.body.api.uptimeSeconds, 'number');
+    assert.equal(typeof metrics.body.api.memoryRssBytes, 'number');
+    assert.equal(typeof metrics.body.api.version, 'string');
+
+    // /events — no daemon run yet → honest empty tail.
+    const events = await getJson(port, '/events');
+    assert.equal(events.status, 200);
+    assert.deepEqual(events.body, { source: 'node', count: 0, events: [] });
+
+    // /contribution — zeros and the canon-honest reputation answer.
+    const contribution = await getJson(port, '/contribution');
+    assert.equal(contribution.status, 200);
+    assert.deepEqual(contribution.body, {
+      events: 0,
+      proofs: 0,
+      verified: null,
+      invalid: null,
+      reputation: 'not_implemented',
+    });
+
+    // GET /node is the alias of GET /node/status — same body.
+    const alias = await getJson(port, '/node');
+    const canonical = await getJson(port, '/node/status');
+    assert.deepEqual(alias.body, canonical.body);
+
+    // /health now carries the node identity (public by design).
+    const health = await getJson(port, '/health');
+    assert.equal(health.body.nodeId, identity.nodeId);
+    assert.equal(health.body.lastHeartbeat, null);
+  } finally {
+    stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+test('dashboard: live daemon → status, metrics, events, contribution', async () => {
+  const box = sandbox();
+  let child;
+  try {
+    moodInitOk(box);
+    const identity = JSON.parse(readFileSync(join(box.home, 'identity', 'node.json'), 'utf8'));
+
+    // A contribution recorded before boot: the daemon's first maintenance
+    // cycle collects it and the genesis snapshot covers it.
+    const rc = mood(box, ['contribution', 'create', '--actor', 'claude-code',
+      '--type', 'code_change', '--description', 'Dashboard test', '--json']);
+    assert.equal(rc.status, 0, `contribution create failed:\n${rc.stderr}\n${rc.stdout}`);
+
+    const port = await freePort();
+    child = await startApiServer({ home: box.home, port });
+
+    const start = await postJson(port, '/node/start');
+    assert.equal(start.status, 200);
+    assert.deepEqual(start.body, { status: 'running' });
+
+    // Wait until the daemon reports running AND its first maintenance
+    // cycle is fully persisted. The snapshot FILE lands mid-cycle, ~30ms
+    // before the metrics counter reaches state.json — readiness must be
+    // judged by the metrics, not by the file count.
+    let ready = false;
+    const deadline = Date.now() + 20_000;
+    while (Date.now() < deadline) {
+      const s = await getJson(port, '/status');
+      const m = await getJson(port, '/metrics');
+      if (s.body.status === 'running' && s.body.lastHeartbeat
+        && m.body.node && m.body.node.snapshots >= 1) {
+        ready = true;
+        break;
+      }
+      await sleep(200);
+    }
+    assert.equal(ready, true, 'daemon reached running state with a persisted maintenance cycle');
+
+    // /health carries identity and heartbeat age — still no auth needed.
+    const health = await getJson(port, '/health');
+    assert.equal(health.body.nodeId, identity.nodeId);
+    assert.ok(health.body.lastHeartbeat, 'daemon heartbeat visible in /health');
+    assert.ok(health.body.uptimeSeconds >= 0);
+
+    // /status — live values.
+    const status = await getJson(port, '/status');
+    assert.equal(status.status, 200);
+    assert.equal(status.body.nodeId, identity.nodeId);
+    assert.equal(status.body.status, 'running');
+    assert.ok(status.body.uptimeSeconds >= 0);
+    assert.equal(status.body.contributions, 1);
+    assert.ok(status.body.snapshots >= 1);
+    assert.ok(status.body.lastHeartbeat);
+    assert.ok(['Connected', 'Disconnected'].includes(status.body.relay),
+      `relay is honestly reported (got ${status.body.relay})`);
+
+    // /metrics — daemon counters plus the API process block.
+    const metrics = await getJson(port, '/metrics');
+    assert.equal(metrics.status, 200);
+    assert.ok(metrics.body.node.heartbeats >= 1);
+    assert.ok(metrics.body.node.snapshots >= 1);
+    assert.equal(metrics.body.node.eventsCollected, 1);
+    assert.equal(metrics.body.node.uptimeSeconds >= 0, true);
+    assert.ok(metrics.body.node.memoryRssBytes > 0);
+    assert.ok(metrics.body.api.pid > 0);
+
+    // /events — tail of the daemon's JSON log trail.
+    const events = await getJson(port, '/events');
+    assert.equal(events.status, 200);
+    assert.equal(events.body.source, 'node');
+    assert.ok(events.body.count > 0);
+    for (const record of events.body.events) {
+      assert.ok(record.timestamp, 'log record has timestamp');
+      assert.ok(record.event, 'log record has event');
+      assert.ok(record.status, 'log record has status');
+      assert.equal(record.node_id, identity.nodeId);
+    }
+    const eventsSeen = new Set(events.body.events.map((r) => r.event));
+    for (const expected of ['node_boot', 'scheduler_started', 'maintenance_cycle', 'heartbeat']) {
+      assert.ok(eventsSeen.has(expected), `log tail includes ${expected}`);
+    }
+
+    // limit is honored; sources are segregated; unknown source is a 400.
+    const limited = await getJson(port, '/events?limit=2');
+    assert.equal(limited.body.count, 2);
+    assert.equal(limited.body.events.length, 2);
+
+    const beats = await getJson(port, '/events?source=heartbeat');
+    assert.equal(beats.body.source, 'heartbeat');
+    assert.ok(beats.body.count >= 1);
+    assert.ok(beats.body.events.every((r) => r.event === 'heartbeat'));
+
+    const errors = await getJson(port, '/events?source=error');
+    assert.equal(errors.status, 200);
+    assert.ok(errors.body.events.every((r) => r.level === 'error'));
+
+    const badSource = await getJson(port, '/events?source=bogus');
+    assert.equal(badSource.status, 400);
+    assert.equal(badSource.body.error.code, 'INVALID_REQUEST');
+
+    // /contribution — counts plus the last maintenance verification result.
+    const contribution = await getJson(port, '/contribution');
+    assert.equal(contribution.status, 200);
+    assert.deepEqual(contribution.body, {
+      events: 1,
+      proofs: 1,
+      verified: 1,
+      invalid: 0,
+      reputation: 'not_implemented',
+    });
+
+    // Stop the daemon → the dashboard reports stopped, uptime null again,
+    // and the final metrics survive.
+    const stop = await postJson(port, '/node/stop');
+    assert.equal(stop.status, 200);
+
+    const after = await getJson(port, '/status');
+    assert.equal(after.body.status, 'stopped');
+    assert.equal(after.body.uptimeSeconds, null);
+
+    const afterMetrics = await getJson(port, '/metrics');
+    assert.ok(afterMetrics.body.node.heartbeats >= 1, 'metrics survive shutdown');
+  } finally {
+    stopApiServer(child);
+    box.cleanup();
+  }
+});
+
+test('allowed hosts: MOOD_API_ALLOWED_HOSTS extends the loopback allowlist', async () => {
+  const box = sandbox();
+  let child;
+  let other;
+  try {
+    moodInitOk(box);
+    const port = await freePort();
+    child = await startApiServer({
+      home: box.home,
+      port,
+      extraEnv: { MOOD_API_ALLOWED_HOSTS: 'monitor.local, ops.box' },
+    });
+
+    const allowed = await requestWithHost(port, '/node/status', 'monitor.local');
+    assert.equal(allowed.status, 200, 'operator-added host is allowed');
+
+    const withPort = await requestWithHost(port, '/health', 'ops.box:8788');
+    assert.equal(withPort.status, 200, 'port suffix is stripped before matching');
+
+    const stillEvil = await requestWithHost(port, '/node/status', 'evil-rebind.example.com');
+    assert.equal(stillEvil.status, 403);
+    assert.equal(stillEvil.body.error.code, 'FORBIDDEN_HOST');
+
+    // A server WITHOUT the env keeps refusing the extra host.
+    const otherPort = await freePort();
+    other = await startApiServer({ home: box.home, port: otherPort });
+    const refused = await requestWithHost(otherPort, '/node/status', 'monitor.local');
+    assert.equal(refused.status, 403);
+    assert.equal(refused.body.error.code, 'FORBIDDEN_HOST');
+  } finally {
+    stopApiServer(child);
+    stopApiServer(other);
     box.cleanup();
   }
 });

@@ -1,0 +1,66 @@
+# MOOD Node — Node Deployment Alpha 001, Phase 2.
+#
+# TWO services from ONE image (deployment/Dockerfile):
+#   mood-node   entrypoint: `mood init` → `mood start` → node-api foreground
+#   mood-relay  stateless WebSocket fan-out (services/relay)
+#
+# Defaults are conservative: both ports publish on host LOOPBACK only.
+# Exposing the node beyond the host is a deliberate operator action
+# (bind + Host allowlist + API key) — see MOOD_NODE_DEPLOYMENT.md.
+#
+#   docker compose up -d                 # build + start (24/7 via restart policy)
+#   docker compose logs -f mood-node     # JSON-line operational trail
+#   docker compose down                  # clean stop (entrypoint exits 0)
+#
+# Host port overrides (a local relay already on 8080, a second stack):
+#   MOOD_API_HOST_PORT=18788 MOOD_RELAY_HOST_PORT=18080 docker compose up -d
+
+services:
+  mood-node:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    image: mood-node:alpha-001
+    container_name: mood-node
+    restart: unless-stopped
+    environment:
+      MOOD_HOME: /data
+      MOOD_API_PORT: "8788"
+      # 0.0.0.0 INSIDE the container only — host exposure is governed by
+      # the loopback `ports:` mapping below and the API's Host allowlist.
+      MOOD_API_BIND: 0.0.0.0
+      MOOD_API_ALLOWED_HOSTS: mood-node   # the compose-network alias
+      MOOD_RELAY_URL: ws://mood-relay:8080
+      NETWORK_ID: mood-testnet-001
+    ports:
+      - "127.0.0.1:${MOOD_API_HOST_PORT:-8788}:8788"
+    volumes:
+      - mood-node-data:/data
+    depends_on:
+      mood-relay:
+        condition: service_started
+
+  mood-relay:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile
+    image: mood-node:alpha-001
+    container_name: mood-relay
+    restart: unless-stopped
+    command: ["node", "services/relay/src/relay.js"]
+    environment:
+      RELAY_PORT: "8080"
+      NETWORK_ID: mood-testnet-001
+    ports:
+      - "127.0.0.1:${MOOD_RELAY_HOST_PORT:-8080}:8080"
+    # The image HEALTHCHECK probes HTTP /health — the relay speaks
+    # WebSocket only, so probe the listening TCP port instead.
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('node:net').createConnection(8080,'127.0.0.1').on('connect',()=>process.exit(0)).on('error',()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 10s
+      retries: 3
+
+volumes:
+  mood-node-data:

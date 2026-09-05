@@ -1,7 +1,8 @@
 /**
  * /node routes — node status and lifecycle.
  *
- *   GET  /node/status   identity · network · protocol · status · epoch
+ *   GET  /node          identity · network · protocol · status · epoch
+ *   GET  /node/status   same (the original Alpha 001 path, unchanged)
  *   POST /node/start    start the node daemon (idempotent)
  *   POST /node/stop     stop the node daemon (idempotent)
  *
@@ -16,7 +17,7 @@ import { fail } from '../errors.js';
 
 const router = Router();
 
-router.get('/status', (req, res) => {
+function nodeStatusResponse(req, res) {
   const s = loadNodeStatus();
   if (!s) {
     fail(res, 409, 'NOT_INITIALIZED', 'Node not initialized — run `mood init` on this machine first');
@@ -29,7 +30,12 @@ router.get('/status', (req, res) => {
     status: s.status.toLowerCase(),
     epoch: formatEpoch(s.epochNumber),
   });
-});
+}
+
+// GET /node — the dashboard-facing alias (Node Deployment Alpha 001).
+router.get('/', nodeStatusResponse);
+
+router.get('/status', nodeStatusResponse);
 
 router.post('/start', async (req, res) => {
   try {

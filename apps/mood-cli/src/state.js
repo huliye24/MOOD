@@ -20,8 +20,12 @@
  *       latest.json         ← pointer to the most recent snapshot
  *       snapshot-*.json     ← snapshot objects written by the runtime
  *     logs/
- *       node.log            ← append-only runtime log
+ *       node.log            ← append-only runtime log (JSON lines)
+ *       error.log           ← error-level records only (JSON lines)
+ *       heartbeat.log       ← heartbeat records only (JSON lines)
  *       api.log             ← append-only node-api (Agent Layer) log
+ *     reports/
+ *       runtime-report-*.json ← hourly runtime report (keep latest 24)
  *     state.json            ← ephemeral state: status, pid, started_at
  *     api-state.json        ← node-api state: status, pid, port, bind
  *     api-stop              ← cooperative stop flag for the API server
@@ -79,6 +83,7 @@ export function moodPaths() {
     configDir: join(root, 'config'),
     snapshotsDir: join(root, 'snapshots'),
     logsDir: join(root, 'logs'),
+    reportsDir: join(root, 'reports'),
     identityFile: join(root, 'identity', 'node.json'),
     privateFile: join(root, 'identity', 'private.json'),
     configFile: join(root, 'config', 'node.json'),
@@ -98,7 +103,7 @@ export function moodPaths() {
  */
 export function ensureMoodHome() {
   const p = moodPaths();
-  for (const d of [p.identityDir, p.configDir, p.snapshotsDir, p.logsDir]) {
+  for (const d of [p.identityDir, p.configDir, p.snapshotsDir, p.logsDir, p.reportsDir]) {
     mkdirSync(d, { recursive: true });
   }
   return p;

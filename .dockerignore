@@ -1,0 +1,38 @@
+# Build-context filter for deployment/Dockerfile (Node Deployment Alpha 001).
+# The image carries ONLY the node subgraph: apps/mood-cli, services/{node-api,relay},
+# packages/*, protocol/contribution. Everything else never enters the context.
+
+# VCS + CI + agent tooling
+.git
+.github
+.claude
+.agents
+
+# Host dependencies (huge, platform-specific, and replaced by npm ci in the image)
+node_modules
+**/node_modules
+
+# Workspaces the node image does not carry (not workspaces of this image;
+# the root lockfile tolerates their absence — verified)
+apps/web
+apps/mood-desktop
+
+# Documentation, scratch, and reports — none of it runs in a container
+docs
+tmp
+output
+*.md
+!apps/mood-cli/README.md
+!services/node-api/README.md
+!services/relay/README.md
+!packages/*/README.md
+!protocol/contribution/README.md
+
+# Local artifacts and audit scratch (untracked work files)
+audit_*.py
+services/relay/package-lock.json
+
+# Never let machine state or secrets ride into a build context
+.mood
+.mood-deploy
+*.log

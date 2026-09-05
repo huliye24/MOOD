@@ -208,6 +208,16 @@ $ curl http://127.0.0.1:8788/node/status
 | `--port <n>` | port (default 8788; env `MOOD_API_PORT`) |
 | `--bind <addr>` | bind address (default 127.0.0.1 — local-only; env `MOOD_API_BIND`) |
 | `--key <secret>` | require `Authorization: Bearer <secret>` on every endpoint except `/health` |
+| `MOOD_API_ALLOWED_HOSTS` | env: comma-separated extra Hostnames allowed past the DNS-rebinding guard (e.g. a compose network alias) |
+
+`GET /health` answers liveness before auth — `status`, `service`,
+`version`, `nodeId` (public by design), `uptimeSeconds`, `lastHeartbeat`.
+Node Deployment Alpha 001 adds the operational dashboard on the same
+port: `GET /status` (node summary), `GET /metrics` (daemon counters +
+API process), `GET /events?source=node|error|heartbeat` (JSON log tails),
+`GET /contribution` (counts; reputation is reported as
+`not_implemented` — Phase Zero has no reputation or tokens). These are
+live operational reads, not the deterministic agent surface.
 
 Security posture: binds loopback only by default, never reads the private
 key file, validates the Host header against DNS rebinding, and exposes

@@ -4,6 +4,9 @@
  * Writes the cooperative stop flag AND signals the pid; the daemon
  * reconciles state.json to Stopped on its way out. If the daemon is
  * already gone, the state file is repaired.
+ *
+ * The work lives in stopNode() so `mood restart` can compose it without
+ * double-emitting envelopes.
  */
 
 import { writeFileSync, existsSync, rmSync } from 'fs';
@@ -32,7 +35,7 @@ function waitForExit(pid) {
   });
 }
 
-export async function run(args, flags) {
+export async function stopNode() {
   if (!isInitialized()) {
     throw new Error('Node not initialized — run `mood init` first');
   }
@@ -41,14 +44,7 @@ export async function run(args, flags) {
   const status = effectiveStatus();
 
   if (status !== 'Running') {
-    if (flags.json) {
-      emit({ stopped: false, wasRunning: false, status: 'Stopped' }, '', flags);
-      return;
-    }
-    process.stdout.write(renderKeyValue('MOOD Node is not running.', [
-      ['Status:', 'Stopped'],
-    ]));
-    return;
+    return { stopped: false, wasRunning: false, status: 'Stopped' };
   }
 
   const st = readState();
@@ -76,14 +72,27 @@ export async function run(args, flags) {
     // best effort
   }
 
+  return { stopped: true, wasRunning: true, clean: exited, pid, status: 'Stopped' };
+}
+
+export async function run(args, flags) {
+  const result = await stopNode();
+
   if (flags.json) {
-    emit({ stopped: true, wasRunning: true, clean: exited, pid, status: 'Stopped' }, '', flags);
+    emit(result, '', flags);
+    return;
+  }
+
+  if (!result.wasRunning) {
+    process.stdout.write(renderKeyValue('MOOD Node is not running.', [
+      ['Status:', 'Stopped'],
+    ]));
     return;
   }
 
   process.stdout.write(renderKeyValue('MOOD Node stopped.', [
-    ['PID:', String(pid)],
-    ['Exit:', exited ? 'clean' : 'forced'],
+    ['PID:', String(result.pid)],
+    ['Exit:', result.clean ? 'clean' : 'forced'],
   ]));
   process.stdout.write(dim('  The local identity and snapshots are preserved in ~/.mood/.\n\n'));
 }

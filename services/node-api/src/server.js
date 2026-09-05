@@ -16,9 +16,17 @@
  * Security posture:
  *   - binds 127.0.0.1 by default (local-only; MOOD_API_BIND overrides)
  *   - optional API key (MOOD_API_KEY), constant-time checked
- *   - Host-header validation (DNS-rebinding defense)
+ *   - Host-header validation (DNS-rebinding defense); operators extend
+ *     the allowlist with MOOD_API_ALLOWED_HOSTS (comma-separated)
  *   - NEVER reads identity/private.json — the private key never enters
  *     this process
+ *
+ * Node Deployment Alpha 001 extends the surface with operational
+ * monitoring: /health carries node identity + heartbeat age (public data,
+ * before auth — container health checks hold no key), and the dashboard
+ * routes (/status, /metrics, /events, /contribution) expose the daemon's
+ * runtime metrics and JSON logs. Reputation/tokens are reported as
+ * not_implemented — Phase Zero is unchanged.
  *
  * Standalone entry:  node src/server.js
  * Programmatic:      import { createApp } from '@mood/node-api'
@@ -34,9 +42,10 @@ import {
 } from 'fs';
 import { join } from 'path';
 import { pathToFileURL } from 'url';
-import { moodPaths } from './state.js';
+import { moodPaths, readIdentity, readState } from './state.js';
 import { createAuthMiddleware } from './middleware/auth.js';
 import { fail } from './errors.js';
+import { createDashboardRoutes } from './routes/dashboard.js';
 import nodeRoutes from './routes/node.js';
 import identityRoutes from './routes/identity.js';
 import peersRoutes from './routes/peers.js';
@@ -48,38 +57,70 @@ import objectsRoutes from './routes/objects.js';
 const DEFAULT_PORT = 8788;
 const DEFAULT_BIND = '127.0.0.1';
 const STOP_POLL_INTERVAL_MS = 1_000;
+const SERVICE_VERSION = '0.1.0-alpha.1';
 
 // Hostnames a local request may legitimately carry. Anything else (e.g. a
 // DNS-rebinded domain) is refused — a browser-based attacker must not be
 // able to reach this port through their own domain resolving to loopback.
-const ALLOWED_HOSTS = new Set(['127.0.0.1', 'localhost', '[::1]']);
+// Operators extending the API beyond loopback (a compose network, a
+// monitoring container) add hostnames via MOOD_API_ALLOWED_HOSTS.
+const LOOPBACK_HOSTS = ['127.0.0.1', 'localhost', '[::1]'];
 
-function hostAllowed(hostHeader) {
+function parseAllowedHosts(envValue) {
+  if (!envValue) return [];
+  return String(envValue)
+    .split(',')
+    .map((h) => h.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function hostAllowed(hostHeader, allowedHosts) {
   if (!hostHeader) return false;
-  const bare = hostHeader.replace(/:\d+$/, ''); // strip :port
-  return ALLOWED_HOSTS.has(bare);
+  const bare = hostHeader.replace(/:\d+$/, '').toLowerCase(); // strip :port
+  return allowedHosts.has(bare);
 }
 
 /**
- * Build the Express app. `options.apiKey` enables Bearer auth when set.
+ * Build the Express app.
+ *
+ * `options.apiKey` enables Bearer auth when set. `options.allowedHosts`
+ * extends the loopback Host allowlist (defaults to the
+ * MOOD_API_ALLOWED_HOSTS environment variable, comma-separated).
  */
-export function createApp({ apiKey } = {}) {
+export function createApp({ apiKey, allowedHosts } = {}) {
   const app = express();
   app.disable('x-powered-by');
 
+  const hosts = new Set([
+    ...LOOPBACK_HOSTS,
+    ...parseAllowedHosts(allowedHosts ?? process.env.MOOD_API_ALLOWED_HOSTS),
+  ]);
+
   // DNS-rebinding defense: applies to every route, /health included.
   app.use((req, res, next) => {
-    if (!hostAllowed(req.get('host'))) {
+    if (!hostAllowed(req.get('host'), hosts)) {
       fail(res, 403, 'FORBIDDEN_HOST', 'Requests must target 127.0.0.1 or localhost');
       return;
     }
     next();
   });
 
-  // Liveness probe — intentionally before auth and intentionally minimal:
-  // it says only that the service is up. No node data, no key required.
+  const apiStartedAtMs = Date.now();
+
+  // Liveness probe — intentionally before auth (Node Deployment Alpha 001
+  // extends it with node identity and heartbeat age; node_id is public by
+  // design, and a container health check holds no key).
   app.get('/health', (req, res) => {
-    res.json({ status: 'ok', service: 'mood-api' });
+    const identity = readIdentity();
+    const state = readState();
+    res.json({
+      status: 'ok',
+      service: 'mood-api',
+      version: SERVICE_VERSION,
+      nodeId: identity ? identity.nodeId : null,
+      uptimeSeconds: Math.max(0, Math.round((Date.now() - apiStartedAtMs) / 1000)),
+      lastHeartbeat: state.lastHeartbeat || null,
+    });
   });
 
   // Everything below requires the API key when one is configured.
@@ -97,6 +138,7 @@ export function createApp({ apiKey } = {}) {
   app.use('/connector', connectorRoutes);
   app.use('/contributions', contributionsRoutes);
   app.use('/objects', objectsRoutes);
+  app.use('/', createDashboardRoutes({ apiStartedAtMs, version: SERVICE_VERSION }));
 
   // Unknown endpoint — stable machine envelope, same as every other error.
   app.use((req, res) => {

@@ -70,7 +70,8 @@ the CLI remains the human's instrument.
 4. **Determinism is a contract.** Every response is stable JSON with a
    fixed key set and no timestamps, no locale text, no prose. Agents can
    diff two responses byte-for-byte; two identical reads are identical
-   bytes.
+   bytes. The deployment dashboard (section 2b) is the one documented
+   exception — operational views are live reads by design.
 
 ---
 
@@ -78,13 +79,36 @@ the CLI remains the human's instrument.
 
 | Method | Endpoint | Response |
 |---|---|---|
-| GET | `/health` | `{"status":"ok","service":"mood-api"}` |
+| GET | `/health` | `{"status":"ok","service":"mood-api","version","nodeId","uptimeSeconds","lastHeartbeat"}` — liveness, open before auth (Node Deployment Alpha 001); `nodeId` is public by design |
 | GET | `/node/status` | `{"nodeId","network","protocol","status","epoch"}` |
+| GET | `/node` | same as `/node/status` — the dashboard-facing alias |
 | GET | `/identity` | `{"nodeId","publicKey","organization"}` |
 | GET | `/peers` | `{"peers":[]}` |
 | GET | `/snapshot` | `{"epoch","digest","agreement"}` |
 | POST | `/node/start` | `{"status":"running"}` |
 | POST | `/node/stop` | `{"status":"stopped"}` |
+| GET | `/connector/status` | `{"connector","agents":[{name,type}]}` — independent of node identity |
+| GET | `/contributions` | `{"contributions":[{event,proof}]}` — full public records, credential-guarded |
+| POST | `/contributions/verify` | `{"verified":true\|false,"errors":[…]}` — verification result, not an API error |
+| GET | `/objects` · `/objects/:id` · POST `/objects/verify` | protocol object layer — network verification minus the transport |
+
+### 2b. The deployment dashboard (Node Deployment Alpha 001)
+
+Operational monitoring over the same `~/.mood/` files the daemon
+writes — read-only, no node logic. These are **live reads**: uptime,
+heartbeat age, metrics and event tails change between requests by
+design, unlike the deterministic agent surface above.
+
+| Method | Endpoint | Response |
+|---|---|---|
+| GET | `/status` | node summary: status, uptime, epoch, peers, contributions, snapshots, relay, lastHeartbeat, simulation/timeScale |
+| GET | `/metrics` | `{"node":{counters}\|null,"api":{pid,uptimeSeconds,memoryRssBytes,version}}` |
+| GET | `/events` | tail of the daemon JSON logs — `?source=node\|error\|heartbeat`, `?limit=n` |
+| GET | `/contribution` | `{"events","proofs","verified","invalid","reputation":"not_implemented"}` |
+
+Phase Zero honesty: reputation, tokens, staking and wallets do not
+exist. The dashboard reports `reputation: "not_implemented"` — the only
+honest answer — and serves no token-like data anywhere.
 
 Errors use one envelope with stable machine codes — never a stack trace,
 never human-only prose:
@@ -116,6 +140,9 @@ procedural** — the dangerous things are not hidden; they are absent.
 - The server refuses requests whose `Host` header is not
   `127.0.0.1`, `localhost`, or `[::1]` — closing the DNS-rebinding
   route by which a browser page could otherwise reach a local service.
+  Operators extending the API beyond loopback (a compose network, a
+  monitoring container) add hostnames via `MOOD_API_ALLOWED_HOSTS`
+  (comma-separated; the port suffix is stripped before matching).
 
 ### The private key is never read
 

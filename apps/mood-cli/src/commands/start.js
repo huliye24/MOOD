@@ -4,10 +4,13 @@
  * Spawns `mood daemon` detached, waits for it to mark itself Running in
  * ~/.mood/state.json, then reports. The daemon keeps running after this
  * command exits (like `dockerd` started from a login shell).
+ *
+ * The work lives in startNode() so `mood restart` can compose it without
+ * double-emitting envelopes.
  */
 
 import { spawn } from 'child_process';
-import { existsSync, openSync } from 'fs';
+import { openSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 import { emit, renderKeyValue, green, yellow, dim } from '../ui/terminal.js';
@@ -43,32 +46,26 @@ function waitForRunning() {
   });
 }
 
-export async function run(args, flags) {
+export async function startNode() {
   if (!isInitialized()) {
     throw new Error('Node not initialized — run `mood init` first');
   }
 
   if (effectiveStatus() === 'Running') {
     const st = readState();
-    if (flags.json) {
-      emit({ started: false, alreadyRunning: true, pid: st.pid, nodeId: loadState().nodeId }, '', flags);
-      return;
-    }
-    process.stdout.write(renderKeyValue('MOOD Node is already running.', [
-      ['PID:', String(st.pid)],
-      ['Since:', st.startedAt || '—'],
-    ]));
-    return;
+    return {
+      started: false,
+      alreadyRunning: true,
+      pid: st.pid,
+      nodeId: loadState().nodeId,
+      status: 'Running',
+    };
   }
 
   const paths = moodPaths();
 
   // Clear any stale stop flag from a previous shutdown.
   writeState({ status: 'Starting', startedAt: null, pid: null, connectedPeers: [] });
-
-  if (!flags.json) {
-    process.stdout.write('\n  Starting MOOD Node...\n');
-  }
 
   const logFd = openSync(paths.logFile, 'a');
   const child = spawn(process.execPath, [BIN, 'daemon'], {
@@ -87,17 +84,27 @@ export async function run(args, flags) {
     throw new Error(`Node failed to start within ${STARTUP_TIMEOUT_MS / 1000}s — see ${paths.logFile}`);
   }
 
+  return {
+    started: true,
+    nodeId: loadState().nodeId,
+    network: NETWORK_NAME,
+    protocol: PROTOCOL_VERSION,
+    relay: RELAY_URL,
+    status: 'Running',
+    pid: st.pid,
+    log: paths.logFile,
+  };
+}
+
+export async function run(args, flags) {
+  if (!flags.json && effectiveStatus() !== 'Running') {
+    process.stdout.write('\n  Starting MOOD Node...\n');
+  }
+
+  const result = await startNode();
+
   if (flags.json) {
-    emit({
-      started: true,
-      nodeId: loadState().nodeId,
-      network: NETWORK_NAME,
-      protocol: PROTOCOL_VERSION,
-      relay: RELAY_URL,
-      status: 'Running',
-      pid: st.pid,
-      log: paths.logFile,
-    }, '', flags);
+    emit(result, '', flags);
     return;
   }
 
@@ -106,8 +113,8 @@ export async function run(args, flags) {
     ['Protocol:', yellow('v' + PROTOCOL_VERSION)],
     ['Network:', yellow(NETWORK_NAME)],
     ['Status:', green('Running')],
-    ['PID:', String(st.pid)],
-    ['Log:', dim(paths.logFile)],
+    ['PID:', String(result.pid)],
+    ['Log:', dim(result.log)],
   ];
   for (const [k, v] of rows) {
     process.stdout.write(`  ${k.padEnd(12, ' ')} ${v}\n`);

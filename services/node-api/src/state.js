@@ -20,6 +20,7 @@ import {
 } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
+import { containsSecret } from '@mood/contribution-proof';
 
 // Mirror of NETWORK_NAME in apps/mood-cli/src/config/defaults.js — used
 // only as a fallback when config/node.json is absent. The config file
@@ -42,6 +43,8 @@ export function moodPaths() {
     latestSnapshotFile: join(root, 'snapshots', 'latest.json'),
     stateFile: join(root, 'state.json'),
     apiStateFile: join(root, 'api-state.json'),
+    logsDir: join(root, 'logs'),
+    reportsDir: join(root, 'reports'),
   };
 }
 
@@ -173,4 +176,57 @@ export function loadNodeStatus() {
  */
 export function formatEpoch(n) {
   return String(n).padStart(3, '0');
+}
+
+// ── Deployment dashboard readers (Node Deployment Alpha 001) ────────────────
+
+/** The JSON log sinks the daemon writes (see apps/mood-cli/src/logging.js). */
+const LOG_SOURCES = new Set(['node', 'error', 'heartbeat']);
+
+/**
+ * Tail of a daemon JSON log. Returns the last `limit` parsed records in
+ * chronological order. Malformed lines are skipped, never fatal; a record
+ * that trips the credential guard is refused — present but stripped, the
+ * same read-side defense as /contributions. Unknown sources return null.
+ */
+export function readLogTail({ source = 'node', limit = 50 } = {}) {
+  if (!LOG_SOURCES.has(source)) return null;
+  const file = join(moodPaths().logsDir, `${source}.log`);
+  let lines;
+  try {
+    lines = readFileSync(file, 'utf8').split('\n').filter((l) => l.trim());
+  } catch {
+    return []; // absent log = empty tail (the daemon has not run yet)
+  }
+
+  const tail = lines.slice(-Math.max(1, Math.min(limit, 1000)));
+  return tail.map((line) => {
+    let record = null;
+    try {
+      record = JSON.parse(line);
+    } catch {
+      record = null;
+    }
+    if (record === null) {
+      return { event: null, refused: 'unparseable log record' };
+    }
+    if (containsSecret(line)) {
+      return { event: null, refused: 'credential-shaped content — this record is not served' };
+    }
+    return record;
+  });
+}
+
+/**
+ * Number of epoch snapshot files on disk (latest.json excluded — it is a
+ * pointer, not a snapshot).
+ */
+export function countSnapshots() {
+  const dir = moodPaths().snapshotsDir;
+  if (!existsSync(dir)) return 0;
+  try {
+    return readdirSync(dir).filter((f) => f.endsWith('.json') && f !== 'latest.json').length;
+  } catch {
+    return 0;
+  }
 }
