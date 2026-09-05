@@ -47,7 +47,10 @@ services:
     image: mood-node:alpha-001
     container_name: mood-relay
     restart: unless-stopped
-    command: ["node", "services/relay/src/relay.js"]
+    # Override the ENTRYPOINT supervisor (a bare `command:` only appends
+    # arguments to it and would boot a second full node) — the relay is a
+    # plain foreground process.
+    entrypoint: ["node", "services/relay/src/relay.js"]
     environment:
       RELAY_PORT: "8080"
       NETWORK_ID: mood-testnet-001
